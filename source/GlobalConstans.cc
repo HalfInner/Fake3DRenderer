@@ -10,8 +10,8 @@ GLdouble radius;
 
 /* Windows globals, defines, and prototypes */
 HWND ghWnd;
-HDC ghDC;
-HGLRC ghRC;
+HDC ghDeviceConext;
+HGLRC ghRenderingContext;
 
 /* main window procedure */
 LONG WINAPI MainWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -22,12 +22,12 @@ LONG WINAPI MainWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
 
         case WM_CREATE:
-            ghDC = GetDC(hWnd);
-            if (!bSetupPixelFormat(ghDC))
+            ghDeviceConext = GetDC(hWnd);
+            if (!bSetupPixelFormat(ghDeviceConext))
                 PostQuitMessage(0);
 
-            ghRC = wglCreateContext(ghDC);
-            wglMakeCurrent(ghDC, ghRC);
+            ghRenderingContext = wglCreateContext(ghDeviceConext);
+            wglMakeCurrent(ghDeviceConext, ghRenderingContext);
             GetClientRect(hWnd, &rect);
             initializeGL(rect.right, rect.bottom);
             break;
@@ -43,21 +43,21 @@ LONG WINAPI MainWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             break;
 
         case WM_CLOSE:
-            if (ghRC)
-                wglDeleteContext(ghRC);
-            if (ghDC)
-                ReleaseDC(hWnd, ghDC);
-            ghRC = nullptr;
-            ghDC = nullptr;
+            if (ghRenderingContext)
+                wglDeleteContext(ghRenderingContext);
+            if (ghDeviceConext)
+                ReleaseDC(hWnd, ghDeviceConext);
+            ghRenderingContext = nullptr;
+            ghDeviceConext = nullptr;
 
             DestroyWindow(hWnd);
             break;
 
         case WM_DESTROY:
-            if (ghRC)
-                wglDeleteContext(ghRC);
-            if (ghDC)
-                ReleaseDC(hWnd, ghDC);
+            if (ghRenderingContext)
+                wglDeleteContext(ghRenderingContext);
+            if (ghDeviceConext)
+                ReleaseDC(hWnd, ghDeviceConext);
 
             PostQuitMessage(0);
             break;
@@ -193,8 +193,6 @@ void polarView(GLdouble radius, GLdouble twist, GLdouble latitude, GLdouble long
     glRotated(-twist, 0.0, 0.0, 1.0);
     glRotated(-latitude, 1.0, 0.0, 0.0);
     glRotated(longitude, 0.0, 0.0, 1.0);
-
-
 }
 
 GLvoid drawScene(GLvoid) {
@@ -222,5 +220,5 @@ GLvoid drawScene(GLvoid) {
 
     glPopMatrix();
 
-    SwapBuffers(ghDC);
+    SwapBuffers(ghDeviceConext);
 }

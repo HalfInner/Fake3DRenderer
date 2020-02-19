@@ -2,6 +2,9 @@
 // Created by kajbr on 19.02.2020.
 //
 
+// Basic logic bases on:
+// https://docs.microsoft.com/en-us/windows/win32/opengl/the-program-ported-to-win32
+
 #ifndef FAKE3DRENDERER_GLOBALCONSTANS_HH
 #define FAKE3DRENDERER_GLOBALCONSTANS_HH
 
@@ -10,8 +13,8 @@
 
 /* Windows globals, defines, and prototypes */
 extern HWND ghWnd;
-extern HDC ghDC;
-extern HGLRC ghRC;
+extern HDC ghDeviceConext;
+extern HGLRC ghRenderingContext;
 
 #define SWAPBUFFERS SwapBuffers(ghDC)
 constexpr int BLACK_INDEX = 0;
