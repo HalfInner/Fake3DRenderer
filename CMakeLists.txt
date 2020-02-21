@@ -4,13 +4,21 @@ project(Fake3DRenderer)
 set(CMAKE_CXX_STANDARD 17)
 
 set(OPENGL_LIB_PATH C:/Program Files\ \(x86\)/Windows\ Kits/10/Lib/10.0.18362.0/um/x64/)
+
+set(GLEW_INCLUDE_PATH C:/Program\ Files\ \(x86\)/glew/include/)
+set(GLEW_LIB_PATH C:/Program\ Files\ \(x86\)/glew/lib/)
+set(GLEW_DLL_PATH C:/Program\ Files\ \(x86\)/glew/bin/glew32.dll)
+
+message(${GLEW_INCLUDE_PATH})
+
+set(GLFW3_LIB_PATH lib/)
+
 set(INCLUDE_PATH include/)
 
-message(hey ${OPENGL_LIB_PATH})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY build)
 
 add_executable(Fake3DRenderer main.cpp source/GlobalConstans.cc)
-target_compile_definitions(Fake3DRenderer PUBLIC kutang)
-target_include_directories(Fake3DRenderer PUBLIC ${INCLUDE_PATH})
-target_link_directories(Fake3DRenderer PUBLIC ${OPENGL_LIB_PATH})
-target_link_libraries(Fake3DRenderer PUBLIC OpenGL32 GlU32)
-
+target_compile_definitions(Fake3DRenderer PUBLIC)
+target_include_directories(Fake3DRenderer PUBLIC ${INCLUDE_PATH} ${GLEW_INCLUDE_PATH})
+target_link_directories(Fake3DRenderer PUBLIC ${OPENGL_LIB_PATH} ${GLFW3_LIB_PATH} ${GLEW_LIB_PATH})
+target_link_libraries(Fake3DRenderer PUBLIC OpenGL32 GlU32 glfw3 glew32)
