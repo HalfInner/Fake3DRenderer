@@ -1,6 +1,8 @@
 //#include <glad/glad.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/vec4.hpp>
+
 //#include <GL/gl.h>
 //#include <GL/glu.h>
 
@@ -142,7 +144,7 @@ int main() {
 
 
     // uncomment this call to draw in wireframe polygons.
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // render loop
     // -----------

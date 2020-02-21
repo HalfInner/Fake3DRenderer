@@ -9,6 +9,8 @@ set(GLEW_INCLUDE_PATH C:/Program\ Files\ \(x86\)/glew/include/)
 set(GLEW_LIB_PATH C:/Program\ Files\ \(x86\)/glew/lib/)
 set(GLEW_DLL_PATH C:/Program\ Files\ \(x86\)/glew/bin/glew32.dll)
 
+set(GLM_INCLUDE_PATH C:/Users/kajbr/Programming/glm)
+
 message(${GLEW_INCLUDE_PATH})
 
 set(GLFW3_LIB_PATH lib/)
@@ -19,6 +21,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY build)
 
 add_executable(Fake3DRenderer main.cpp source/GlobalConstans.cc)
 target_compile_definitions(Fake3DRenderer PUBLIC)
-target_include_directories(Fake3DRenderer PUBLIC ${INCLUDE_PATH} ${GLEW_INCLUDE_PATH})
+target_include_directories(Fake3DRenderer PUBLIC ${INCLUDE_PATH} ${GLEW_INCLUDE_PATH} ${GLM_INCLUDE_PATH})
 target_link_directories(Fake3DRenderer PUBLIC ${OPENGL_LIB_PATH} ${GLFW3_LIB_PATH} ${GLEW_LIB_PATH})
 target_link_libraries(Fake3DRenderer PUBLIC OpenGL32 GlU32 glfw3 glew32)
