@@ -5,7 +5,6 @@
 #ifndef FAKE3DRENDERER_INPUTCONTROLLER_HH
 #define FAKE3DRENDERER_INPUTCONTROLLER_HH
 
-
 #include "Shader.hh"
 #include "ShaderManager.hh"
 #include "Renderable.hh"
@@ -22,11 +21,12 @@ struct /* interface */ InputController {
 
     virtual void serve() = 0;
 
-    virtual ~InputController() {}
+    virtual ~InputController() = default;
 };
+
 class OpenGlInputController : public InputController {
   public:
-    OpenGlInputController(GLFWwindow *window) : window_(window) {}
+    explicit OpenGlInputController(GLFWwindow *window) : window_(window) {}
 
     void serve() override {
         if (glfwGetKey(window_, GLFW_KEY_ENTER) == GLFW_PRESS) {

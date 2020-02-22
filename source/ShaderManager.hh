@@ -10,6 +10,8 @@
 #include <vector>
 #include <memory>
 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include "Utils.hh"
 
 class ShaderManager;
@@ -21,7 +23,7 @@ class ShaderManager {
             shaders(SHADERS_LIMITS, nullptr), shaderCounter(0) {
     }
 
-    ~ShaderManager() {};
+    ~ShaderManager() = default;
 
     uint32_t addShader(const char *shaderSource) {
         if (auto hasReachedLimit = shaderCounter == SHADERS_LIMITS; hasReachedLimit) {

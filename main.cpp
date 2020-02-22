@@ -10,13 +10,14 @@
 #include "source/Renderable.hh"
 #include "source/ShaderManager.hh"
 #include "source/Shader.hh"
+#include "source/ShaderEngine.hh"
 #include "source/InputController.hh"
 
 struct Windowable {
     virtual void initialize() = 0;
     virtual void run() = 0;
 
-    virtual ~Windowable() {};
+    virtual ~Windowable() = default;
 };
 
 namespace Graphic {
@@ -41,78 +42,25 @@ class Triangle : public Renderable {
 class SimpleWindow : public Windowable {
   public:
     SimpleWindow() :
-            shaderManagerPtr_(std::make_shared<ShaderManager>()), vs_(shaderManagerPtr_),
-            fs_(shaderManagerPtr_) {
+            shaderManagerPtr_(std::make_shared<ShaderManager>()),
+            vs_(std::make_shared<VertexShaderSource>(shaderManagerPtr_)),
+            fs_(std::make_shared<FragmentShaderSource>(shaderManagerPtr_)) {
     }
 
     void initialize() override {
         initializeGlfw();
         createWindowContext();
 
+        initializeGlew();
+
         configureInputController();
-
-        glfwMakeContextCurrent(window_);
-        glfwSetFramebufferSizeCallback(window_, [](auto win, auto width, auto height) {
-            // make sure the viewport matches the new window_ dimensions; note that width and
-            // height will be significantly larger than specified on retina displays.
-            glViewport(0, 0, width, height);
-        });
-
-        auto err = glewInit();
-        if (err != GLEW_OK) {
-            constexpr auto errorMsg = "Failed to initialize GLEW library";
-            std::cerr << errorMsg;
-            glfwTerminate();
-            throw std::runtime_error(errorMsg);
-        }
-
-        if (!GLEW_VERSION_2_1) { // check that the machine supports the 2.1 API.
-            // or handle the error in a nicer way
-            constexpr auto errorMsg = "GLEW does not support the latest needed features";
-            std::cerr << errorMsg;
-            glfwTerminate();
-            throw std::runtime_error(errorMsg);
-        }
 
         // build and compile our shader program
         // ------------------------------------
         // vertex shader
-        int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertexShader, 1, vs_.shader(), NULL);
-        glCompileShader(vertexShader);
-        // check for shader compile errors
-        int success;
-        char infoLog[512];
-        glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-        if (!success) {
-            glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-            std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-        }
-        // fragment shader
-        int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragmentShader, 1, fs_.shader(), NULL);
-        glCompileShader(fragmentShader);
-        // check for shader compile errors
-        glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-        if (!success) {
-            glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-            std::cerr << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-        }
-
-        // link shaders
-        shaderProgram_ = glCreateProgram();
-        glAttachShader(shaderProgram_, vertexShader);
-        glAttachShader(shaderProgram_, fragmentShader);
-        glLinkProgram(shaderProgram_);
-        // check for linking errors
-        glGetProgramiv(shaderProgram_, GL_LINK_STATUS, &success);
-        if (!success) {
-            glGetProgramInfoLog(shaderProgram_, 512, NULL, infoLog);
-            std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-        }
-
-        glDeleteShader(vertexShader);
-        glDeleteShader(fragmentShader);
+        shaderEngine.addFragmentShader(fs_);
+        shaderEngine.addVertexShader(vs_);
+        shaderEngine.initialize();
 
         // set up vertex data (and buffer(s)) and configure vertex attributes
         // ------------------------------------------------------------------
@@ -139,7 +87,7 @@ class SimpleWindow : public Windowable {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
         glEnableVertexAttribArray(0);
 
         // note that this is allowed, the call to glVertexAttribPointer registered VBO_ as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
@@ -156,6 +104,24 @@ class SimpleWindow : public Windowable {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 
+    void initializeGlew() const {
+        auto err = glewInit();
+        if (err != GLEW_OK) {
+            constexpr auto errorMsg = "Failed to initialize GLEW library";
+            std::cerr << errorMsg;
+            glfwTerminate();
+            throw std::runtime_error(errorMsg);
+        }
+
+        if (!GLEW_VERSION_2_1) { // check that the machine supports the 2.1 API.
+            // or handle the error in a nicer way
+            constexpr auto errorMsg = "GLEW does not support the latest needed features";
+            std::cerr << errorMsg;
+            glfwTerminate();
+            throw std::runtime_error(errorMsg);
+        }
+    }
+
     void configureInputController() {
         openGlInputController_ = std::make_unique<OpenGlInputController>(window_);
         openGlInputController_->subscribeEnterPress([wd = window_]() {
@@ -167,13 +133,20 @@ class SimpleWindow : public Windowable {
 // --------------------
         initialScreenWidth_ = 800;
         initialScreenHeight_ = 640;
-        window_ = glfwCreateWindow(initialScreenWidth_, initialScreenHeight_, "LearnOpenGL", NULL, NULL);
+        window_ = glfwCreateWindow(initialScreenWidth_, initialScreenHeight_, "LearnOpenGL", nullptr, nullptr);
         if (window_ == nullptr) {
             constexpr auto errorMsg = "Failed to create GLFW window_";
             std::cerr << errorMsg;
             glfwTerminate();
             throw std::runtime_error(errorMsg);
         }
+
+        glfwMakeContextCurrent(window_);
+        glfwSetFramebufferSizeCallback(window_, [](auto win, auto width, auto height) {
+            // make sure the viewport matches the new window_ dimensions; note that width and
+            // height will be significantly larger than specified on retina displays.
+            glViewport(0, 0, width, height);
+        });
     }
 
     void initializeGlfw() const {// glfw: initialize and configure
@@ -200,11 +173,12 @@ class SimpleWindow : public Windowable {
             glClear(GL_COLOR_BUFFER_BIT);
 
             // draw our first triangle
-            glUseProgram(shaderProgram_);
+//            glUseProgram(shaderProgram_);
+            glUseProgram(shaderEngine.handler());
             // seeing as we only have a single VAO_ there's no need to bind it every time, but we'll do so to keep things a bit more organized
             glBindVertexArray(VAO_);
             //glDrawArrays(GL_TRIANGLES, 0, 6);
-            glDrawElements(GL_LINES, 6, GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
             // glBindVertexArray(0); // no need to unbind it every time
 
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -214,7 +188,7 @@ class SimpleWindow : public Windowable {
         }
     }
 
-    ~SimpleWindow() {
+    ~SimpleWindow() override {
 //        runThread.join();
         // optional: de-allocate all resources once they've outlived their purpose:
         // ------------------------------------------------------------------------
@@ -232,16 +206,16 @@ class SimpleWindow : public Windowable {
     unsigned int VBO_ = 0;
     unsigned int EBO_ = 0;
     GLFWwindow *window_ = nullptr;
-    GLuint shaderProgram_;
 
     ShaderManagerPtr shaderManagerPtr_;
-    VertexShaderSource vs_;
-    FragmentShaderSource fs_;
+    std::shared_ptr<VertexShaderSource> vs_;
+    std::shared_ptr<FragmentShaderSource> fs_;
+    ShaderEngine shaderEngine;
 
     std::unique_ptr<OpenGlInputController> openGlInputController_;
 
-    int initialScreenWidth_;
-    int initialScreenHeight_;
+    int initialScreenWidth_ = 0;
+    int initialScreenHeight_ = 0;
 };
 
 int main() {
