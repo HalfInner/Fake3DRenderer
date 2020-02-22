@@ -11,14 +11,6 @@
 #include <thread>
 #include <vector>
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-
-void processInput(GLFWwindow *window);
-
-// settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
-
 struct ShaderSource {
     virtual const char **shader() = 0;
 
@@ -36,20 +28,31 @@ struct NotCreatable {
     NotCreatable &operator=(NotCreatable &&) = delete;
 };
 
-struct ShaderManager : NotCreatable {
+class ShaderManager : public NotCreatable {
+  public:
     static uint32_t addShader(const char *shaderSource) {
+        if (auto hasReachedLimit = shaderCounter == shadersLimit; hasReachedLimit) {
+            throw std::runtime_error("Cannot create new shader. Limit has been reached");
+        }
+        ++shaderCounter;
         auto id = shaders.size();
         shaders.emplace_back(shaderSource);
         return id;
     }
 
     static const char **shader(uint32_t id) {
+        if (auto isInRange = id < shaders.size(); !isInRange) {
+            throw std::runtime_error("Out of scope");
+        }
         return shaders.data() + id;
     }
-
+  private:
     static std::vector<const char *> shaders;
+    static constexpr size_t shadersLimit = 10;
+    static uint32_t shaderCounter;
 };
-std::vector<const char *> ShaderManager::shaders(10u, nullptr);
+uint32_t ShaderManager::shaderCounter = 0;
+std::vector<const char *> ShaderManager::shaders(ShaderManager::shadersLimit, nullptr);
 
 
 class VertexShaderSource : public ShaderSource {
@@ -92,7 +95,6 @@ class FragmentShaderSource : public ShaderSource {
     uint32_t id_;
 };
 
-
 struct Windowable {
     virtual void initialize() = 0;
     virtual void run() = 0;
@@ -113,7 +115,9 @@ class SimpleWindow : public Windowable {
 
         // glfw window_ creation
         // --------------------
-        window_ = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+        initialScreenWidth_ = 800;
+        initialScreenHeight_ = 640;
+        window_ = glfwCreateWindow(initialScreenWidth_, initialScreenHeight_, "LearnOpenGL", NULL, NULL);
         if (window_ == NULL) {
             constexpr auto errorMsg = "Failed to create GLFW window_";
             std::cerr << errorMsg;
@@ -277,6 +281,8 @@ class SimpleWindow : public Windowable {
     GLuint shaderProgram_;
     VertexShaderSource vs_;
     FragmentShaderSource fs_;
+    int initialScreenWidth_;
+    int initialScreenHeight_;
 };
 
 int main() {
