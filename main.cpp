@@ -7,6 +7,7 @@
 //#include <GL/glu.h>
 
 #include <iostream>
+#include <functional>
 #include "source/Renderable.hh"
 #include "source/ShaderManager.hh"
 #include "source/Shader.hh"
@@ -18,6 +19,33 @@ struct Windowable {
     virtual ~Windowable() {};
 };
 
+struct /* interface */ InputController {
+    using InputControllerCB = std::function<void()>;
+    virtual void subscribeEnterPress(InputControllerCB f) = 0;
+
+    virtual void serve() = 0;
+
+    virtual ~InputController() {}
+};
+
+class OpenGlInputController : public InputController {
+  public:
+    OpenGlInputController(GLFWwindow *window) : window_(window) { }
+
+    void serve() override {
+        if (glfwGetKey(window_, GLFW_KEY_ENTER) == GLFW_PRESS) {
+            if (cb_) cb_();
+        }
+    }
+
+    void subscribeEnterPress(InputControllerCB cb) override {
+        cb_ = cb;
+    }
+
+  private:
+    InputControllerCB cb_;
+    GLFWwindow *window_;
+};
 
 namespace Graphic {
 
@@ -58,12 +86,17 @@ class SimpleWindow : public Windowable {
         initialScreenWidth_ = 800;
         initialScreenHeight_ = 640;
         window_ = glfwCreateWindow(initialScreenWidth_, initialScreenHeight_, "LearnOpenGL", NULL, NULL);
-        if (window_ == NULL) {
+        if (window_ == nullptr) {
             constexpr auto errorMsg = "Failed to create GLFW window_";
             std::cerr << errorMsg;
             glfwTerminate();
             throw std::runtime_error(errorMsg);
         }
+
+        openGlInputController_ = std::make_unique<OpenGlInputController>(window_);
+        openGlInputController_->subscribeEnterPress([wd = window_]() {
+            glfwSetWindowShouldClose(wd, true);
+        });
 
         glfwMakeContextCurrent(window_);
         glfwSetFramebufferSizeCallback(window_, [](auto win, auto width, auto height) {
@@ -174,11 +207,11 @@ class SimpleWindow : public Windowable {
 
         // render loop
         // -----------
+
         while (!glfwWindowShouldClose(window_)) {
             // input
             // -----
-            if (glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-                glfwSetWindowShouldClose(window_, true);
+            openGlInputController_->serve();
 
             // render
             // ------
@@ -223,6 +256,8 @@ class SimpleWindow : public Windowable {
     ShaderManagerPtr shaderManagerPtr_;
     VertexShaderSource vs_;
     FragmentShaderSource fs_;
+
+    std::unique_ptr<OpenGlInputController> openGlInputController_;
 
     int initialScreenWidth_;
     int initialScreenHeight_;
