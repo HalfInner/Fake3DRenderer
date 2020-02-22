@@ -46,29 +46,10 @@ class SimpleWindow : public Windowable {
     }
 
     void initialize() override {
-        // glfw: initialize and configure
-        // ------------------------------
-        glfwInit();
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        initializeGlfw();
+        createWindowContext();
 
-        // glfw window_ creation
-        // --------------------
-        initialScreenWidth_ = 800;
-        initialScreenHeight_ = 640;
-        window_ = glfwCreateWindow(initialScreenWidth_, initialScreenHeight_, "LearnOpenGL", NULL, NULL);
-        if (window_ == nullptr) {
-            constexpr auto errorMsg = "Failed to create GLFW window_";
-            std::cerr << errorMsg;
-            glfwTerminate();
-            throw std::runtime_error(errorMsg);
-        }
-
-        openGlInputController_ = std::make_unique<OpenGlInputController>(window_);
-        openGlInputController_->subscribeEnterPress([wd = window_]() {
-            glfwSetWindowShouldClose(wd, true);
-        });
+        configureInputController();
 
         glfwMakeContextCurrent(window_);
         glfwSetFramebufferSizeCallback(window_, [](auto win, auto width, auto height) {
@@ -173,6 +154,34 @@ class SimpleWindow : public Windowable {
 
         // uncomment this call to draw in wireframe polygons.
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+
+    void configureInputController() {
+        openGlInputController_ = std::make_unique<OpenGlInputController>(window_);
+        openGlInputController_->subscribeEnterPress([wd = window_]() {
+            glfwSetWindowShouldClose(wd, true);
+        });
+    }
+
+    void createWindowContext() {// glfw window_ creation
+// --------------------
+        initialScreenWidth_ = 800;
+        initialScreenHeight_ = 640;
+        window_ = glfwCreateWindow(initialScreenWidth_, initialScreenHeight_, "LearnOpenGL", NULL, NULL);
+        if (window_ == nullptr) {
+            constexpr auto errorMsg = "Failed to create GLFW window_";
+            std::cerr << errorMsg;
+            glfwTerminate();
+            throw std::runtime_error(errorMsg);
+        }
+    }
+
+    void initializeGlfw() const {// glfw: initialize and configure
+// ------------------------------
+        glfwInit();
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     }
 
     void run() override {
