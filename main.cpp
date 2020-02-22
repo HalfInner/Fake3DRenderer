@@ -7,11 +7,8 @@
 //#include <GL/glu.h>
 
 #include <iostream>
-#include <string>
-#include <thread>
-#include <vector>
+#include "source/Renderable.hh"
 #include "source/ShaderManager.hh"
-#include "source/Utils.hh"
 #include "source/Shader.hh"
 
 struct Windowable {
@@ -20,6 +17,26 @@ struct Windowable {
 
     virtual ~Windowable() {};
 };
+
+
+namespace Graphic {
+
+class StaticCamera : public Camera {
+  public:
+    Result draw(Renderable *renderable) override {
+        return Result::Fail;
+    }
+};
+
+class Triangle : public Renderable {
+  public:
+    Result draw() override {
+        return Result::Fail;
+    }
+};
+
+} // namespace Graphic
+
 
 class SimpleWindow : public Windowable {
   public:
@@ -35,7 +52,6 @@ class SimpleWindow : public Windowable {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
 
         // glfw window_ creation
         // --------------------
@@ -174,7 +190,7 @@ class SimpleWindow : public Windowable {
             // seeing as we only have a single VAO_ there's no need to bind it every time, but we'll do so to keep things a bit more organized
             glBindVertexArray(VAO_);
             //glDrawArrays(GL_TRIANGLES, 0, 6);
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_LINES, 6, GL_UNSIGNED_INT, 0);
             // glBindVertexArray(0); // no need to unbind it every time
 
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)

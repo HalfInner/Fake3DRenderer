@@ -9,7 +9,6 @@ struct ShaderSource {
     virtual const char **shader() = 0;
 
     virtual ~ShaderSource() {};
-
 };
 
 class VertexShaderSource : public ShaderSource {
