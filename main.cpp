@@ -7,44 +7,16 @@
 //#include <GL/glu.h>
 
 #include <iostream>
-#include <functional>
 #include "source/Renderable.hh"
 #include "source/ShaderManager.hh"
 #include "source/Shader.hh"
+#include "source/InputController.hh"
 
 struct Windowable {
     virtual void initialize() = 0;
     virtual void run() = 0;
 
     virtual ~Windowable() {};
-};
-
-struct /* interface */ InputController {
-    using InputControllerCB = std::function<void()>;
-    virtual void subscribeEnterPress(InputControllerCB f) = 0;
-
-    virtual void serve() = 0;
-
-    virtual ~InputController() {}
-};
-
-class OpenGlInputController : public InputController {
-  public:
-    OpenGlInputController(GLFWwindow *window) : window_(window) { }
-
-    void serve() override {
-        if (glfwGetKey(window_, GLFW_KEY_ENTER) == GLFW_PRESS) {
-            if (cb_) cb_();
-        }
-    }
-
-    void subscribeEnterPress(InputControllerCB cb) override {
-        cb_ = cb;
-    }
-
-  private:
-    InputControllerCB cb_;
-    GLFWwindow *window_;
 };
 
 namespace Graphic {
