@@ -10,6 +10,8 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include "source/ShaderManager.hh"
+#include "source/Utils.hh"
 
 struct ShaderSource {
     virtual const char **shader() = 0;
@@ -17,52 +19,15 @@ struct ShaderSource {
     virtual ~ShaderSource() {};
 };
 
-struct NotCreatable {
-    NotCreatable() = delete;
-    ~NotCreatable() = delete;
-
-    NotCreatable(const NotCreatable &) = delete;
-    NotCreatable(NotCreatable &&) = delete;
-
-    NotCreatable &operator=(const NotCreatable &) = delete;
-    NotCreatable &operator=(NotCreatable &&) = delete;
-};
-
-class ShaderManager : public NotCreatable {
-  public:
-    static uint32_t addShader(const char *shaderSource) {
-        if (auto hasReachedLimit = shaderCounter == shadersLimit; hasReachedLimit) {
-            throw std::runtime_error("Cannot create new shader. Limit has been reached");
-        }
-        ++shaderCounter;
-        auto id = shaders.size();
-        shaders.emplace_back(shaderSource);
-        return id;
-    }
-
-    static const char **shader(uint32_t id) {
-        if (auto isInRange = id < shaders.size(); !isInRange) {
-            throw std::runtime_error("Out of scope");
-        }
-        return shaders.data() + id;
-    }
-  private:
-    static std::vector<const char *> shaders;
-    static constexpr size_t shadersLimit = 10;
-    static uint32_t shaderCounter;
-};
-uint32_t ShaderManager::shaderCounter = 0;
-std::vector<const char *> ShaderManager::shaders(ShaderManager::shadersLimit, nullptr);
-
-
 class VertexShaderSource : public ShaderSource {
   public:
-    VertexShaderSource() {
-        id_ = ShaderManager::addShader(shaderProgram);
+    VertexShaderSource(ShaderManagerPtr shaderManager) :
+            shaderManager_(shaderManager) {
+        id_ = shaderManager_->addShader(shaderProgram);
     }
 
     const char **shader() override {
-        return ShaderManager::shader(id_);
+        return shaderManager_->shader(id_);
     }
 
   private:
@@ -73,16 +38,18 @@ class VertexShaderSource : public ShaderSource {
                 gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
             })";
     uint32_t id_;
+    ShaderManagerPtr shaderManager_;
 };
 
 class FragmentShaderSource : public ShaderSource {
   public:
-    FragmentShaderSource() {
-        id_ = ShaderManager::addShader(shaderProgram);
+    FragmentShaderSource(ShaderManagerPtr shaderManager) :
+            shaderManager_(shaderManager) {
+        id_ = shaderManager_->addShader(shaderProgram);
     }
 
     const char **shader() override {
-        return ShaderManager::shader(id_);
+        return shaderManager_->shader(id_);
     }
 
   private:
@@ -93,6 +60,7 @@ class FragmentShaderSource : public ShaderSource {
               FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
             })";
     uint32_t id_;
+    ShaderManagerPtr shaderManager_;
 };
 
 struct Windowable {
@@ -104,6 +72,11 @@ struct Windowable {
 
 class SimpleWindow : public Windowable {
   public:
+    SimpleWindow() :
+            shaderManagerPtr_(std::make_shared<ShaderManager>()), vs_(shaderManagerPtr_),
+            fs_(shaderManagerPtr_) {
+    }
+
     void initialize() override {
         // glfw: initialize and configure
         // ------------------------------
@@ -279,8 +252,11 @@ class SimpleWindow : public Windowable {
     unsigned int EBO_ = 0;
     GLFWwindow *window_ = nullptr;
     GLuint shaderProgram_;
+
+    ShaderManagerPtr shaderManagerPtr_;
     VertexShaderSource vs_;
     FragmentShaderSource fs_;
+
     int initialScreenWidth_;
     int initialScreenHeight_;
 };

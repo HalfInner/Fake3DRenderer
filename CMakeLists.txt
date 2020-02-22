@@ -19,8 +19,9 @@ set(GLFW3_LIB_PATH C:/lib/)
 set(INCLUDE_PATH include/)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY build)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wpedantic -Werror")
 
-add_executable(Fake3DRenderer main.cpp source/Renderable.h source/Cuboid.h)
+add_executable(Fake3DRenderer main.cpp source/ShaderManager.cc)
 target_compile_definitions(Fake3DRenderer PUBLIC )
 target_include_directories(Fake3DRenderer PUBLIC
         ${INCLUDE_PATH} ${GLFW3_INCLUDE_PATH} ${GLEW_INCLUDE_PATH} ${GLM_INCLUDE_PATH})

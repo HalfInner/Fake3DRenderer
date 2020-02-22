@@ -5,7 +5,7 @@
 #ifndef FAKE3DRENDERER_CUBOID_H
 #define FAKE3DRENDERER_CUBOID_H
 
-#include "Renderable.h"
+#include "Renderable.hh"
 
 #include <stdexcept>
 
