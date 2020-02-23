@@ -31,8 +31,7 @@ struct /*interface*/ Camera {
 
 class TPPCamera : public Camera {
   public:
-    explicit TPPCamera(GLFWwindow* window, std::shared_ptr<ShaderEngine> shaderEngine) :
-            window_(window), shaderEngine_(shaderEngine) {}
+    explicit TPPCamera(std::shared_ptr<ShaderEngine> shaderEngine) : shaderEngine_(shaderEngine) {}
 
     Result addObject(std::shared_ptr<Renderable> renderable) override {
         objects_.emplace_back(std::move(renderable));
@@ -54,20 +53,28 @@ class TPPCamera : public Camera {
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         // glBindVertexArray(0); // no need to unbind it every time
 
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
-        glfwSwapBuffers(window_);
-        glfwPollEvents();
-
         return Result::Success;
     }
 
     Result initialize() override {
-//        glBindBuffer(GL_ARRAY_BUFFER, VBO_);
-//        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-//
-//        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_);
-//        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        // generated from object
+        float vertices[] = {
+                0.5f, 0.5f, 0.0f,  // top right
+                0.5f, -0.5f, 0.0f,  // bottom right
+                -0.5f, -0.5f, 0.0f,  // bottom left
+                -0.5f, 0.5f, 0.0f   // top left
+        };
+
+        unsigned int indices[] = {  // note that we start from 0!
+                0, 1, 3,  // first Triangle
+//                1, 2, 3,   // second Triangle
+                0, 1, 2   // second Triangle
+        };
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
         glEnableVertexAttribArray(0);
@@ -88,7 +95,6 @@ class TPPCamera : public Camera {
     unsigned int VAO_ = 0;
     unsigned int VBO_ = 0;
     unsigned int EBO_ = 0;
-    GLFWwindow* window_ = nullptr;
     std::shared_ptr<ShaderEngine> shaderEngine_;
     std::vector<std::shared_ptr<Renderable>> objects_;
 };

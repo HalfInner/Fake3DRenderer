@@ -47,7 +47,6 @@ class SimpleWindow : public Windowable {
 
         initializeGlew();
 
-
         configureInputController();
 
         // build and compile our shader program
@@ -57,8 +56,8 @@ class SimpleWindow : public Windowable {
         shaderEngine_->addVertexShader(vs_);
         shaderEngine_->initialize();
 
-//        tppCamera_ = std::make_unique<Graphic::TPPCamera>(window_, shaderEngine_);
-
+        tppCamera_ = std::make_unique<Graphic::TPPCamera>(shaderEngine_);
+//        tppCamera_->initialize();
         // set up vertex data (and buffer(s)) and configure vertex attributes
         // ------------------------------------------------------------------
 
@@ -115,6 +114,7 @@ class SimpleWindow : public Windowable {
             // -----
             openGlInputController_->serve();
 
+//            tppCamera_->draw();
             // render
             // ------
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -127,7 +127,7 @@ class SimpleWindow : public Windowable {
             glBindVertexArray(VAO_);
             //glDrawArrays(GL_TRIANGLES, 0, 6);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-            // glBindVertexArray(0); // no need to unbind it every time
+             glBindVertexArray(0); // no need to unbind it every time
 
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
             // -------------------------------------------------------------------------------
@@ -207,7 +207,7 @@ class SimpleWindow : public Windowable {
     unsigned int VBO_ = 0;
     unsigned int EBO_ = 0;
 
-    GLFWwindow* window_ = nullptr;
+    GLFWwindow *window_ = nullptr;
 
     ShaderManagerPtr shaderManagerPtr_;
     std::shared_ptr<VertexShaderSource> vs_;
