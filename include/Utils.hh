@@ -5,6 +5,8 @@
 #ifndef FAKE3DRENDERER_UTILS_HH
 #define FAKE3DRENDERER_UTILS_HH
 
+
+
 struct NotCreatable {
     NotCreatable() = delete;
     ~NotCreatable() = delete;

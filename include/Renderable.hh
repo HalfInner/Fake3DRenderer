@@ -43,53 +43,16 @@ class TPPCamera : public Camera {
 
     Result initialize() override {
         // generated from object
-        float vertices[] = {
-                0.5f, 0.5f, 0.0f,  // top right
-                0.5f, -0.5f, 0.0f,  // bottom right
-                -0.5f, -0.5f, 0.0f,  // bottom left
-                -0.5f, 0.5f, 0.0f   // top left
-        };
 
-        unsigned int indices[] = {  // note that we start from 0!
-                0, 1, 3,  // first Triangle
-//                1, 2, 3,   // second Triangle
-                0, 1, 2   // second Triangle
-        };
-
-        glGenVertexArrays(1, &VAO_);
-        glGenBuffers(1, &VBO_);
-        glGenBuffers(1, &EBO_);
-
-        glBindVertexArray(VAO_);
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO_);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-        glEnableVertexAttribArray(0);
-
-        // note that this is allowed, the call to glVertexAttribPointer registered VBO_ as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-        // remember: do NOT unbind the EBO_ while a VAO_ is active as the bound element buffer object IS stored in the VAO_; keep the EBO_ bound.
-        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-        // You can unbind the VAO_ afterwards so other VAO_ calls won't accidentally modify this VAO_, but this rarely happens. Modifying other
-        // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-        glBindVertexArray(0);
-
-        // uncomment this call to draw in wireframe polygons.
-        // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         return Result::Success;
     }
+
 
     Result draw() override {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        prepareObjects();
         // draw our first triangle
         // glUseProgram(shaderProgram_);
         glUseProgram(shaderEngine_->handler());
@@ -119,6 +82,54 @@ class TPPCamera : public Camera {
     }
 
   private:
+
+    void prepareObjects() {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, DELETE_BUFFER_KEY);
+//        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        float vertices[] = {
+                0.5f, 0.5f, 0.0f,  // top right
+                0.5f, -0.5f, 0.0f,  // bottom right
+                -0.5f, -0.5f, 0.0f,  // bottom left
+                -0.5f, 0.5f, 0.0f   // top left
+        };
+
+        unsigned int indices[] = {  // note that we start from 0!
+                0, 1, 3,  // first Triangle
+                0, 1, 2   // second Triangle
+        };
+
+        glGenVertexArrays(1, &VAO_);
+        glGenBuffers(1, &VBO_);
+        glGenBuffers(1, &EBO_);
+
+        glBindVertexArray(VAO_);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+        glEnableVertexAttribArray(0);
+
+        // note that this is allowed, the call to glVertexAttribPointer registered VBO_ as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
+        glBindBuffer(GL_ARRAY_BUFFER, DELETE_BUFFER_KEY);
+
+        // remember: do NOT unbind the EBO_ while a VAO_ is active as the bound element buffer object IS stored in the VAO_; keep the EBO_ bound.
+        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, DELETE_BUFFER_KEY);
+
+        // You can unbind the VAO_ afterwards so other VAO_ calls won't accidentally modify this VAO_, but this rarely happens. Modifying other
+        // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
+        glBindVertexArray(DELETE_BUFFER_KEY);
+
+        // uncomment this call to draw in wireframe polygons.
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+
+    static constexpr unsigned DELETE_BUFFER_KEY = 0;
+
     unsigned int VAO_ = 0;
     unsigned int VBO_ = 0;
     unsigned int EBO_ = 0;
