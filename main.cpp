@@ -38,6 +38,7 @@ class SimpleWindow : public Windowable {
             shaderManagerPtr_(std::make_shared<ShaderManager>()),
             vs_(std::make_shared<VertexShaderSource>(shaderManagerPtr_)),
             fs_(std::make_shared<FragmentShaderSource>(shaderManagerPtr_)) {
+        shaderEngine_ = std::make_shared<ShaderEngine>();
     }
 
     void initialize() override {
@@ -46,14 +47,17 @@ class SimpleWindow : public Windowable {
 
         initializeGlew();
 
+
         configureInputController();
 
         // build and compile our shader program
         // ------------------------------------
         // vertex shader
-        shaderEngine.addFragmentShader(fs_);
-        shaderEngine.addVertexShader(vs_);
-        shaderEngine.initialize();
+        shaderEngine_->addFragmentShader(fs_);
+        shaderEngine_->addVertexShader(vs_);
+        shaderEngine_->initialize();
+
+//        tppCamera_ = std::make_unique<Graphic::TPPCamera>(window_, shaderEngine_);
 
         // set up vertex data (and buffer(s)) and configure vertex attributes
         // ------------------------------------------------------------------
@@ -118,7 +122,7 @@ class SimpleWindow : public Windowable {
 
             // draw our first triangle
 //            glUseProgram(shaderProgram_);
-            glUseProgram(shaderEngine.handler());
+            glUseProgram(shaderEngine_->handler());
             // seeing as we only have a single VAO_ there's no need to bind it every time, but we'll do so to keep things a bit more organized
             glBindVertexArray(VAO_);
             //glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -178,12 +182,11 @@ class SimpleWindow : public Windowable {
         initialScreenHeight_ = 640;
         window_ = glfwCreateWindow(initialScreenWidth_, initialScreenHeight_, "LearnOpenGL", nullptr, nullptr);
         if (window_ == nullptr) {
-            constexpr auto errorMsg = "Failed to create GLFW window_";
+            constexpr auto errorMsg = "Failed to create GLFW window";
             std::cerr << errorMsg;
             glfwTerminate();
             throw std::runtime_error(errorMsg);
         }
-
         glfwMakeContextCurrent(window_);
         glfwSetFramebufferSizeCallback(window_, [](auto win, auto width, auto height) {
             // make sure the viewport matches the new window_ dimensions; note that width and
@@ -203,12 +206,15 @@ class SimpleWindow : public Windowable {
     unsigned int VAO_ = 0;
     unsigned int VBO_ = 0;
     unsigned int EBO_ = 0;
-    GLFWwindow *window_ = nullptr;
+
+    GLFWwindow* window_ = nullptr;
 
     ShaderManagerPtr shaderManagerPtr_;
     std::shared_ptr<VertexShaderSource> vs_;
     std::shared_ptr<FragmentShaderSource> fs_;
-    ShaderEngine shaderEngine;
+    std::shared_ptr<ShaderEngine> shaderEngine_;
+
+    std::unique_ptr<Graphic::TPPCamera> tppCamera_;
 
     std::unique_ptr<OpenGlInputController> openGlInputController_;
 

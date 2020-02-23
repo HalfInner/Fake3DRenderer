@@ -31,7 +31,7 @@ struct /*interface*/ Camera {
 
 class TPPCamera : public Camera {
   public:
-    explicit TPPCamera(std::shared_ptr<GLFWwindow> window, std::shared_ptr<ShaderEngine> shaderEngine) :
+    explicit TPPCamera(GLFWwindow* window, std::shared_ptr<ShaderEngine> shaderEngine) :
             window_(window), shaderEngine_(shaderEngine) {}
 
     Result addObject(std::shared_ptr<Renderable> renderable) override {
@@ -56,7 +56,7 @@ class TPPCamera : public Camera {
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
-        glfwSwapBuffers(window_.get());
+        glfwSwapBuffers(window_);
         glfwPollEvents();
 
         return Result::Success;
@@ -88,7 +88,7 @@ class TPPCamera : public Camera {
     unsigned int VAO_ = 0;
     unsigned int VBO_ = 0;
     unsigned int EBO_ = 0;
-    std::shared_ptr<GLFWwindow> window_ = nullptr;
+    GLFWwindow* window_ = nullptr;
     std::shared_ptr<ShaderEngine> shaderEngine_;
     std::vector<std::shared_ptr<Renderable>> objects_;
 };
