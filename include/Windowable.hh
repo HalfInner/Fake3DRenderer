@@ -15,6 +15,7 @@
 #include "Shader.hh"
 #include "ShaderManager.hh"
 #include "Renderable.hh"
+#include "Triangle.hh"
 #include "Windowable.hh"
 
 struct Windowable {
@@ -23,6 +24,8 @@ struct Windowable {
 
     virtual ~Windowable() = default;
 };
+
+
 
 class SimpleWindow : public Windowable {
   public:
@@ -47,6 +50,7 @@ class SimpleWindow : public Windowable {
 
         tppCamera_ = std::make_unique<Graphic::TPPCamera>(shaderEngine_);
         tppCamera_->initialize();
+        tppCamera_->addObject(std::make_shared<Triangle>());
     }
 
     void run() override {

@@ -24,49 +24,22 @@ struct /*interface*/ Movable {
     virtual ~Movable() = default;
 };
 
-
 struct /*interface*/ Renderable {
-    virtual std::vector<float> trianglazation() = 0;
+    virtual std::vector<glm::vec4> trianglazation() = 0;
     virtual ~Renderable() = default;
 };
 
 struct /*interface*/ Camera {
+    virtual Result initialize() = 0;
     virtual Result draw() = 0;
     virtual Result addObject(std::shared_ptr<Renderable> renderable) = 0;
     virtual Result setPosition(glm::vec4 position) = 0;
-    virtual Result initialize() = 0;
     virtual ~Camera() = default;
 };
 
 class TPPCamera : public Camera {
   public:
     explicit TPPCamera(std::shared_ptr<ShaderEngine> shaderEngine) : shaderEngine_(std::move(shaderEngine)) {}
-
-    Result addObject(std::shared_ptr<Renderable> renderable) override {
-        objects_.emplace_back(std::move(renderable));
-        return Result::Success;
-    }
-
-    Result setPosition(glm::vec4 position) override {
-        position_ = position;
-        return Result::Success;
-    }
-
-    Result draw() override {
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        // draw our first triangle
-        // glUseProgram(shaderProgram_);
-        glUseProgram(shaderEngine_->handler());
-        // seeing as we only have a single VAO_ there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        glBindVertexArray(VAO_);
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-        // glBindVertexArray(0); // no need to unbind it every time
-
-        return Result::Success;
-    }
 
     Result initialize() override {
         // generated from object
@@ -110,6 +83,32 @@ class TPPCamera : public Camera {
 
         // uncomment this call to draw in wireframe polygons.
         // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        return Result::Success;
+    }
+
+    Result draw() override {
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // draw our first triangle
+        // glUseProgram(shaderProgram_);
+        glUseProgram(shaderEngine_->handler());
+        // seeing as we only have a single VAO_ there's no need to bind it every time, but we'll do so to keep things a bit more organized
+        glBindVertexArray(VAO_);
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        // glBindVertexArray(0); // no need to unbind it every time
+
+        return Result::Success;
+    }
+
+    Result addObject(std::shared_ptr<Renderable> renderable) override {
+        objects_.emplace_back(std::move(renderable));
+        return Result::Success;
+    }
+
+    Result setPosition(glm::vec4 position) override {
+        position_ = position;
         return Result::Success;
     }
 

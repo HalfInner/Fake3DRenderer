@@ -1,6 +1,6 @@
 # Fake 3D Renderer
 
-Simple 3D engine.  
+Primitive & Naive 3D engine.  
 
 ## Support 
 
