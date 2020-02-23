@@ -5,8 +5,10 @@
 #ifndef FAKE3DRENDERER_RENDERABLE_H
 #define FAKE3DRENDERER_RENDERABLE_H
 
+#include <glm/vec4.hpp>
 #include <memory>
 #include <vector>
+
 #include "ShaderEngine.hh"
 
 namespace Graphic {
@@ -25,6 +27,7 @@ struct /*interface*/ Renderable {
 struct /*interface*/ Camera {
     virtual Result draw() = 0;
     virtual Result addObject(std::shared_ptr<Renderable> renderable) = 0;
+    virtual Result setPosition(glm::vec4 position) = 0;
     virtual Result initialize() = 0;
     virtual ~Camera() = default;
 };
@@ -38,9 +41,12 @@ class TPPCamera : public Camera {
         return Result::Success;
     }
 
+    Result setPosition(glm::vec4 position) override {
+        position_ = position;
+        return Result::Success;
+    }
+
     Result draw() override {
-        // render
-        // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -90,14 +96,14 @@ class TPPCamera : public Camera {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         // remember: do NOT unbind the EBO_ while a VAO_ is active as the bound element buffer object IS stored in the VAO_; keep the EBO_ bound.
-        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
         // You can unbind the VAO_ afterwards so other VAO_ calls won't accidentally modify this VAO_, but this rarely happens. Modifying other
         // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
         glBindVertexArray(0);
 
         // uncomment this call to draw in wireframe polygons.
-//        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         return Result::Success;
     }
 
@@ -113,6 +119,7 @@ class TPPCamera : public Camera {
     unsigned int EBO_ = 0;
     std::shared_ptr<ShaderEngine> shaderEngine_;
     std::vector<std::shared_ptr<Renderable>> objects_;
+    glm::vec4 position_;
 };
 
 } // namespace Graphic

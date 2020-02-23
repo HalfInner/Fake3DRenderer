@@ -6,9 +6,9 @@
 #define FAKE3DRENDERER_SHADERMANAGER_HH
 
 #include <cstdint>
+#include <memory>
 #include <stdexcept>
 #include <vector>
-#include <memory>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>

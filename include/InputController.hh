@@ -5,14 +5,15 @@
 #ifndef FAKE3DRENDERER_INPUTCONTROLLER_HH
 #define FAKE3DRENDERER_INPUTCONTROLLER_HH
 
+#include <functional>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/vec4.hpp>
+#include <iostream>
+
 #include "Shader.hh"
 #include "ShaderManager.hh"
 #include "Renderable.hh"
-#include <functional>
-#include <iostream>
-#include <glm/vec4.hpp>
-#include <GLFW/glfw3.h>
-#include <GL/glew.h>
 #include "InputController.hh"
 
 struct /* interface */ InputController {

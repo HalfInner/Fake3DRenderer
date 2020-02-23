@@ -5,9 +5,9 @@
 #ifndef FAKE3DRENDERER_CUBOID_H
 #define FAKE3DRENDERER_CUBOID_H
 
-#include "Renderable.hh"
-
 #include <stdexcept>
+
+#include "Renderable.hh"
 
 namespace Graphic {
 

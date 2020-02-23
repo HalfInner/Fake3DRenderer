@@ -5,15 +5,16 @@
 #ifndef FAKE3DRENDERER_WINDOWABLE_HH
 #define FAKE3DRENDERER_WINDOWABLE_HH
 
+#include <iostream>
+#include <glm/vec4.hpp>
+#include <GLFW/glfw3.h>
+#include <GL/glew.h>
+
 #include "InputController.hh"
 #include "ShaderEngine.hh"
 #include "Shader.hh"
 #include "ShaderManager.hh"
 #include "Renderable.hh"
-#include <iostream>
-#include <glm/vec4.hpp>
-#include <GLFW/glfw3.h>
-#include <GL/glew.h>
 #include "Windowable.hh"
 
 struct Windowable {
@@ -40,9 +41,6 @@ class SimpleWindow : public Windowable {
 
         configureInputController();
 
-        // build and compile our shader program
-        // ------------------------------------
-        // vertex shader
         shaderEngine_->addFragmentShader(fs_);
         shaderEngine_->addVertexShader(vs_);
         shaderEngine_->initialize();
@@ -51,11 +49,7 @@ class SimpleWindow : public Windowable {
         tppCamera_->initialize();
     }
 
-
     void run() override {
-
-        // render loop
-        // -----------
         while (!glfwWindowShouldClose(window_)) {
             openGlInputController_->serve();
             tppCamera_->draw();
