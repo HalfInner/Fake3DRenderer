@@ -4,11 +4,19 @@
 
 namespace Graphic {
 
-class Triangle : public Renderable {
+class Triangle : public Renderable, public Movable {
   public:
-    Result draw() override {
-        return Result::Fail;
+    std::vector<float> trianglazation() override {
+        return std::vector<float>();
     }
+
+    Result move(glm::vec4 vec) override {
+        pos_ += vec;
+        return Result::Success;
+    }
+
+  private:
+    glm::vec4 pos_{};
 };
 
 } // namespace Graphic

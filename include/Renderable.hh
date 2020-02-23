@@ -19,8 +19,14 @@ enum class Result {
     NotApplicable
 };
 
+struct /*interface*/ Movable {
+    virtual Result move(glm::vec4 vec) = 0;
+    virtual ~Movable() = default;
+};
+
+
 struct /*interface*/ Renderable {
-    virtual Result draw() = 0;
+    virtual std::vector<float> trianglazation() = 0;
     virtual ~Renderable() = default;
 };
 
