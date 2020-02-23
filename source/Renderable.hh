@@ -70,6 +70,13 @@ class TPPCamera : public Camera {
 //                1, 2, 3,   // second Triangle
                 0, 1, 2   // second Triangle
         };
+
+        glGenVertexArrays(1, &VAO_);
+        glGenBuffers(1, &VBO_);
+        glGenBuffers(1, &EBO_);
+
+        glBindVertexArray(VAO_);
+
         glBindBuffer(GL_ARRAY_BUFFER, VBO_);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
