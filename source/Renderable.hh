@@ -95,7 +95,16 @@ class TPPCamera : public Camera {
         // You can unbind the VAO_ afterwards so other VAO_ calls won't accidentally modify this VAO_, but this rarely happens. Modifying other
         // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
         glBindVertexArray(0);
+
+        // uncomment this call to draw in wireframe polygons.
+//        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         return Result::Success;
+    }
+
+    ~TPPCamera() override {
+        glDeleteVertexArrays(1, &VAO_);
+        glDeleteBuffers(1, &VBO_);
+        glDeleteBuffers(1, &EBO_);
     }
 
   private:
