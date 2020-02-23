@@ -5,6 +5,8 @@
 #ifndef FAKE3DRENDERER_SHADER_HH
 #define FAKE3DRENDERER_SHADER_HH
 
+#include "ShaderManager.hh"
+
 struct ShaderSource {
     virtual const char **shader() = 0;
 

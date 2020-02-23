@@ -22,24 +22,6 @@ struct Windowable {
 
 namespace Graphic {
 
-class StaticCamera : public Camera {
-  public:
-    void addObject(std::shared_ptr<Renderable> object) {
-        objects.emplace_back(std::move(object));
-    }
-
-    Result draw() override {
-        for (auto &&object : objects) {
-            (void) object;
-            // not implemented
-        }
-        return Result::Fail;
-    }
-
-  private:
-    std::vector<std::shared_ptr<Renderable>> objects;
-};
-
 class Triangle : public Renderable {
   public:
     Result draw() override {
@@ -76,15 +58,18 @@ class SimpleWindow : public Windowable {
         // set up vertex data (and buffer(s)) and configure vertex attributes
         // ------------------------------------------------------------------
 
+        // generated from object
         float vertices[] = {
                 0.5f, 0.5f, 0.0f,  // top right
                 0.5f, -0.5f, 0.0f,  // bottom right
                 -0.5f, -0.5f, 0.0f,  // bottom left
                 -0.5f, 0.5f, 0.0f   // top left
         };
+
         unsigned int indices[] = {  // note that we start from 0!
                 0, 1, 3,  // first Triangle
-                1, 2, 3   // second Triangle
+//                1, 2, 3,   // second Triangle
+                0, 1, 2   // second Triangle
         };
 
         glGenVertexArrays(1, &VAO_);
@@ -113,8 +98,9 @@ class SimpleWindow : public Windowable {
         glBindVertexArray(0);
 
         // uncomment this call to draw in wireframe polygons.
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
+
 
     void run() override {
 
