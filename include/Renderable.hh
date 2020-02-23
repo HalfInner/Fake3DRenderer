@@ -31,7 +31,7 @@ struct /*interface*/ Camera {
 
 class TPPCamera : public Camera {
   public:
-    explicit TPPCamera(std::shared_ptr<ShaderEngine> shaderEngine) : shaderEngine_(shaderEngine) {}
+    explicit TPPCamera(std::shared_ptr<ShaderEngine> shaderEngine) : shaderEngine_(std::move(shaderEngine)) {}
 
     Result addObject(std::shared_ptr<Renderable> renderable) override {
         objects_.emplace_back(std::move(renderable));

@@ -10,13 +10,13 @@
 struct ShaderSource {
     virtual const char **shader() = 0;
 
-    virtual ~ShaderSource() {};
+    virtual ~ShaderSource() = default;
 };
 
 class VertexShaderSource : public ShaderSource {
   public:
-    VertexShaderSource(ShaderManagerPtr shaderManager) :
-            shaderManager_(shaderManager) {
+    explicit VertexShaderSource(ShaderManagerPtr shaderManager) :
+            shaderManager_(std::move(shaderManager)) {
         id_ = shaderManager_->addShader(shaderProgram);
     }
 
@@ -37,8 +37,8 @@ class VertexShaderSource : public ShaderSource {
 
 class FragmentShaderSource : public ShaderSource {
   public:
-    FragmentShaderSource(ShaderManagerPtr shaderManager) :
-            shaderManager_(shaderManager) {
+    explicit FragmentShaderSource(ShaderManagerPtr shaderManager) :
+            shaderManager_(std::move(shaderManager)) {
         id_ = shaderManager_->addShader(shaderProgram);
     }
 

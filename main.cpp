@@ -7,12 +7,12 @@
 //#include <GL/glu.h>
 
 #include <iostream>
-#include "source/Renderable.hh"
-#include "source/ShaderManager.hh"
-#include "source/Shader.hh"
-#include "source/ShaderEngine.hh"
-#include "source/InputController.hh"
-#include "source/Windowable.hh"
+#include "Renderable.hh"
+#include "ShaderManager.hh"
+#include "Shader.hh"
+#include "ShaderEngine.hh"
+#include "InputController.hh"
+#include "Windowable.hh"
 
 namespace Graphic {
 

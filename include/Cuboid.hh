@@ -19,7 +19,7 @@ class Cuboid : public Renderable {
     // Interface Renderable
     Result draw() override {
         throw std::runtime_error("Not Implemented");
-        return Result::Success;
+//        return Result::Success;
     }
 
   private:
