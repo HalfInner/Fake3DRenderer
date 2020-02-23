@@ -24,9 +24,20 @@ namespace Graphic {
 
 class StaticCamera : public Camera {
   public:
-    Result draw(Renderable *renderable) override {
+    void addObject(std::shared_ptr<Renderable> object) {
+        objects.emplace_back(std::move(object));
+    }
+
+    Result draw() override {
+        for (auto &&object : objects) {
+            (void) object;
+            // not implemented
+        }
         return Result::Fail;
     }
+
+  private:
+    std::vector<std::shared_ptr<Renderable>> objects;
 };
 
 class Triangle : public Renderable {
@@ -64,11 +75,12 @@ class SimpleWindow : public Windowable {
 
         // set up vertex data (and buffer(s)) and configure vertex attributes
         // ------------------------------------------------------------------
+
         float vertices[] = {
-                0.5f, 0.5f, 0.5f,  // top right
-                0.5f, -0.5f, 0.5f,  // bottom right
-                -0.5f, -0.5f, 0.5f,  // bottom left
-                -0.5f, 0.5f, 0.5f   // top left
+                0.5f, 0.5f, 0.0f,  // top right
+                0.5f, -0.5f, 0.0f,  // bottom right
+                -0.5f, -0.5f, 0.0f,  // bottom left
+                -0.5f, 0.5f, 0.0f   // top left
         };
         unsigned int indices[] = {  // note that we start from 0!
                 0, 1, 3,  // first Triangle
@@ -103,6 +115,51 @@ class SimpleWindow : public Windowable {
         // uncomment this call to draw in wireframe polygons.
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
+
+    void run() override {
+
+        // render loop
+        // -----------
+        while (!glfwWindowShouldClose(window_)) {
+            // input
+            // -----
+            openGlInputController_->serve();
+
+            // render
+            // ------
+            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            // draw our first triangle
+//            glUseProgram(shaderProgram_);
+            glUseProgram(shaderEngine.handler());
+            // seeing as we only have a single VAO_ there's no need to bind it every time, but we'll do so to keep things a bit more organized
+            glBindVertexArray(VAO_);
+            //glDrawArrays(GL_TRIANGLES, 0, 6);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+            // glBindVertexArray(0); // no need to unbind it every time
+
+            // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+            // -------------------------------------------------------------------------------
+            glfwSwapBuffers(window_);
+            glfwPollEvents();
+        }
+    }
+
+    ~SimpleWindow() override {
+//        runThread.join();
+        // optional: de-allocate all resources once they've outlived their purpose:
+        // ------------------------------------------------------------------------
+        glDeleteVertexArrays(1, &VAO_);
+        glDeleteBuffers(1, &VBO_);
+        glDeleteBuffers(1, &EBO_);
+
+        // glfw: terminate, clearing all previously allocated GLFW resources.
+        // ------------------------------------------------------------------
+        glfwTerminate();
+    }
+
+  private:
 
     void initializeGlew() const {
         auto err = glewInit();
@@ -157,51 +214,6 @@ class SimpleWindow : public Windowable {
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     }
 
-    void run() override {
-
-        // render loop
-        // -----------
-
-        while (!glfwWindowShouldClose(window_)) {
-            // input
-            // -----
-            openGlInputController_->serve();
-
-            // render
-            // ------
-            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
-
-            // draw our first triangle
-//            glUseProgram(shaderProgram_);
-            glUseProgram(shaderEngine.handler());
-            // seeing as we only have a single VAO_ there's no need to bind it every time, but we'll do so to keep things a bit more organized
-            glBindVertexArray(VAO_);
-            //glDrawArrays(GL_TRIANGLES, 0, 6);
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-            // glBindVertexArray(0); // no need to unbind it every time
-
-            // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-            // -------------------------------------------------------------------------------
-            glfwSwapBuffers(window_);
-            glfwPollEvents();
-        }
-    }
-
-    ~SimpleWindow() override {
-//        runThread.join();
-        // optional: de-allocate all resources once they've outlived their purpose:
-        // ------------------------------------------------------------------------
-        glDeleteVertexArrays(1, &VAO_);
-        glDeleteBuffers(1, &VBO_);
-        glDeleteBuffers(1, &EBO_);
-
-        // glfw: terminate, clearing all previously allocated GLFW resources.
-        // ------------------------------------------------------------------
-        glfwTerminate();
-    }
-
-  private:
     unsigned int VAO_ = 0;
     unsigned int VBO_ = 0;
     unsigned int EBO_ = 0;

@@ -15,11 +15,12 @@ enum class Result {
 
 struct /*interface*/ Renderable {
     virtual Result draw() = 0;
-    virtual ~Renderable() {};
+    virtual ~Renderable() = default;
 };
 
 struct /*interface*/ Camera {
-    virtual Result draw(Renderable*) = 0;
+    virtual Result draw() = 0;
+    virtual ~Camera() = default;
 };
 
 } // namespace Graphic
