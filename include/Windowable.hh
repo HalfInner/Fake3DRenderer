@@ -94,6 +94,9 @@ class SimpleWindow : public Windowable {
         openGlInputController_->subscribeEnterPress([wd = window_]() {
             glfwSetWindowShouldClose(wd, true);
         });
+        openGlInputController_->subscribeEscapePress([wd = window_]() {
+            std::cout << "ESCAPE CLICKED\n";
+        });
     }
 
     void createWindowContext() {

@@ -18,7 +18,8 @@
 
 struct /* interface */ InputController {
     using InputControllerCB = std::function<void()>;
-    virtual void subscribeEnterPress(InputControllerCB f) = 0;
+    virtual void subscribeEnterPress(InputControllerCB cb) {};
+    virtual void subscribeEscapePress(InputControllerCB cb) {};
 
     virtual void serve() = 0;
 
@@ -31,16 +32,24 @@ class OpenGlInputController : public InputController {
 
     void serve() override {
         if (glfwGetKey(window_, GLFW_KEY_ENTER) == GLFW_PRESS) {
-            if (cb_) cb_();
+            if (cbEnterPress_) cbEnterPress_();
+        }
+        if (glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+            if (cbEscapePress_) cbEscapePress_();
         }
     }
 
+    void subscribeEscapePress(InputControllerCB cb) override {
+        cbEscapePress_ = cb;
+    }
+
     void subscribeEnterPress(InputControllerCB cb) override {
-        cb_ = cb;
+        cbEnterPress_ = cb;
     }
 
   private:
-    InputControllerCB cb_;
+    InputControllerCB cbEnterPress_;
+    InputControllerCB cbEscapePress_;
     GLFWwindow *window_;
 };
 #endif //FAKE3DRENDERER_INPUTCONTROLLER_HH
