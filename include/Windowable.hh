@@ -5,10 +5,12 @@
 #ifndef FAKE3DRENDERER_WINDOWABLE_HH
 #define FAKE3DRENDERER_WINDOWABLE_HH
 
+#include <chrono>
 #include <iostream>
 #include <glm/vec4.hpp>
 #include <GLFW/glfw3.h>
 #include <GL/glew.h>
+#include <thread>
 
 #include "InputController.hh"
 #include "ShaderEngine.hh"
@@ -24,8 +26,6 @@ struct Windowable {
 
     virtual ~Windowable() = default;
 };
-
-
 
 class SimpleWindow : public Windowable {
   public:
@@ -49,8 +49,8 @@ class SimpleWindow : public Windowable {
         shaderEngine_->initialize();
 
         tppCamera_ = std::make_unique<Graphic::TPPCamera>(shaderEngine_);
-        tppCamera_->initialize();
         tppCamera_->addObject(std::make_shared<Triangle>());
+        tppCamera_->initialize();
     }
 
     void run() override {
@@ -59,6 +59,9 @@ class SimpleWindow : public Windowable {
             tppCamera_->draw();
             glfwSwapBuffers(window_);
             glfwPollEvents();
+
+            using namespace std::chrono_literals;
+            std::this_thread::sleep_for(10ms);
         }
     }
 

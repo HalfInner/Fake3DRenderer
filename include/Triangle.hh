@@ -7,10 +7,10 @@
 
 class Triangle : public Graphic::Renderable, public Graphic::Movable {
   public:
-    std::vector<glm::vec4> trianglazation() override {
-        return {{-1, 0, 0, 0},
-                {1,  0, 0, 0},
-                {0,  2, 0, 0}};
+    std::vector<glm::vec3> trianglazation() override {
+        return {{-1, 0, 0},
+                {1,  0, 0},
+                {0,  1, 0}};
     }
 
     Graphic::Result move(glm::vec4 vec) override {
