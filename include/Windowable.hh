@@ -50,6 +50,7 @@ class SimpleWindow : public Windowable {
 
         tppCamera_ = std::make_unique<Graphic::TPPCamera>(shaderEngine_);
         tppCamera_->addObject(std::make_shared<Graphic::Triangle>());
+        tppCamera_->addObject(std::make_shared<Graphic::TriangleInv>());
         tppCamera_->initialize();
     }
 
@@ -70,7 +71,6 @@ class SimpleWindow : public Windowable {
     }
 
   private:
-
     void initializeGlew() const {
         auto err = glewInit();
         if (err != GLEW_OK) {

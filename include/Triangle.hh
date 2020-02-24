@@ -36,7 +36,6 @@ class Triangle : public Renderable {
     }
 
   private:
-    glm::vec4 pos_{};
     std::shared_ptr<Buffer> buffer_;
 };
 
@@ -59,7 +58,6 @@ class TriangleInv : public Renderable {
     }
 
   private:
-    glm::vec4 pos_{};
     std::shared_ptr<Buffer> buffer_;
 };
 

@@ -12,7 +12,7 @@
 namespace Graphic {
 
 struct  /*interface*/ Buffer {
-    virtual void initialize(std::vector<glm::vec3> &&points, std::vector<unsigned> &&indicies) = 0;
+    virtual void initialize(std::vector<glm::vec3> &&points, std::vector<unsigned> &&indices) = 0;
     virtual void bind() = 0;
     virtual void unbind() = 0;
     virtual ~Buffer() = default;

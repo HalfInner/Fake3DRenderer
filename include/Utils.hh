@@ -5,6 +5,8 @@
 #ifndef FAKE3DRENDERER_UTILS_HH
 #define FAKE3DRENDERER_UTILS_HH
 
+namespace Utils {
+
 
 
 struct NotCreatable {
@@ -18,4 +20,5 @@ struct NotCreatable {
     NotCreatable &operator=(NotCreatable &&) = delete;
 };
 
+} // namespace Utils
 #endif //FAKE3DRENDERER_UTILS_HH
