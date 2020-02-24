@@ -49,7 +49,7 @@ class SimpleWindow : public Windowable {
         shaderEngine_->initialize();
 
         tppCamera_ = std::make_unique<Graphic::TPPCamera>(shaderEngine_);
-        tppCamera_->addObject(std::make_shared<Triangle>());
+        tppCamera_->addObject(std::make_shared<Graphic::Triangle>());
         tppCamera_->initialize();
     }
 

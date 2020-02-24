@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "ShaderEngine.hh"
+#include "Triangle.hh"
 
 namespace Graphic {
 
@@ -26,51 +27,6 @@ struct /*interface*/ Movable {
     virtual ~Movable() = default;
 };
 
-struct  /*interface*/ Buffer {
-    virtual void initialize(std::vector<glm::vec3>&& points, std::vector<unsigned>&& indicies) = 0;
-    virtual void bind() = 0;
-    virtual void unbind() = 0;
-    virtual ~Buffer() = default;
-};
-
-class OpenGlBuffer : public Buffer {
-  public:
-    void initialize(std::vector<glm::vec3> &&points, std::vector<unsigned> &&indices) override {
-        glGenVertexArrays(1, &VAO_);
-        glGenBuffers(1, &VBO_);
-        glGenBuffers(1, &EBO_);
-
-        bind();
-        glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(glm::vec3), points.data(), GL_DYNAMIC_DRAW);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned), indices.data(), GL_DYNAMIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-        glEnableVertexAttribArray(0); // TODO (kaj) : check where belongs it
-        unbind();
-    }
-
-    void bind() override {
-        glBindVertexArray(VAO_);
-        glBindBuffer(GL_ARRAY_BUFFER, VBO_);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_);
-    }
-
-    void unbind() override {
-        glBindBuffer(GL_ARRAY_BUFFER, DELETE_BUFFER_KEY);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, DELETE_BUFFER_KEY);
-        glBindVertexArray(DELETE_BUFFER_KEY);
-    }
-  private:
-    static constexpr unsigned DELETE_BUFFER_KEY = 0;
-
-    unsigned int VAO_ = 0;
-    unsigned int VBO_;
-    unsigned int EBO_;
-};
-
-struct /*interface*/ Renderable {
-    virtual std::vector<glm::vec3> trianglazation() = 0;
-    virtual ~Renderable() = default;
-};
 
 struct /*interface*/ Camera {
     virtual Result initialize() = 0;
@@ -86,7 +42,9 @@ class TPPCamera : public Camera {
 
     Result initialize() override {
         // generated from object
-        prepareObjects();
+        for (auto &&object : objects_) {
+            object->initialize(std::make_shared<OpenGlBuffer>());
+        }
 
         return Result::Success;
     }
@@ -100,14 +58,12 @@ class TPPCamera : public Camera {
         // glUseProgram(shaderProgram_);
         glUseProgram(shaderEngine_->handler());
         // seeing as we only have a single VAO_ there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        glBindVertexArray(VAO_);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_);
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-        // glBindVertexArray(0); // no need to unbind it every time
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, DELETE_BUFFER_KEY);
-        glBindVertexArray(DELETE_BUFFER_KEY);
+        for (auto &&object : objects_) {
+            object->beginDraw();
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+            object->endDraw();
+        }
 
         return Result::Success;
     }
@@ -123,70 +79,13 @@ class TPPCamera : public Camera {
     }
 
     ~TPPCamera() override {
-        glDeleteVertexArrays(1, &VAO_);
-        glDeleteBuffers(1, &VBO_);
-        glDeleteBuffers(1, &EBO_);
     }
 
   private:
 
     void prepareObjects() {
-
-        vertices.clear();
-        indices.clear();
-        auto counter = 0u;
-        for (auto &&object : objects_) {
-            for (auto &&localPoint : object->trianglazation()) {
-                indices.emplace_back(counter++);
-                vertices.emplace_back(localPoint);
-            }
-        }
-//        float vertices[] = {
-//                0.5f, 0.5f, 0.0f,  // top right
-//                0.5f, -0.5f, 0.0f,  // bottom right
-//                -0.5f, -0.5f, 0.0f,  // bottom left
-//                -0.5f, 0.5f, 0.0f   // top left
-//        };
-////                auto arrayVertices = new float[vertices.size()];
-//
-//        unsigned int indices[] = {  // note that we start from 0!
-//                0, 1, 3,  // first Triangle
-//                0, 1, 2   // second Triangle
-//        };
-//        auto arrayVertices = new float[vertices.size()];
-
-
-        glGenVertexArrays(1, &VAO_);
-        glGenBuffers(1, &VBO_);
-        glGenBuffers(1, &EBO_);
-
-        glBindVertexArray(VAO_);
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO_);
-//        glBufferData(GL_ARRAY_BUFFER, vertices.size(), static_cast<float *>(glm::value_ptr(vertices.front())),
-//                     GL_STATIC_DRAW);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_DYNAMIC_DRAW);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_);
-//        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size(), indices.data(), GL_STATIC_DRAW);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned), indices.data(), GL_DYNAMIC_DRAW);
-
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-        glEnableVertexAttribArray(0);
-
-
-        // note that this is allowed, the call to glVertexAttribPointer registered VBO_ as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-
-        glBindBuffer(GL_ARRAY_BUFFER, DELETE_BUFFER_KEY);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, DELETE_BUFFER_KEY);
-        glBindVertexArray(DELETE_BUFFER_KEY);
-        // remember: do NOT unbind the EBO_ while a VAO_ is active as the bound element buffer object IS stored in the VAO_; keep the EBO_ bound.
-        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, DELETE_BUFFER_KEY);
-
-        // You can unbind the VAO_ afterwards so other VAO_ calls won't accidentally modify this VAO_, but this rarely happens. Modifying other
-        // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-//        glBindVertexArray(DELETE_BUFFER_KEY);
-
+//        auto cube = std::make_shared<Graphic::Triangle>();
+//        addObject(cube);
         // uncomment this call to draw in wireframe polygons.
 //        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
