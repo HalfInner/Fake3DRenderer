@@ -59,7 +59,7 @@ class SimpleWindow : public Windowable {
 //        ourShader.setMat4("view", view);
 
 
-        tppCamera_ = std::make_unique<Graphic::TPPCamera>(shaderEngine_);
+        tppCamera_ = std::make_unique<Graphic::BasicRenderer>(shaderEngine_);
 //        tppCamera_->addObject(std::make_shared<Graphic::Triangle>());
 //        tppCamera_->addObject(std::make_shared<Graphic::TriangleInv>());
         tppCamera_->addObject(std::make_shared<Graphic::Cube>());
@@ -147,7 +147,7 @@ class SimpleWindow : public Windowable {
     std::shared_ptr<FragmentShaderSource> fs_= nullptr;
     std::shared_ptr<ShaderEngine> shaderEngine_= nullptr;
 
-    std::unique_ptr<Graphic::TPPCamera> tppCamera_= nullptr;
+    std::unique_ptr<Graphic::BasicRenderer> tppCamera_= nullptr;
 
     std::unique_ptr<OpenGlInputController> openGlInputController_ = nullptr;
 
