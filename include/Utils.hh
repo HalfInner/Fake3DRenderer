@@ -7,8 +7,6 @@
 
 namespace Utils {
 
-
-
 struct NotCreatable {
     NotCreatable() = delete;
     ~NotCreatable() = delete;

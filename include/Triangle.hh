@@ -10,9 +10,27 @@
 
 namespace Graphic {
 
+enum RenderType : unsigned {
+    Triangles = GL_TRIANGLES,
+    UnknownRenderType = 0x0
+};
+
+enum CountType : unsigned {
+    Byte = GL_UNSIGNED_BYTE,
+    Short = GL_UNSIGNED_SHORT,
+    Integer = GL_UNSIGNED_INT,
+    UnknownCountType = 0x0
+};
+
+struct RendererInfo {
+    RenderType type = RenderType::Triangles;
+    unsigned elements = 0x0;
+    CountType countType = CountType::Integer;
+};
+
 struct /*interface*/ Renderable {
     virtual void initialize(std::shared_ptr<Buffer> buffer) = 0;
-    virtual void beginDraw() = 0;
+    virtual RendererInfo beginDraw() = 0;
     virtual void endDraw() = 0;
     virtual ~Renderable() = default;
 };
@@ -22,13 +40,18 @@ class Triangle : public Renderable {
     void initialize(std::shared_ptr<Buffer> buffer) override {
         buffer_ = std::move(buffer);
 
-        buffer_->initialize({{-1, 0,  0},
-                             {0,   1, 0},
-                             {1,  0,  0}}, {0, 1, 2});
+        buffer_->initialize({{-1, 0, 0},
+                             {0,  1, 0},
+                             {1,  0, 0}}, {0, 1, 2});
     }
 
-    void beginDraw() override {
+    RendererInfo beginDraw() override {
+        RendererInfo ri;
+        ri.elements = 1;
+
         buffer_->bind();
+
+        return ri;
     }
 
     void endDraw() override {
@@ -45,12 +68,17 @@ class TriangleInv : public Renderable {
         buffer_ = std::move(buffer);
 
         buffer_->initialize({{-1, 0,  0},
-                             {0,   -1, 0},
+                             {0,  -1, 0},
                              {1,  0,  0}}, {0, 1, 2});
     }
 
-    void beginDraw() override {
+    RendererInfo beginDraw() override {
+        RendererInfo ri;
+        ri.elements = 1;
+
         buffer_->bind();
+
+        return ri;
     }
 
     void endDraw() override {
@@ -60,6 +88,47 @@ class TriangleInv : public Renderable {
   private:
     std::shared_ptr<Buffer> buffer_;
 };
+
+class Cube : public Renderable {
+  public:
+    void initialize(std::shared_ptr<Buffer> buffer) override {
+        buffer_ = std::move(buffer);
+
+        auto sideLength = 0.5f;
+
+        auto front_t_1 = glm::vec3{-sideLength, sideLength, sideLength};
+        auto front_t_2 = glm::vec3{-sideLength, -sideLength, sideLength};
+        auto front_t_3 = glm::vec3{sideLength, sideLength, sideLength};
+        auto front_t_4 = glm::vec3{sideLength, -sideLength, sideLength};
+
+        auto rear_t_1 = glm::vec3{-sideLength, sideLength, -sideLength};
+        auto rear_t_2 = glm::vec3{-sideLength, -sideLength, -sideLength};
+        auto rear_t_3 = glm::vec3{sideLength, sideLength, -sideLength};
+        auto rear_t_4 = glm::vec3{sideLength, -sideLength, -sideLength};
+
+        buffer_->initialize({front_t_1, front_t_2, front_t_3, front_t_4,
+                             rear_t_1, rear_t_2, rear_t_3, rear_t_4},
+                            {0, 1, 2, 1, 2, 3,
+                             4, 5, 6, 5, 6, 7});
+    }
+
+    RendererInfo beginDraw() override {
+        RendererInfo ri;
+        ri.elements = 8;
+
+        buffer_->bind();
+
+        return ri;
+    }
+
+    void endDraw() override {
+        buffer_->unbind();
+    }
+
+  private:
+    std::shared_ptr<Buffer> buffer_;
+};
+
 
 } // namespace Graphic
 #endif //FAKE3DRENDERER_TRIANGLE_HH

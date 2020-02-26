@@ -27,7 +27,6 @@ struct /*interface*/ Movable {
     virtual ~Movable() = default;
 };
 
-
 struct /*interface*/ Camera {
     virtual Result initialize() = 0;
     virtual Result draw() = 0;
@@ -67,8 +66,8 @@ class TPPCamera : public Camera {
 //        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
         for (auto &&object : objects_) {
-            object->beginDraw();
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+            auto info = object->beginDraw();
+            glDrawElements(info.type, info.elements, info.countType, nullptr);
             object->endDraw();
         }
 
