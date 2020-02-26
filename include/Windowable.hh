@@ -74,7 +74,7 @@ class SimpleWindow : public Windowable {
             glfwPollEvents();
 
             using namespace std::chrono_literals;
-            std::this_thread::sleep_for(10ms);
+            std::this_thread::sleep_for(100ms);
         }
     }
 

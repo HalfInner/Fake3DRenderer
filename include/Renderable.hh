@@ -72,15 +72,22 @@ class BasicRenderer : public Renderer {
         shaderEngine_->setMat4("projection", projection);
 
         // camera/view transformation
-        auto position = glm::vec3(0.0f, 0.0f, 0.0f);
+        auto position = glm::vec3(0.0f, 0.0f, 4.0f);
         auto up = glm::vec3(0.0f, 1.0f, 0.0f);
         auto front = glm::vec3(0.0f, 0.0f, -1.0f);
         glm::mat4 view = glm::lookAt(position, position + front, up);
         shaderEngine_->setMat4("view", view);
 
-
         for (auto &&object : objects_) {
             auto info = object->beginDraw();
+
+            // calculate the model matrix for each object and pass it to shader before drawing
+            glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+            model = glm::translate(model, {0,0,0});
+            float angle = 20.0f * 1;
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            shaderEngine_->setMat4("model", model);
+
             glDrawElements(info.type, info.elements, info.countType, nullptr);
             object->endDraw();
         }
