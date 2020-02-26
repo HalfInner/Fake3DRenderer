@@ -47,6 +47,17 @@ class SimpleWindow : public Windowable {
         shaderEngine_->addFragmentShader(fs_);
         shaderEngine_->addVertexShader(vs_);
         shaderEngine_->initialize();
+        shaderEngine_->activate();
+//
+//
+//        // pass projection matrix to shader (note that in this case it could change every frame)
+//        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+//        ourShader.setMat4("projection", projection);
+//
+//        // camera/view transformation
+//        glm::mat4 view = camera.GetViewMatrix();
+//        ourShader.setMat4("view", view);
+
 
         tppCamera_ = std::make_unique<Graphic::TPPCamera>(shaderEngine_);
 //        tppCamera_->addObject(std::make_shared<Graphic::Triangle>());

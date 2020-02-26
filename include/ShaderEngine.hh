@@ -37,14 +37,22 @@ class ShaderEngine {
         isShadersInitialized_ = true;
     }
 
-    int handler() {
+    void activate() {
         if (!isShadersInitialized_) {
             auto msg = "ERROR::SHADER::PROGRAM::NOT_INITIALIZED";
             std::cerr << msg << std::endl;
             throw std::runtime_error(msg);
         }
-        return shaderProgram_;
+
+        glUseProgram(shaderProgram_);
     }
+
+    void setMat4(const std::string &name, const glm::mat4 &mat) const
+    {
+        auto varId = glGetUniformLocation(shaderProgram_, name.c_str());
+        glUniformMatrix4fv(varId, 1, GL_FALSE, &mat[0][0]);
+    }
+
 
   private:
     void initializeShaders() {

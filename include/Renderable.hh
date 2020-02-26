@@ -52,8 +52,6 @@ class TPPCamera : public Camera {
     Result draw() override {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-
-        glUseProgram(shaderEngine_->handler());
 //
 //        const float radius = 10.0f;
 //        float camX = sin(glfwGetTime()) * radius;
