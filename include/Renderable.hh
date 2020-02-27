@@ -72,7 +72,7 @@ class BasicRenderer : public Renderer {
         shaderEngine_->setMat4("projection", projection);
 
         // camera/view transformation
-        auto position = glm::vec3(0.0f, 0.0f, 4.0f);
+        auto position = glm::vec3(-1.0f, 0.0f, 4.0f);
         auto up = glm::vec3(0.0f, 1.0f, 0.0f);
         auto front = glm::vec3(0.0f, 0.0f, -1.0f);
         glm::mat4 view = glm::lookAt(position, position + front, up);
