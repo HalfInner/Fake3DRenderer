@@ -57,12 +57,12 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     // Zoomable
     void zoom(float ratio) override;
   private:
-    glm::vec3 position_;
-    float cameraZoom_;
+    glm::vec3 position_{-1.0f, 0.0f, 4.0f};
+    float cameraZoom_ {};
 
-    float pitch_;
-    float yaw_;
-    float roll_;
+    float pitch_{};
+    float yaw_{};
+    float roll_{};
 };
 
 #endif //FAKE3DRENDERER_BASICCAMERA_HH

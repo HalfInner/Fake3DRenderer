@@ -50,6 +50,8 @@ class BasicRenderer : public Renderer {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        camera.move({0.05, 0, 0});
+
         shaderEngine_->setMat4("projection", camera.projection());
         shaderEngine_->setMat4("view", camera.view());
 
@@ -74,7 +76,7 @@ class BasicRenderer : public Renderer {
 
   private:
 
-    BasicCamera camera;
+    MovableCamera camera;
 
     unsigned int VAO_ = 0;
     unsigned int VBO_ = 0;

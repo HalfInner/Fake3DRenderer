@@ -33,7 +33,6 @@ glm::mat4 MovableCamera::projection() {
 }
 
 glm::mat4 MovableCamera::view() {
-    position_ = glm::vec3(-1.0f, 0.0f, 4.0f);
     auto up = glm::vec3(0.0f, 1.0f, 0.0f); // TODO (kaj) : What's that?
     auto front = glm::vec3(0.0f, 0.0f, -1.0f); // TODO (kaj) : What's that?
     glm::mat4 view = glm::lookAt(position_, position_ + front, up); // TODO (kaj) : Implement by yourself
