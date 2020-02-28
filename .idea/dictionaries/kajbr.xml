@@ -3,6 +3,7 @@
     <words>
       <w>renderable</w>
       <w>windowable</w>
+      <w>zoomable</w>
     </words>
   </dictionary>
 </component>
