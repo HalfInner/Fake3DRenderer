@@ -8,8 +8,8 @@
 #include <chrono>
 #include <iostream>
 #include <glm/vec4.hpp>
-#include <GLFW/glfw3.h>
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <thread>
 
 #include "InputController.hh"
@@ -18,12 +18,10 @@
 #include "ShaderManager.hh"
 #include "Renderable.hh"
 #include "Triangle.hh"
-#include "Windowable.hh"
 
 struct Windowable {
     virtual void initialize() = 0;
     virtual void run() = 0;
-
     virtual ~Windowable() = default;
 };
 
@@ -48,16 +46,6 @@ class SimpleWindow : public Windowable {
         shaderEngine_->addVertexShader(vs_);
         shaderEngine_->initialize();
         shaderEngine_->activate();
-//
-//
-//        // pass projection matrix to shader (note that in this case it could change every frame)
-//        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-//        ourShader.setMat4("projection", projection);
-//
-//        // camera/view transformation
-//        glm::mat4 view = camera.GetViewMatrix();
-//        ourShader.setMat4("view", view);
-
 
         tppCamera_ = std::make_unique<Graphic::BasicRenderer>(shaderEngine_);
 //        tppCamera_->addObject(std::make_shared<Graphic::Triangle>());
