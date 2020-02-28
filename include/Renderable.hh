@@ -12,6 +12,7 @@
 #include <memory>
 #include <vector>
 
+#include "BasicCamera.hh"
 #include "ShaderEngine.hh"
 #include "Triangle.hh"
 
@@ -32,7 +33,6 @@ struct /*interface*/ Renderer {
     virtual Result initialize() = 0;
     virtual Result draw() = 0;
     virtual Result addObject(std::shared_ptr<Renderable> renderable) = 0;
-    virtual Result setPosition(glm::vec4 position) = 0;
     virtual ~Renderer() = default;
 };
 
@@ -54,39 +54,13 @@ class BasicRenderer : public Renderer {
     Result draw() override {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-//
-//        const float radius = 10.0f;
-//        float camX = sin(glfwGetTime()) * radius;
-//        float camZ = cos(glfwGetTime()) * radius;
-//
-//        view_ = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
-//        glm::mat4 model = glm::mat4(1.0f);
-//        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-//        int modelLoc = glGetUniformLocation(shaderEngine_->handler(), "model");
-//        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-
-        // pass projection matrix to shader (note that in this case it could change every frame)
-        auto cameraZoom = 45.f;
-        glm::mat4 projection = glm::perspective(glm::radians(cameraZoom), (float)800 / (float)640, 0.1f, 100.0f);
-        shaderEngine_->setMat4("projection", projection);
-
-        // camera/view transformation
-        auto position = glm::vec3(-1.0f, 0.0f, 4.0f);
-        auto up = glm::vec3(0.0f, 1.0f, 0.0f);
-        auto front = glm::vec3(0.0f, 0.0f, -1.0f);
-        glm::mat4 view = glm::lookAt(position, position + front, up);
-        shaderEngine_->setMat4("view", view);
+        shaderEngine_->setMat4("projection", camera.projection());
+        shaderEngine_->setMat4("view", camera.view());
 
         for (auto &&object : objects_) {
             auto info = object->beginDraw();
-
-            // calculate the model matrix for each object and pass it to shader before drawing
-            glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-            model = glm::translate(model, {0,0,0});
-            float angle = 20.0f * 1;
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            shaderEngine_->setMat4("model", model);
+            shaderEngine_->setMat4("model", camera.model());
 
             glDrawElements(info.type, info.elements, info.countType, nullptr);
             object->endDraw();
@@ -97,11 +71,6 @@ class BasicRenderer : public Renderer {
 
     Result addObject(std::shared_ptr<Renderable> renderable) override {
         objects_.emplace_back(std::move(renderable));
-        return Result::Success;
-    }
-
-    Result setPosition(glm::vec4 position) override {
-//        position_ = position;
         return Result::Success;
     }
 
@@ -117,7 +86,7 @@ class BasicRenderer : public Renderer {
 //        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 
-    static constexpr unsigned DELETE_BUFFER_KEY = 0;
+    BasicCamera camera;
 
     unsigned int VAO_ = 0;
     unsigned int VBO_ = 0;

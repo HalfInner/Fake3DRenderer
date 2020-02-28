@@ -26,6 +26,7 @@ struct RendererInfo {
     RenderType type = RenderType::Triangles;
     unsigned elements = 0x0;
     CountType countType = CountType::Integer;
+    glm::vec4 position {};
 };
 
 struct /*interface*/ Renderable {
