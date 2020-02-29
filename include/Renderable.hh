@@ -26,7 +26,7 @@ enum class Result {
 
 struct /*interface*/ Renderer {
     virtual Result initialize() = 0;
-    virtual Result draw() = 0;
+    virtual Result draw(float elapsedTime = 0) = 0;
     virtual Result addObject(std::shared_ptr<Renderable> renderable) = 0;
     virtual ~Renderer() = default;
 };
@@ -34,7 +34,8 @@ struct /*interface*/ Renderer {
 
 class BasicRenderer : public Renderer {
   public:
-    explicit BasicRenderer(std::shared_ptr<ShaderEngine> shaderEngine) : shaderEngine_(std::move(shaderEngine)) {}
+    explicit BasicRenderer(std::shared_ptr<ShaderEngine> shaderEngine, std::shared_ptr<Camera> camera)
+            : shaderEngine_(std::move(shaderEngine)), camera_(std::move(camera)) {}
 
     Result initialize() override {
 
@@ -46,18 +47,23 @@ class BasicRenderer : public Renderer {
         return Result::Success;
     }
 
-    Result draw() override {
+    Result draw(float elapsedTime) override {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        camera.move({0.05, 0, 0});
 
-        shaderEngine_->setMat4("projection", camera.projection());
-        shaderEngine_->setMat4("view", camera.view());
+        std::cout << "Elapsed time: " << elapsedTime << '\n';
+        auto velocity = 0.0000004;
+        if (auto wiseCamera = std::dynamic_pointer_cast<MovableCamera>(camera_)) {
+            wiseCamera->move({velocity * elapsedTime, 0, 0});
+        }
+
+        shaderEngine_->setMat4("projection", camera_->projection());
+        shaderEngine_->setMat4("view", camera_->view());
 
         for (auto &&object : objects_) {
             auto info = object->beginDraw();
-            shaderEngine_->setMat4("model", camera.model());
+            shaderEngine_->setMat4("model", camera_->model());
 
             glDrawElements(info.type, info.elements, info.countType, nullptr);
             object->endDraw();
@@ -76,12 +82,12 @@ class BasicRenderer : public Renderer {
 
   private:
 
-    MovableCamera camera;
-
     unsigned int VAO_ = 0;
     unsigned int VBO_ = 0;
     unsigned int EBO_ = 0;
-    std::shared_ptr<ShaderEngine> shaderEngine_;
+    std::shared_ptr<ShaderEngine> shaderEngine_{nullptr};
+    std::shared_ptr<Camera> camera_{nullptr};
+
     std::vector<std::shared_ptr<Renderable>> objects_;
 
     glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);

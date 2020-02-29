@@ -25,6 +25,25 @@ struct Windowable {
     virtual ~Windowable() = default;
 };
 
+class SimpleClock {
+  public:
+    void resume() {
+        begin_ = std::chrono::steady_clock::now();
+    }
+
+    auto measure() {
+        end_ = std::chrono::steady_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end_ - begin_).count();
+        begin_ = end_;
+
+        return elapsed;
+    }
+
+  private:
+    std::chrono::steady_clock::time_point begin_{};
+    std::chrono::steady_clock::time_point end_{};
+};
+
 class SimpleWindow : public Windowable {
   public:
     SimpleWindow() :
@@ -47,7 +66,9 @@ class SimpleWindow : public Windowable {
         shaderEngine_->initialize();
         shaderEngine_->activate();
 
-        tppCamera_ = std::make_unique<Graphic::BasicRenderer>(shaderEngine_);
+        camera_ = std::make_shared<MovableCamera>();
+
+        tppCamera_ = std::make_unique<Graphic::BasicRenderer>(shaderEngine_, camera_);
 //        tppCamera_->addObject(std::make_shared<Graphic::Triangle>());
 //        tppCamera_->addObject(std::make_shared<Graphic::TriangleInv>());
         tppCamera_->addObject(std::make_shared<Graphic::Cube>());
@@ -55,14 +76,17 @@ class SimpleWindow : public Windowable {
     }
 
     void run() override {
+        SimpleClock sc;
+        sc.resume();
         while (!glfwWindowShouldClose(window_)) {
+            auto elapsed = sc.measure();
             openGlInputController_->serve();
-            tppCamera_->draw();
+            tppCamera_->draw(elapsed);
             glfwSwapBuffers(window_);
             glfwPollEvents();
 
             using namespace std::chrono_literals;
-            std::this_thread::sleep_for(100ms);
+            std::this_thread::sleep_for(1ms);
         }
     }
 
@@ -128,19 +152,21 @@ class SimpleWindow : public Windowable {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     }
+
     GLFWwindow *window_ = nullptr;
 
     ShaderManagerPtr shaderManagerPtr_ = nullptr;
-    std::shared_ptr<VertexShaderSource> vs_= nullptr;
-    std::shared_ptr<FragmentShaderSource> fs_= nullptr;
-    std::shared_ptr<ShaderEngine> shaderEngine_= nullptr;
+    std::shared_ptr<VertexShaderSource> vs_ = nullptr;
+    std::shared_ptr<FragmentShaderSource> fs_ = nullptr;
+    std::shared_ptr<ShaderEngine> shaderEngine_ = nullptr;
 
-    std::unique_ptr<Graphic::BasicRenderer> tppCamera_= nullptr;
+    std::unique_ptr<Graphic::BasicRenderer> tppCamera_ = nullptr;
 
     std::unique_ptr<OpenGlInputController> openGlInputController_ = nullptr;
 
     int initialScreenWidth_ = 0;
     int initialScreenHeight_ = 0;
+    std::shared_ptr<MovableCamera> camera_;
 };
 
 #endif //FAKE3DRENDERER_WINDOWABLE_HH
