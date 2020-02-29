@@ -48,7 +48,8 @@ glm::mat4 MovableCamera::model() {
 }
 
 void MovableCamera::move(glm::vec3 vec) {
-    position_ += vec;
+    velocity_ = 0.0000004f;
+    position_ += vec * velocity_;
 }
 
 void MovableCamera::zoom(float ratio) {

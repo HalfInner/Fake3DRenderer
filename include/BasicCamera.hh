@@ -63,6 +63,7 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     float pitch_{};
     float yaw_{};
     float roll_{};
+    float velocity_{};
 };
 
 #endif //FAKE3DRENDERER_BASICCAMERA_HH

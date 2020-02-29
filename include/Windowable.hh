@@ -81,7 +81,15 @@ class SimpleWindow : public Windowable {
         while (!glfwWindowShouldClose(window_)) {
             auto elapsed = sc.measure();
             openGlInputController_->serve();
+
+            if (auto wiseCamera = std::dynamic_pointer_cast<MovableCamera>(camera_)) {
+                glm::vec3 leftDirectionVector {1, 0, 0};
+                leftDirectionVector *= elapsed;
+                wiseCamera->move(leftDirectionVector);
+            }
+
             tppCamera_->draw(elapsed);
+
             glfwSwapBuffers(window_);
             glfwPollEvents();
 
