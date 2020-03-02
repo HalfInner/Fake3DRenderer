@@ -26,6 +26,15 @@ glm::mat4 BasicCamera::model() {
     return model;
 }
 
+MovableCamera::MovableCamera() {
+    front_ = glm::vec3(0.0f, 0.0f, -1.0f); // TODO (kaj) : What's that?
+    front_.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+    front_.y = sin(glm::radians(pitch_));
+    front_.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+
+    up_ = glm::vec3(0.0f, 1.0f, 0.0f); // TODO (kaj) : What's that?
+}
+
 glm::mat4 MovableCamera::projection() {
     cameraZoom_ = 45.f;
     glm::mat4 projection = glm::perspective(glm::radians(cameraZoom_), (float)800 / (float)640, 0.1f, 100.0f);
@@ -33,9 +42,7 @@ glm::mat4 MovableCamera::projection() {
 }
 
 glm::mat4 MovableCamera::view() {
-    auto up = glm::vec3(0.0f, 1.0f, 0.0f); // TODO (kaj) : What's that?
-    auto front = glm::vec3(0.0f, 0.0f, -1.0f); // TODO (kaj) : What's that?
-    glm::mat4 view = glm::lookAt(position_, position_ + front, up); // TODO (kaj) : Implement by yourself
+    glm::mat4 view = glm::lookAt(position_, position_ + front_, up_); // TODO (kaj) : Implement by yourself
     return view;
 }
 
@@ -67,3 +74,4 @@ void MovableCamera::yaw(float angle) {
 void MovableCamera::roll(float angle) {
     roll_ = angle;
 }
+

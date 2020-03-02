@@ -41,6 +41,7 @@ class BasicCamera : public Camera {
 
 class MovableCamera : public Camera, public Movable, public Rotatable, public Zoomable {
   public:
+    MovableCamera();
     // Camera
     glm::mat4 projection() override;
     glm::mat4 view() override;
@@ -60,10 +61,12 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     glm::vec3 position_{-1.0f, 0.0f, 4.0f};
     float cameraZoom_ {};
 
-    float pitch_{};
-    float yaw_{};
-    float roll_{};
+    float pitch_{.0f};
+    float yaw_{-90.f};
+    float roll_{ .0f};
     float velocity_{};
+    glm::vec3 up_{};
+    glm::vec3 front_{};
 };
 
 #endif //FAKE3DRENDERER_BASICCAMERA_HH
