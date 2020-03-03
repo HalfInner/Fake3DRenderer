@@ -73,7 +73,8 @@ void MovableCamera::move(Direction direction, float elapsedTime) {
             {Direction::Downward,  glm::vec3{0, -1, 0}}
     };
 
-    position_ += vectorDirections.at(direction) * velocity_ * elapsedTime;
+    float additionalMoveVelocity = 10.f;
+    position_ += vectorDirections.at(direction) * velocity_  * additionalMoveVelocity * elapsedTime;
 }
 
 void MovableCamera::zoom(float ratio) {

@@ -117,20 +117,34 @@ class Cube : public Renderable {
         auto right_t_3 = glm::vec3{sideLength, sideLength, sideLength};
         auto right_t_4 = glm::vec3{sideLength, sideLength, -sideLength};
 
+        auto top_t_1 = glm::vec3{-sideLength, sideLength, sideLength};
+        auto top_t_2 = glm::vec3{sideLength, sideLength, sideLength};
+        auto top_t_3 = glm::vec3{-sideLength, sideLength, -sideLength};
+        auto top_t_4 = glm::vec3{sideLength, sideLength, -sideLength};
+
+        auto bottom_t_1 = glm::vec3{-sideLength, -sideLength, sideLength};
+        auto bottom_t_2 = glm::vec3{sideLength, -sideLength, sideLength};
+        auto bottom_t_3 = glm::vec3{-sideLength, -sideLength, -sideLength};
+        auto bottom_t_4 = glm::vec3{sideLength, -sideLength, -sideLength};
+
 
         buffer_->initialize({front_t_1, front_t_2, front_t_3, front_t_4,
                              rear_t_1, rear_t_2, rear_t_3, rear_t_4,
                              left_t_1, left_t_2, left_t_3, left_t_4,
-                             right_t_1, right_t_2, right_t_3, right_t_4},
+                             right_t_1, right_t_2, right_t_3, right_t_4,
+                             top_t_1, top_t_2, top_t_3, top_t_4,
+                             bottom_t_1, bottom_t_2, bottom_t_3, bottom_t_4},
                             {0, 1, 2, 1, 2, 3,
-                             4, 5, 6, 5, 6, 7,
-                             8, 9, 10, 9, 10, 11,
-                             12, 13, 14, 13, 14, 15});
+                             4, 5, 6, 6, 7, 5,
+                             8, 10, 9, 10, 11, 9,
+                             12, 13, 14, 13, 14, 15,
+                             16, 17, 18, 17, 18, 19,
+                             20, 21, 22, 21, 22, 23});
     }
 
     RendererInfo beginDraw() override {
         RendererInfo ri{};
-        ri.elements = 16;
+        ri.elements = 16 * 3;
 
         buffer_->bind();
 
