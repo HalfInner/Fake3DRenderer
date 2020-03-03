@@ -162,6 +162,19 @@ class BasicFake3DEngine : public Fake3DEngine {
                 camera->move(Movable::Direction::Downward, elapsed);
             }
         });
+
+        openGlInputController_->subscribeZPress([weakCamera](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto camera = weakCamera.lock()) {
+                camera->zoom(Zoomable::ResizeType::ZoomIn, elapsed);
+            }
+        });
+        openGlInputController_->subscribeCPress([weakCamera](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto camera = weakCamera.lock()) {
+                camera->zoom(Zoomable::ResizeType::ZoomOut, elapsed);
+            }
+        });
     }
 
     void createWindowContext() {

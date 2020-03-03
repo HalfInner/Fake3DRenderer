@@ -3,6 +3,7 @@
 //
 
 #include <unordered_map>
+#include <iostream>
 #include "BasicCamera.hh"
 
 glm::mat4 BasicCamera::projection() {
@@ -31,8 +32,9 @@ MovableCamera::MovableCamera() {
     updateCameraCoordinates();
 
     up_ = glm::vec3(0.0f, 1.0f, 0.0f); // TODO (kaj) : What's that?
+    cameraZoom_ = 45.f;
 
-    velocity_ = 0.0000004f;
+    velocity_ = 0.000008f;
 }
 
 void MovableCamera::updateCameraCoordinates() {
@@ -43,7 +45,6 @@ void MovableCamera::updateCameraCoordinates() {
 }
 
 glm::mat4 MovableCamera::projection() {
-    cameraZoom_ = 45.f;
     glm::mat4 projection = glm::perspective(glm::radians(cameraZoom_), (float) 800 / (float) 640, 0.1f, 100.0f);
     return projection;
 }
@@ -60,11 +61,6 @@ glm::mat4 MovableCamera::model() {
     model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
     return model;
 }
-
-void MovableCamera::move(glm::vec3 vec) {
-    position_ += vec * velocity_;
-}
-
 
 void MovableCamera::move(Direction direction, float elapsedTime) {
     const std::unordered_map<Direction, glm::vec3> vectorDirections {
@@ -83,6 +79,15 @@ void MovableCamera::zoom(float ratio) {
     cameraZoom_ += ratio * velocity_;
 }
 
+void MovableCamera::zoom(ResizeType resizeType, float elapsedTime) {
+    float zoomRatio = resizeType == ResizeType::ZoomOut ? 0.3/velocity_ : -0.3/velocity_;
+    cameraZoom_ += zoomRatio * velocity_;
+    if (cameraZoom_ < 0.)
+        cameraZoom_ = 0;
+    if (cameraZoom_ > 100.)
+        cameraZoom_ = 100;
+}
+
 void MovableCamera::pitch(float angle) {
     pitch_ += angle * velocity_;
     updateCameraCoordinates();
@@ -97,5 +102,6 @@ void MovableCamera::roll(float angle) {
     roll_ += angle * velocity_;
     updateCameraCoordinates();
 }
+
 
 

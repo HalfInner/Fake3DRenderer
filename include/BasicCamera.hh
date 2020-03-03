@@ -19,7 +19,6 @@ struct /*interface*/ Movable {
     enum class Direction {
         Forward, Backward, Leftward, Rightward, Upward, Downward
     };
-    virtual void move(glm::vec3 vec) = 0;
     virtual void move(Direction direction, float elapsedTime) = 0;
     virtual ~Movable() = default;
 };
@@ -32,7 +31,11 @@ struct /*interface*/ Rotatable {
 };
 
 struct /*interface*/ Zoomable {
+    enum class ResizeType {
+        ZoomIn, ZoomOut
+    };
     virtual void zoom(float ratio) = 0;
+    virtual void zoom(ResizeType resizeType, float elapsedTime) = 0;
     virtual ~Zoomable() = default;
 };
 
@@ -57,10 +60,10 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     void roll(float angle) override;
 
     // Movable
-    void move(glm::vec3 vec) override;
     void move(Direction direction, float elapsedTime) override;
     // Zoomable
     void zoom(float ratio) override;
+    void zoom(ResizeType resizeType, float elapsedTime) override;
   private:
     void updateCameraCoordinates();
 
