@@ -2,6 +2,7 @@
 // Created by kajbr on 28.02.2020.
 //
 
+#include <unordered_map>
 #include "BasicCamera.hh"
 
 glm::mat4 BasicCamera::projection() {
@@ -64,6 +65,20 @@ void MovableCamera::move(glm::vec3 vec) {
     position_ += vec * velocity_;
 }
 
+
+void MovableCamera::move(Direction direction, float elapsedTime) {
+    const std::unordered_map<Direction, glm::vec3> vectorDirections {
+            { Direction::Forward, glm::vec3{0, 0, -1}},
+            { Direction::Backward, glm::vec3{0, 0, 1}},
+            { Direction::Leftward, glm::vec3{-1, 0, 0}},
+            { Direction::Rightward, glm::vec3{1, 0, 0}},
+            { Direction::Upward, glm::vec3{0, 1, 0}},
+            { Direction::Downward, glm::vec3{0, -1, 0}}
+    };
+
+    position_ += vectorDirections.at(direction) * velocity_ * elapsedTime;
+}
+
 void MovableCamera::zoom(float ratio) {
     cameraZoom_ += ratio * velocity_;
 }
@@ -82,4 +97,5 @@ void MovableCamera::roll(float angle) {
     roll_ += angle * velocity_;
     updateCameraCoordinates();
 }
+
 

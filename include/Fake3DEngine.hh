@@ -124,21 +124,19 @@ class BasicFake3DEngine : public Fake3DEngine {
         openGlInputController_->subscribeEscapePress([wd = window_](void *param) {
             glfwSetWindowShouldClose(wd, true);
         });
-//        auto wiseCamera = std::dynamic_pointer_cast<MovableCamera>(camera_);
+
         std::weak_ptr<MovableCamera> weakCamera(camera_);
         openGlInputController_->subscribeWPress([weakCamera](void *param) {
             float elapsed = *reinterpret_cast<float *>(param);
-            std::cout << "Elapsed time::W::" << elapsed << "\n";
-            glm::vec3 leftDirectionVector{0, 0, -1};
-            leftDirectionVector *= elapsed;
             if (auto camera = weakCamera.lock()) {
-                camera->move(leftDirectionVector);
+                camera->move(Movable::Direction::Forward, elapsed);
             }
-//
-//                float angle = 10;
-//                angle *= elapsed;wwww
-////                wiseCamera->pitch(angle);
-//                wiseCamera->yaw(angle);
+        });
+        openGlInputController_->subscribeSPress([weakCamera](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto camera = weakCamera.lock()) {
+                camera->move(Movable::Direction::Backward, elapsed);
+            }
         });
     }
 
