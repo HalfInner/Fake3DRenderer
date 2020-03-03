@@ -20,13 +20,13 @@ glm::mat4 BasicCamera::view() {
     return view;
 }
 
-glm::mat4 BasicCamera::model() {
-    glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-    model = glm::translate(model, {0, 0, 0});
-    float angle = 20.0f * 1;
-    model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-    return model;
-}
+//glm::mat4 BasicCamera::model() {
+//    glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+//    model = glm::translate(model, {0, 0, 0});
+//    float angle = 20.0f * 1;
+//    model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+//    return model;
+//}
 
 MovableCamera::MovableCamera() {
     updateCameraCoordinates();
@@ -54,13 +54,9 @@ glm::mat4 MovableCamera::view() {
     return view;
 }
 
-glm::mat4 MovableCamera::model() {
-    glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-    model = glm::translate(model, {0, 0, 0});
-    float angle = 20.0f * 1;
-    model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-    return model;
-}
+//glm::mat4 MovableCamera::model() {
+//    return model;
+//}
 
 void MovableCamera::move(Direction direction, float elapsedTime) {
     // TODO (kaj): Consult that we always move forward from start point which is not intuitive

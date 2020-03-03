@@ -11,7 +11,7 @@
 struct /*interface*/ Camera {
     virtual glm::mat4 projection() = 0;
     virtual glm::mat4 view() = 0;
-    virtual glm::mat4 model() = 0;
+//    virtual glm::mat4 model() = 0;
     virtual ~Camera() = default;
 };
 
@@ -51,7 +51,7 @@ class BasicCamera : public Camera {
   public:
     glm::mat4 projection() override;
     glm::mat4 view() override;
-    glm::mat4 model() override;
+//    glm::mat4 model() override;
 };
 
 class MovableCamera : public Camera, public Movable, public Rotatable, public Zoomable {
@@ -60,7 +60,7 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     // Camera
     glm::mat4 projection() override;
     glm::mat4 view() override;
-    glm::mat4 model() override;
+//    glm::mat4 model() override;
 
     // Rotatable
     void pitch(float angle) override;

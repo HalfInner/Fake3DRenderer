@@ -47,6 +47,12 @@ class ShaderEngine {
         glUseProgram(shaderProgram_);
     }
 
+    void setVec3(const std::string &name, const glm::vec3 &vec) const
+    {
+        auto varId = glGetUniformLocation(shaderProgram_, name.c_str());
+        glUniform3fv(varId, 1, &vec[0]);
+    }
+
     void setMat4(const std::string &name, const glm::mat4 &mat) const
     {
         auto varId = glGetUniformLocation(shaderProgram_, name.c_str());

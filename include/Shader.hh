@@ -31,6 +31,7 @@ class VertexShaderSource : public ShaderSource {
 
             out vec2 TexCoord;
 
+            uniform vec3 pos;
             uniform mat4 model;
             uniform mat4 view;
             uniform mat4 projection;

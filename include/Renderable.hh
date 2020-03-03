@@ -50,17 +50,17 @@ class BasicRenderer : public Renderer {
     Result draw(float elapsedTime) override {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-//        auto velocity = 0.0000004;
-//        if (auto wiseCamera = std::dynamic_pointer_cast<MovableCamera>(camera_)) {
-//            wiseCamera->move({velocity * elapsedTime, 0, 0});
-//        }
-
         shaderEngine_->setMat4("projection", camera_->projection());
         shaderEngine_->setMat4("view", camera_->view());
 
         for (auto &&object : objects_) {
             auto info = object->beginDraw();
-            shaderEngine_->setMat4("model", camera_->model());
+
+            glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+            model = glm::translate(model, info.position);
+            float angle = 1.f;
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 1.f, 1.f));
+            shaderEngine_->setMat4("model", model);
 
             glDrawElements(info.type, info.elements, info.countType, nullptr);
             object->endDraw();
