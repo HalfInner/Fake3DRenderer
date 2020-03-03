@@ -138,6 +138,30 @@ class BasicFake3DEngine : public Fake3DEngine {
                 camera->move(Movable::Direction::Backward, elapsed);
             }
         });
+        openGlInputController_->subscribeAPress([weakCamera](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto camera = weakCamera.lock()) {
+                camera->move(Movable::Direction::Leftward, elapsed);
+            }
+        });
+        openGlInputController_->subscribeDPress([weakCamera](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto camera = weakCamera.lock()) {
+                camera->move(Movable::Direction::Rightward, elapsed);
+            }
+        });
+        openGlInputController_->subscribeQPress([weakCamera](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto camera = weakCamera.lock()) {
+                camera->move(Movable::Direction::Upward, elapsed);
+            }
+        });
+        openGlInputController_->subscribeEPress([weakCamera](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto camera = weakCamera.lock()) {
+                camera->move(Movable::Direction::Downward, elapsed);
+            }
+        });
     }
 
     void createWindowContext() {
