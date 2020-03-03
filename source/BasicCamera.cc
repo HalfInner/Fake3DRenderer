@@ -1,11 +1,10 @@
 //
 // Created by kajbr on 28.02.2020.
 //
+#include "BasicCamera.hh"
 
 #include <unordered_map>
-#include <iostream>
-//#include <glm/ext/quaternion_common.inl>
-#include "BasicCamera.hh"
+
 
 glm::mat4 BasicCamera::projection() {
     auto cameraZoom = 45.f;
@@ -35,7 +34,7 @@ MovableCamera::MovableCamera() {
     up_ = glm::vec3(0.0f, 1.0f, 0.0f); // TODO (kaj) : What's that?
     cameraZoom_ = 45.f;
 
-    velocity_ = 0.000008f;
+    velocity_ = 0.0000008f;
 }
 
 void MovableCamera::updateCameraCoordinates() {
@@ -82,12 +81,12 @@ void MovableCamera::zoom(float ratio) {
 }
 
 void MovableCamera::zoom(ResizeType resizeType, float elapsedTime) {
-    const float zoomRatio = resizeType == ResizeType::ZoomOut ? 0.3 / velocity_ : -0.3 / velocity_;
-    cameraZoom_ += zoomRatio * velocity_;
-    if (cameraZoom_ < 10.)
-        cameraZoom_ = 10.;
-    if (cameraZoom_ > 100.)
-        cameraZoom_ = 100;
+    const float zoomRatio = resizeType == ResizeType::ZoomOut ? 90.f : -90.f;
+    cameraZoom_ += zoomRatio * velocity_ * elapsedTime;
+    if (cameraZoom_ < 10.f)
+        cameraZoom_ = 10.f;
+    if (cameraZoom_ > 100.f)
+        cameraZoom_ = 100.f;
 }
 
 void MovableCamera::pitch(float angle) {
@@ -106,25 +105,25 @@ void MovableCamera::roll(float angle) {
 }
 
 void MovableCamera::rotate(HeadDirection headDirection, float elapsedTime) {
-    float defaultAngle = 0.3 / velocity_;
+    float defaultAngle = 90.f;
     switch (headDirection) {
         case HeadDirection::LeftSide:
-            yaw_ += -defaultAngle * velocity_;
+            yaw_ += -defaultAngle * velocity_ * elapsedTime;
             break;
         case HeadDirection::RightSide:
-            yaw_ += defaultAngle * velocity_;
+            yaw_ += defaultAngle * velocity_ * elapsedTime;
             break;
         case HeadDirection::UpSide:
-            pitch_ += defaultAngle * velocity_;
+            pitch_ += defaultAngle * velocity_ * elapsedTime;
             break;
         case HeadDirection::DownSide:
-            pitch_ += -defaultAngle * velocity_;
+            pitch_ += -defaultAngle * velocity_ * elapsedTime;
             break;
         case HeadDirection::LeftShoulder:
-            roll_ += defaultAngle * velocity_;
+            roll_ += defaultAngle * velocity_ * elapsedTime;
             break;
         case HeadDirection::RightShoulder:
-            roll_ += -defaultAngle * velocity_;
+            roll_ += -defaultAngle * velocity_ * elapsedTime;
             break;
     }
     updateCameraCoordinates();

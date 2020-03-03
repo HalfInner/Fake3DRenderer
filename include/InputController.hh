@@ -19,42 +19,42 @@
 struct /* interface */ InputController {
     using InputControllerCB = std::function<void(void*)>;
 
-    virtual void subscribeEnterPress(InputControllerCB cb) {};
+    virtual void subscribeEnterPress(InputControllerCB&& cb) {};
 
-    virtual void subscribeEscapePress(InputControllerCB cb) {};
+    virtual void subscribeEscapePress(InputControllerCB&& cb) {};
 
     // Move
-    virtual void subscribeWPress(InputControllerCB cb) {};
+    virtual void subscribeWPress(InputControllerCB&& cb) {};
 
-    virtual void subscribeSPress(InputControllerCB cb) {};
+    virtual void subscribeSPress(InputControllerCB&& cb) {};
 
-    virtual void subscribeAPress(InputControllerCB cb) {};
+    virtual void subscribeAPress(InputControllerCB&& cb) {};
 
-    virtual void subscribeDPress(InputControllerCB cb) {};
+    virtual void subscribeDPress(InputControllerCB&& cb) {};
 
-    virtual void subscribeQPress(InputControllerCB cb) {};
+    virtual void subscribeQPress(InputControllerCB&& cb) {};
 
-    virtual void subscribeEPress(InputControllerCB cb) {};
+    virtual void subscribeEPress(InputControllerCB&& cb) {};
 
     // rotate
-    virtual void subscribeRPress(InputControllerCB cb) {};
+    virtual void subscribeRPress(InputControllerCB&& cb) {};
 
-    virtual void subscribeTPress(InputControllerCB cb) {};
+    virtual void subscribeTPress(InputControllerCB&& cb) {};
 
-    virtual void subscribeFPress(InputControllerCB cb) {};
+    virtual void subscribeFPress(InputControllerCB&& cb) {};
 
-    virtual void subscribeGPress(InputControllerCB cb) {};
+    virtual void subscribeGPress(InputControllerCB&& cb) {};
 
-    virtual void subscribeVPress(InputControllerCB cb) {};
+    virtual void subscribeVPress(InputControllerCB&& cb) {};
 
-    virtual void subscribeBPress(InputControllerCB cb) {};
+    virtual void subscribeBPress(InputControllerCB&& cb) {};
 
     // Zoom
-    virtual void subscribeZPress(InputControllerCB cb) {};
+    virtual void subscribeZPress(InputControllerCB&& cb) {};
 
-    virtual void subscribeCPress(InputControllerCB cb) {};
+    virtual void subscribeCPress(InputControllerCB&& cb) {};
 
-    virtual void serve(float elapsedTime = .0f) = 0;
+    virtual void serve(float elapsedTime) = 0;
 
     virtual ~InputController() = default;
 };
@@ -63,7 +63,7 @@ class OpenGlInputController : public InputController {
   public:
     explicit OpenGlInputController(GLFWwindow *window) : window_(window) {}
 
-    void serve(float elapsedTime = .0f) override {
+    void serve(float elapsedTime) override {
         if (glfwGetKey(window_, GLFW_KEY_ENTER) == GLFW_PRESS) {
             if (cbEnterPress_) cbEnterPress_(nullptr);
         }
@@ -114,67 +114,67 @@ class OpenGlInputController : public InputController {
         }
     }
 
-    void subscribeEscapePress(InputControllerCB cb) override {
+    void subscribeEscapePress(InputControllerCB&& cb) override {
         cbEscapePress_ = cb;
     }
 
-    void subscribeEnterPress(InputControllerCB cb) override {
+    void subscribeEnterPress(InputControllerCB&& cb) override {
         cbEnterPress_ = cb;
     }
 
-    void subscribeWPress(InputControllerCB cb) override {
+    void subscribeWPress(InputControllerCB&& cb) override {
         cbWPress_ = cb;
     }
 
-    void subscribeSPress(InputControllerCB cb) override {
+    void subscribeSPress(InputControllerCB&& cb) override {
         cbSPress_ = cb;
     }
 
-    void subscribeAPress(InputControllerCB cb) override {
+    void subscribeAPress(InputControllerCB&& cb) override {
         cbAPress_ = cb;
     }
 
-    void subscribeDPress(InputControllerCB cb) override {
+    void subscribeDPress(InputControllerCB&& cb) override {
         cbDPress_ = cb;
     }
 
-    void subscribeQPress(InputControllerCB cb) override {
+    void subscribeQPress(InputControllerCB&& cb) override {
         cbQPress_ = cb;
     }
 
-    void subscribeEPress(InputControllerCB cb) override {
+    void subscribeEPress(InputControllerCB&& cb) override {
         cbEPress_ = cb;
     }
 
-    void subscribeRPress(InputControllerCB cb) override {
+    void subscribeRPress(InputControllerCB&& cb) override {
         cbRPress_ = cb;
     }
 
-    void subscribeTPress(InputControllerCB cb) override {
+    void subscribeTPress(InputControllerCB&& cb) override {
         cbTPress_ = cb;
     }
 
-    void subscribeFPress(InputControllerCB cb) override {
+    void subscribeFPress(InputControllerCB&& cb) override {
         cbFPress_ = cb;
     }
 
-    void subscribeGPress(InputControllerCB cb) override {
+    void subscribeGPress(InputControllerCB&& cb) override {
         cbGPress_ = cb;
     }
 
-    void subscribeVPress(InputControllerCB cb) override {
+    void subscribeVPress(InputControllerCB&& cb) override {
         cbVPress_ = cb;
     }
 
-    void subscribeBPress(InputControllerCB cb) override {
+    void subscribeBPress(InputControllerCB&& cb) override {
         cbBPress_ = cb;
     }
 
-    void subscribeZPress(InputControllerCB cb) override {
+    void subscribeZPress(InputControllerCB&& cb) override {
         cbZPress_ = cb;
     }
 
-    void subscribeCPress(InputControllerCB cb) override {
+    void subscribeCPress(InputControllerCB&& cb) override {
         cbCPress_ = cb;
     }
 

@@ -26,7 +26,7 @@ enum class Result {
 
 struct /*interface*/ Renderer {
     virtual Result initialize() = 0;
-    virtual Result draw(float elapsedTime = 0) = 0;
+    virtual Result draw(float elapsedTime) = 0;
     virtual Result addObject(std::shared_ptr<Renderable> renderable) = 0;
     virtual ~Renderer() = default;
 };
@@ -74,9 +74,6 @@ class BasicRenderer : public Renderer {
         return Result::Success;
     }
 
-    ~BasicRenderer() override {
-    }
-
   private:
 
     unsigned int VAO_ = 0;
@@ -87,10 +84,10 @@ class BasicRenderer : public Renderer {
 
     std::vector<std::shared_ptr<Renderable>> objects_;
 
-    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 cameraDirection;
-    glm::mat4 view_;
+    glm::vec3 cameraPos{glm::vec3(0.0f, 0.0f, 3.0f)};
+    glm::vec3 cameraTarget{glm::vec3(0.0f, 0.0f, 0.0f)};
+    glm::vec3 cameraDirection{};
+    glm::mat4 view_{};
 
     std::vector<glm::vec3> vertices{};
     std::vector<unsigned> indices{};

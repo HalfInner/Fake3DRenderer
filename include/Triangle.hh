@@ -142,7 +142,7 @@ class Cube : public Renderable {
     }
 
   private:
-    std::shared_ptr<Buffer> buffer_;
+    std::shared_ptr<Buffer> buffer_{nullptr};
 };
 
 
