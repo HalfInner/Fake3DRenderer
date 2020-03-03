@@ -50,8 +50,6 @@ class BasicRenderer : public Renderer {
     Result draw(float elapsedTime) override {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        std::cout << "Elapsed time: " << elapsedTime << '\n';
-
 //        auto velocity = 0.0000004;
 //        if (auto wiseCamera = std::dynamic_pointer_cast<MovableCamera>(camera_)) {
 //            wiseCamera->move({velocity * elapsedTime, 0, 0});

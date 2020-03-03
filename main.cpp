@@ -1,8 +1,8 @@
 
-#include "Windowable.hh"
+#include "Fake3DEngine.hh"
 
 int main() {
-    SimpleWindow sw;
+    BasicFake3DEngine sw;
     sw.initialize();
     sw.run();
 }

@@ -2,8 +2,8 @@
 // Created by kajbr on 23.02.2020.
 //
 
-#ifndef FAKE3DRENDERER_WINDOWABLE_HH
-#define FAKE3DRENDERER_WINDOWABLE_HH
+#ifndef FAKE3DRENDERER_FAKE3DENGINE_HH
+#define FAKE3DRENDERER_FAKE3DENGINE_HH
 
 #include <chrono>
 #include <iostream>
@@ -19,10 +19,10 @@
 #include "Renderable.hh"
 #include "Triangle.hh"
 
-struct Windowable {
+struct Fake3DEngine {
     virtual void initialize() = 0;
     virtual void run() = 0;
-    virtual ~Windowable() = default;
+    virtual ~Fake3DEngine() = default;
 };
 
 class SimpleClock {
@@ -44,9 +44,9 @@ class SimpleClock {
     std::chrono::steady_clock::time_point end_{};
 };
 
-class SimpleWindow : public Windowable {
+class BasicFake3DEngine : public Fake3DEngine {
   public:
-    SimpleWindow() :
+    BasicFake3DEngine() :
             shaderManagerPtr_(std::make_shared<ShaderManager>()),
             vs_(std::make_shared<VertexShaderSource>(shaderManagerPtr_)),
             fs_(std::make_shared<FragmentShaderSource>(shaderManagerPtr_)) {
@@ -59,7 +59,6 @@ class SimpleWindow : public Windowable {
 
         initializeGlew();
 
-        configureInputController();
 
         shaderEngine_->addFragmentShader(fs_);
         shaderEngine_->addVertexShader(vs_);
@@ -68,11 +67,14 @@ class SimpleWindow : public Windowable {
 
         camera_ = std::make_shared<MovableCamera>();
 
-        tppCamera_ = std::make_unique<Graphic::BasicRenderer>(shaderEngine_, camera_);
-//        tppCamera_->addObject(std::make_shared<Graphic::Triangle>());
-//        tppCamera_->addObject(std::make_shared<Graphic::TriangleInv>());
-        tppCamera_->addObject(std::make_shared<Graphic::Cube>());
-        tppCamera_->initialize();
+        basicRenderer_ = std::make_unique<Graphic::BasicRenderer>(shaderEngine_, camera_);
+//        basicRenderer_->addObject(std::make_shared<Graphic::Triangle>());
+//        basicRenderer_->addObject(std::make_shared<Graphic::TriangleInv>());
+        basicRenderer_->addObject(std::make_shared<Graphic::Cube>());
+        basicRenderer_->initialize();
+
+
+        configureInputController();
     }
 
     void run() override {
@@ -80,15 +82,8 @@ class SimpleWindow : public Windowable {
         sc.resume();
         while (!glfwWindowShouldClose(window_)) {
             auto elapsed = sc.measure();
-            openGlInputController_->serve();
-
-            if (auto wiseCamera = std::dynamic_pointer_cast<MovableCamera>(camera_)) {
-                glm::vec3 leftDirectionVector {1, 0, 0};
-                leftDirectionVector *= elapsed;
-                wiseCamera->move(leftDirectionVector);
-            }
-
-            tppCamera_->draw(elapsed);
+            openGlInputController_->serve(elapsed);
+            basicRenderer_->draw(elapsed);
 
             glfwSwapBuffers(window_);
             glfwPollEvents();
@@ -98,7 +93,7 @@ class SimpleWindow : public Windowable {
         }
     }
 
-    ~SimpleWindow() override {
+    ~BasicFake3DEngine() override {
         glfwTerminate();
     }
 
@@ -123,11 +118,27 @@ class SimpleWindow : public Windowable {
 
     void configureInputController() {
         openGlInputController_ = std::make_unique<OpenGlInputController>(window_);
-        openGlInputController_->subscribeEnterPress([wd = window_]() {
+        openGlInputController_->subscribeEnterPress([wd = window_](void *param) {
             glfwSetWindowShouldClose(wd, true);
         });
-        openGlInputController_->subscribeEscapePress([wd = window_]() {
-            std::cout << "ESCAPE CLICKED\n";
+        openGlInputController_->subscribeEscapePress([wd = window_](void *param) {
+            glfwSetWindowShouldClose(wd, true);
+        });
+//        auto wiseCamera = std::dynamic_pointer_cast<MovableCamera>(camera_);
+        std::weak_ptr<MovableCamera> weakCamera(camera_);
+        openGlInputController_->subscribeWPress([weakCamera](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            std::cout << "Elapsed time::W::" << elapsed << "\n";
+            glm::vec3 leftDirectionVector{0, 0, -1};
+            leftDirectionVector *= elapsed;
+            if (auto camera = weakCamera.lock()) {
+                camera->move(leftDirectionVector);
+            }
+//
+//                float angle = 10;
+//                angle *= elapsed;wwww
+////                wiseCamera->pitch(angle);
+//                wiseCamera->yaw(angle);
         });
     }
 
@@ -168,7 +179,7 @@ class SimpleWindow : public Windowable {
     std::shared_ptr<FragmentShaderSource> fs_ = nullptr;
     std::shared_ptr<ShaderEngine> shaderEngine_ = nullptr;
 
-    std::unique_ptr<Graphic::BasicRenderer> tppCamera_ = nullptr;
+    std::unique_ptr<Graphic::BasicRenderer> basicRenderer_ = nullptr;
 
     std::unique_ptr<OpenGlInputController> openGlInputController_ = nullptr;
 
@@ -177,4 +188,4 @@ class SimpleWindow : public Windowable {
     std::shared_ptr<MovableCamera> camera_;
 };
 
-#endif //FAKE3DRENDERER_WINDOWABLE_HH
+#endif //FAKE3DRENDERER_FAKE3DENGINE_HH

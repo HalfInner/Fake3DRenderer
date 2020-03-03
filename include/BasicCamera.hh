@@ -58,6 +58,8 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     // Zoomable
     void zoom(float ratio) override;
   private:
+    void updateCameraCoordinates();
+
     glm::vec3 position_{-1.0f, 0.0f, 4.0f};
     float cameraZoom_ {};
 
