@@ -68,9 +68,8 @@ class BasicFake3DEngine : public Fake3DEngine {
         camera_ = std::make_shared<MovableCamera>();
 
         basicRenderer_ = std::make_unique<Graphic::BasicRenderer>(shaderEngine_, camera_);
-//        basicRenderer_->addObject(std::make_shared<Graphic::Triangle>());
-//        basicRenderer_->addObject(std::make_shared<Graphic::TriangleInv>());
         basicRenderer_->addObject(std::make_shared<Graphic::Cube>());
+        basicRenderer_->addObject(std::make_shared<Graphic::Cube>(glm::vec3(-1, 0, 0)));
         basicRenderer_->initialize();
 
 

@@ -92,6 +92,9 @@ class TriangleInv : public Renderable {
 
 class Cube : public Renderable {
   public:
+    explicit Cube(glm::vec3 position = {}) :
+            position_(position) {};
+
     void initialize(std::shared_ptr<Buffer> buffer) override {
         buffer_ = std::move(buffer);
 
@@ -145,7 +148,7 @@ class Cube : public Renderable {
     RendererInfo beginDraw() override {
         RendererInfo ri{};
         ri.elements = 6 * 2 * 3;
-        ri.position = {-1, 0, 0};
+        ri.position = position_;
         buffer_->bind();
         return ri;
     }
@@ -156,6 +159,7 @@ class Cube : public Renderable {
 
   private:
     std::shared_ptr<Buffer> buffer_{nullptr};
+    glm::vec3 position_;
 };
 
 
