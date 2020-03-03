@@ -36,7 +36,7 @@ struct /* interface */ InputController {
 
     virtual void subscribeEPress(InputControllerCB cb) {};
 
-    // Rotate
+    // rotate
     virtual void subscribeRPress(InputControllerCB cb) {};
 
     virtual void subscribeTPress(InputControllerCB cb) {};

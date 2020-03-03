@@ -24,9 +24,17 @@ struct /*interface*/ Movable {
 };
 
 struct /*interface*/ Rotatable {
+    enum class HeadDirection {
+        LeftSide, RightSide, UpSide, DownSide, LeftShoulder, RightShoulder
+    };
+
     virtual void pitch(float angle) = 0;
     virtual void yaw(float angle) = 0;
     virtual void roll(float angle) = 0;
+
+    virtual void rotate(HeadDirection headDirection, float elapsedTime) = 0;
+
+
     virtual ~Rotatable() = default;
 };
 
@@ -58,6 +66,7 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     void pitch(float angle) override;
     void yaw(float angle) override;
     void roll(float angle) override;
+    void rotate(HeadDirection headDirection, float elapsedTime) override;
 
     // Movable
     void move(Direction direction, float elapsedTime) override;

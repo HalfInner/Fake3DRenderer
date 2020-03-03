@@ -175,6 +175,43 @@ class BasicFake3DEngine : public Fake3DEngine {
                 camera->zoom(Zoomable::ResizeType::ZoomOut, elapsed);
             }
         });
+
+        openGlInputController_->subscribeRPress([weakCamera](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto camera = weakCamera.lock()) {
+                camera->rotate(Rotatable::HeadDirection::LeftSide, elapsed);
+            }
+        });
+        openGlInputController_->subscribeTPress([weakCamera](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto camera = weakCamera.lock()) {
+                camera->rotate(Rotatable::HeadDirection::RightSide, elapsed);
+            }
+        });
+        openGlInputController_->subscribeFPress([weakCamera](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto camera = weakCamera.lock()) {
+                camera->rotate(Rotatable::HeadDirection::DownSide, elapsed);
+            }
+        });
+        openGlInputController_->subscribeGPress([weakCamera](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto camera = weakCamera.lock()) {
+                camera->rotate(Rotatable::HeadDirection::UpSide, elapsed);
+            }
+        });
+        openGlInputController_->subscribeVPress([weakCamera](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto camera = weakCamera.lock()) {
+                camera->rotate(Rotatable::HeadDirection::LeftShoulder, elapsed);
+            }
+        });
+        openGlInputController_->subscribeBPress([weakCamera](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto camera = weakCamera.lock()) {
+                camera->rotate(Rotatable::HeadDirection::RightShoulder, elapsed);
+            }
+        });
     }
 
     void createWindowContext() {

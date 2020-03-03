@@ -4,6 +4,7 @@
 
 #include <unordered_map>
 #include <iostream>
+//#include <glm/ext/quaternion_common.inl>
 #include "BasicCamera.hh"
 
 glm::mat4 BasicCamera::projection() {
@@ -63,13 +64,14 @@ glm::mat4 MovableCamera::model() {
 }
 
 void MovableCamera::move(Direction direction, float elapsedTime) {
-    const std::unordered_map<Direction, glm::vec3> vectorDirections {
-            { Direction::Forward, glm::vec3{0, 0, -1}},
-            { Direction::Backward, glm::vec3{0, 0, 1}},
-            { Direction::Leftward, glm::vec3{-1, 0, 0}},
-            { Direction::Rightward, glm::vec3{1, 0, 0}},
-            { Direction::Upward, glm::vec3{0, 1, 0}},
-            { Direction::Downward, glm::vec3{0, -1, 0}}
+    // TODO (kaj): Consult that we always move forward from start point which is not intuitive
+    const std::unordered_map<Direction, glm::vec3> vectorDirections{
+            {Direction::Forward,   glm::vec3{0, 0, -1}},
+            {Direction::Backward,  glm::vec3{0, 0, 1}},
+            {Direction::Leftward,  glm::vec3{-1, 0, 0}},
+            {Direction::Rightward, glm::vec3{1, 0, 0}},
+            {Direction::Upward,    glm::vec3{0, 1, 0}},
+            {Direction::Downward,  glm::vec3{0, -1, 0}}
     };
 
     position_ += vectorDirections.at(direction) * velocity_ * elapsedTime;
@@ -80,10 +82,10 @@ void MovableCamera::zoom(float ratio) {
 }
 
 void MovableCamera::zoom(ResizeType resizeType, float elapsedTime) {
-    float zoomRatio = resizeType == ResizeType::ZoomOut ? 0.3/velocity_ : -0.3/velocity_;
+    const float zoomRatio = resizeType == ResizeType::ZoomOut ? 0.3 / velocity_ : -0.3 / velocity_;
     cameraZoom_ += zoomRatio * velocity_;
-    if (cameraZoom_ < 0.)
-        cameraZoom_ = 0;
+    if (cameraZoom_ < 10.)
+        cameraZoom_ = 10.;
     if (cameraZoom_ > 100.)
         cameraZoom_ = 100;
 }
@@ -100,6 +102,31 @@ void MovableCamera::yaw(float angle) {
 
 void MovableCamera::roll(float angle) {
     roll_ += angle * velocity_;
+    updateCameraCoordinates();
+}
+
+void MovableCamera::rotate(HeadDirection headDirection, float elapsedTime) {
+    float defaultAngle = 0.3 / velocity_;
+    switch (headDirection) {
+        case HeadDirection::LeftSide:
+            yaw_ += -defaultAngle * velocity_;
+            break;
+        case HeadDirection::RightSide:
+            yaw_ += defaultAngle * velocity_;
+            break;
+        case HeadDirection::UpSide:
+            pitch_ += defaultAngle * velocity_;
+            break;
+        case HeadDirection::DownSide:
+            pitch_ += -defaultAngle * velocity_;
+            break;
+        case HeadDirection::LeftShoulder:
+            roll_ += defaultAngle * velocity_;
+            break;
+        case HeadDirection::RightShoulder:
+            roll_ += -defaultAngle * velocity_;
+            break;
+    }
     updateCameraCoordinates();
 }
 
