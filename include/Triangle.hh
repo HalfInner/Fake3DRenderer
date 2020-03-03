@@ -145,7 +145,7 @@ class Cube : public Renderable {
     RendererInfo beginDraw() override {
         RendererInfo ri{};
         ri.elements = 6 * 2 * 3;
-        ri.position = {0, 0, 0};
+        ri.position = {-1, 0, 0};
         buffer_->bind();
         return ri;
     }
@@ -172,12 +172,14 @@ class Sphere : public Renderable {
         for (size_t i = 0; i < interleavedVertices.size(); i += 3) {
             points.push_back({interleavedVertices[i], interleavedVertices[i + 1], interleavedVertices[i + 2]});
         }
+        indiciesCount = indices.size();
         buffer_->initialize(std::move(points), std::move(indices));
     }
 
     RendererInfo beginDraw() override {
         RendererInfo ri;
-        ri.elements = 1;
+        ri.elements = indiciesCount;
+        ri.position = {1, 0, 0};
 
         buffer_->bind();
 
@@ -245,8 +247,6 @@ class Sphere : public Renderable {
         else
             buildVerticesFlat();
     }
-
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -694,15 +694,16 @@ class Sphere : public Renderable {
     int sectorCount;                        // longitude, # of slices
     int stackCount;                         // latitude, # of stacks
     bool smooth;
-    std::vector<float> vertices;
-    std::vector<float> normals;
-    std::vector<float> texCoords;
-    std::vector<unsigned int> indices;
-    std::vector<unsigned int> lineIndices;
+    std::vector<float> vertices{};
+    std::vector<float> normals{};
+    std::vector<float> texCoords{};
+    std::vector<unsigned int> indices{};
+    unsigned indiciesCount = 0;
+    std::vector<unsigned int> lineIndices{};
 
     // interleaved
-    std::vector<float> interleavedVertices;
-    int interleavedStride;                  // # of bytes to hop to the next vertex (should be 32 bytes)
+    std::vector<float> interleavedVertices{};
+    int interleavedStride{};                  // # of bytes to hop to the next vertex (should be 32 bytes)
 
 
     std::shared_ptr<Buffer> buffer_;
