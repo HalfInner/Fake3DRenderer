@@ -54,7 +54,7 @@ class BasicRenderer : public Renderer {
         shaderEngine_->setView(camera_->view());
 
         for (auto &&object : objects_) {
-            auto info = object->beginDraw();
+            auto info = object->beginDraw(elapsedTime);
             shaderEngine_->setColor(info.color);
 
             glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first

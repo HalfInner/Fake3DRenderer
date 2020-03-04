@@ -33,6 +33,7 @@ class VertexShaderSource : public ShaderSource {
             out vec3 vertexColor;
 
             uniform vec3 colorObject;
+
             uniform vec3 pos;
             uniform mat4 model;
             uniform mat4 view;
@@ -72,10 +73,7 @@ class FragmentShaderSource : public ShaderSource {
 //                vec3 ambient = ambientStrength * lightColor;
 //
 //                vec3 result = ambient * objectColor;
-//                FragColor = vec4(result, 1.0);
-//                FragColor = vec4(1.0f, 0.92f, .8f, 0.8f);
                 FragColor = vec4(vertexColor, 1.0);
-//                FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
             })";
     uint32_t id_;
     ShaderManagerPtr shaderManager_;

@@ -39,7 +39,7 @@ struct /*interface*/ RendererInfo {
 
 struct /*interface*/ Renderable {
     virtual void initialize(std::shared_ptr<Buffer> buffer) = 0;
-    virtual RendererInfo beginDraw() = 0;
+    virtual RendererInfo beginDraw(float elapsedTime) = 0;
     virtual void endDraw() = 0;
     virtual ~Renderable() = default;
 };
@@ -54,7 +54,7 @@ class Triangle : public Renderable {
                              {1,  0, 0}}, {0, 1, 2});
     }
 
-    RendererInfo beginDraw() override {
+    RendererInfo beginDraw(float elapsedTime) override {
         RendererInfo ri;
         ri.elements = 1;
 
@@ -81,7 +81,7 @@ class TriangleInv : public Renderable {
                              {1,  0,  0}}, {0, 1, 2});
     }
 
-    RendererInfo beginDraw() override {
+    RendererInfo beginDraw(float elapsedTime) override {
         RendererInfo ri;
         ri.elements = 1;
 
@@ -136,7 +136,7 @@ class NaiveSphere : public Renderable {
         buffer_->initialize(std::move(spherePoints), std::move(sphereIndicies));
     }
 
-    RendererInfo beginDraw() override {
+    RendererInfo beginDraw(float elapsedTime) override {
         RendererInfo ri;
         ri.elements = latitudeSteps_ * meridianSteps_ * 3 * 2;
         ri.position = position_;
@@ -218,7 +218,7 @@ class Cube : public Renderable {
                              20, 21, 22, 21, 22, 23});
     }
 
-    RendererInfo beginDraw() override {
+    RendererInfo beginDraw(float elapsedTime) override {
         RendererInfo ri{};
         ri.elements = 6 * 2 * 3;
         ri.position = position_;
