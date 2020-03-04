@@ -140,6 +140,7 @@ class NaiveSphere : public Renderable {
         RendererInfo ri;
         ri.elements = latitudeSteps_ * meridianSteps_ * 3 * 2;
         ri.position = position_;
+        ri.color = color_;
         ri.debugMode = false;
 
         buffer_->bind();
@@ -157,6 +158,8 @@ class NaiveSphere : public Renderable {
     const int latitudeSteps_ = 50;
     const int meridianSteps_ = 50;
 
+
+    glm::vec3 color_{1.f, 0.25f, 0.75f};
     glm::vec3 position_;
 };
 
