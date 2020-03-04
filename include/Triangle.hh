@@ -44,6 +44,13 @@ struct /*interface*/ Renderable {
     virtual ~Renderable() = default;
 };
 
+struct /*interface*/ LightPoint {
+    virtual glm::vec3 position() = 0;
+    virtual glm::vec3 color() = 0;
+    virtual float intensity() = 0;
+    virtual ~LightPoint() = default;
+};
+
 class Triangle : public Renderable {
   public:
     void initialize(std::shared_ptr<Buffer> buffer) override {
@@ -162,6 +169,40 @@ class NaiveSphere : public Renderable {
     glm::vec3 color_{1.f, 0.25f, 0.75f};
     glm::vec3 position_;
 };
+
+class SunSphere : public Renderable, public LightPoint {
+  public:
+    SunSphere() : naiveSphere_(1.f, position_) {}
+
+    RendererInfo beginDraw(float elapsedTime) override {
+        auto info = naiveSphere_.beginDraw(elapsedTime);
+        info.color = color_;
+
+        return info;
+    }
+
+    void endDraw() override {
+        naiveSphere_.endDraw();
+    }
+
+    glm::vec3 position() override {
+        return position_;
+    }
+
+    glm::vec3 color() override {
+        return color_;
+    }
+
+    float intensity() override {
+        return 1.f;
+    }
+
+  private:
+    glm::vec3 position_{-1, 10, -12};
+    glm::vec3 color_ {1.f, 1.f, 1.f};
+    NaiveSphere naiveSphere_;
+};
+
 
 class Cube : public Renderable {
   public:
