@@ -49,38 +49,33 @@ class ShaderEngine {
 
 //    void setLightColor()
 
-    void setVec3(const std::string &name, const glm::vec3 &vec) const
-    {
-        auto varId = glGetUniformLocation(shaderProgram_, name.c_str());
-        glUniform3fv(varId, 1, &vec[0]);
-    }
-
-    void setMat4(const std::string &name, const glm::mat4 &mat) const
-    {
-        auto varId = glGetUniformLocation(shaderProgram_, name.c_str());
-        glUniformMatrix4fv(varId, 1, GL_FALSE, &mat[0][0]);
-    }
-
-    void setProjection(const glm::mat4 &mat) const
-    {
+    void setProjection(const glm::mat4 &mat) const {
         const std::string projectionName = "projection";
         setMat4(projectionName, mat);
     }
 
-    void setView(const glm::mat4 &mat) const
-    {
+    void setView(const glm::mat4 &mat) const {
         const std::string viewName = "view";
         setMat4(viewName, mat);
     }
 
-    void setModel(const glm::mat4 &mat) const
-    {
+    void setModel(const glm::mat4 &mat) const {
         const std::string modelName = "model";
         setMat4(modelName, mat);
     }
 
 
   private:
+    void setVec3(const std::string &name, const glm::vec3 &vec) const {
+        auto varId = glGetUniformLocation(shaderProgram_, name.c_str());
+        glUniform3fv(varId, 1, &vec[0]);
+    }
+
+    void setMat4(const std::string &name, const glm::mat4 &mat) const {
+        auto varId = glGetUniformLocation(shaderProgram_, name.c_str());
+        glUniformMatrix4fv(varId, 1, GL_FALSE, &mat[0][0]);
+    }
+
     void initializeShaders() {
         // link shaders
         shaderProgram_ = glCreateProgram();
