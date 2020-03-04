@@ -62,6 +62,7 @@ class BasicRenderer : public Renderer {
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 1.f, 1.f));
             shaderEngine_->setMat4("model", model);
 
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glDrawElements(info.type, info.elements, info.countType, nullptr);
             object->endDraw();
         }
