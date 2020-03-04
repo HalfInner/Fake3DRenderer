@@ -54,6 +54,7 @@ class BasicRenderer : public Renderer {
         shaderEngine_->setProjection(camera_->projection());
         shaderEngine_->setView(camera_->view());
 
+        auto& light = lights_.front(); // TODO(kaj): Supports only one light at the moment
         for (auto &&object : objects_) {
             auto info = object->beginDraw(elapsedTime);
             shaderEngine_->setColor(info.color);
