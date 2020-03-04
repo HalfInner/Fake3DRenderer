@@ -30,6 +30,7 @@ struct /*interface*/ RendererInfo {
     unsigned elements = 0u;
     CountType countType = CountType::Integer;
     glm::vec3 position{};
+    bool debugMode = false;
 };
 
 struct /*interface*/ Renderable {
@@ -130,7 +131,7 @@ class NaiveSphere : public Renderable {
         RendererInfo ri;
         ri.elements = latitudeSteps_ * meridianSteps_ * 3;
         ri.position = {0, 0, 0};
-
+        ri.debugMode = true;
         buffer_->bind();
 
         return ri;
