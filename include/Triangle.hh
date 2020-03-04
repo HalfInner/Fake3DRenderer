@@ -100,7 +100,7 @@ class TriangleInv : public Renderable {
 
 class NaiveSphere : public Renderable {
   public:
-    explicit NaiveSphere(float radius = 2.f, glm::vec3 position = {}) : radius_(radius), position_(position) {};
+    explicit NaiveSphere(float radius = 1.f, glm::vec3 position = {}) : radius_(radius), position_(position) {};
 
     void initialize(std::shared_ptr<Buffer> buffer) override {
         buffer_ = std::move(buffer);
@@ -117,7 +117,8 @@ class NaiveSphere : public Renderable {
                 auto pointY = radius_ * sin(theta) * sin(gamma);
                 auto pointZ = radius_ * cos(theta);
 
-                spherePoints.emplace_back(glm::normalize(glm::vec3{pointX, pointY, pointZ}));
+//                spherePoints.emplace_back(glm::normalize(glm::vec3{pointX, pointY, pointZ}));
+                spherePoints.emplace_back(glm::vec3{pointX, pointY, pointZ});
             }
         }
 
