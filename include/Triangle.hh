@@ -12,24 +12,28 @@
 
 namespace Graphic {
 
-enum RenderType : unsigned {
-    Triangles = GL_TRIANGLES,
-    Lines = GL_LINES,
-    UnknownRenderType = 0x0
-};
-
-enum CountType : unsigned {
-    Byte = GL_UNSIGNED_BYTE,
-    Short = GL_UNSIGNED_SHORT,
-    Integer = GL_UNSIGNED_INT,
-    UnknownCountType = 0x0
-};
 
 struct /*interface*/ RendererInfo {
-    RenderType type = RenderType::Triangles;
-    unsigned elements = 0u;
+    enum RenderType : unsigned {
+        Triangles = GL_TRIANGLES,
+        Lines = GL_LINES,
+        UnknownRenderType = 0x0
+    };
+
+    enum CountType : unsigned {
+        Byte = GL_UNSIGNED_BYTE,
+        Short = GL_UNSIGNED_SHORT,
+        Integer = GL_UNSIGNED_INT,
+        UnknownCountType = 0x0
+    };
+
+    RenderType renderType = RenderType::Triangles;
     CountType countType = CountType::Integer;
+    unsigned elements = 0u;
+
     glm::vec3 position{};
+    glm::vec3 color{};
+
     bool debugMode = false;
 };
 
@@ -96,11 +100,11 @@ class TriangleInv : public Renderable {
 
 class NaiveSphere : public Renderable {
   public:
+    explicit NaiveSphere(glm::vec3 position = {}) : position_(position) {};
+
     void initialize(std::shared_ptr<Buffer> buffer) override {
         buffer_ = std::move(buffer);
 
-
-        constexpr float radius = 2.f;
         std::vector<glm::vec3> spherePoints;
         float gamma = 0.f;
         float theta = 0.f;
@@ -109,9 +113,9 @@ class NaiveSphere : public Renderable {
             gamma += 2 * M_PI / latitudeSteps_;
             for (auto mstep = 0.f; mstep < meridianSteps_; ++mstep) {
                 theta += M_PI / meridianSteps_;
-                auto pointX = radius * sin(theta) * cos(gamma);
-                auto pointY = radius * sin(theta) * sin(gamma);
-                auto pointZ = radius * cos(theta);
+                auto pointX = radius_ * sin(theta) * cos(gamma);
+                auto pointY = radius_ * sin(theta) * sin(gamma);
+                auto pointZ = radius_ * cos(theta);
 
                 spherePoints.emplace_back(glm::normalize(glm::vec3{pointX, pointY, pointZ}));
             }
@@ -134,8 +138,9 @@ class NaiveSphere : public Renderable {
     RendererInfo beginDraw() override {
         RendererInfo ri;
         ri.elements = latitudeSteps_ * meridianSteps_ * 3 * 2;
-        ri.position = {0, 0, 0};
-//        ri.debugMode = true;
+        ri.position = position_;
+        ri.debugMode = false;
+
         buffer_->bind();
 
         return ri;
@@ -147,8 +152,11 @@ class NaiveSphere : public Renderable {
 
   private:
     std::shared_ptr<Buffer> buffer_;
+    const float radius_ = 2.f;
     const int latitudeSteps_ = 50;
     const int meridianSteps_ = 50;
+
+    glm::vec3 position_;
 };
 
 class Cube : public Renderable {

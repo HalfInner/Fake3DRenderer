@@ -65,7 +65,7 @@ class BasicRenderer : public Renderer {
             if (info.debugMode) {
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             }
-            glDrawElements(info.type, info.elements, info.countType, nullptr);
+            glDrawElements(info.renderType, info.elements, info.countType, nullptr);
             object->endDraw();
         }
 

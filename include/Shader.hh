@@ -61,9 +61,17 @@ class FragmentShaderSource : public ShaderSource {
   private:
     static constexpr const char *shaderProgram = R"(
             #version 330 core
+
+            in float lightColor;
+            in vec3 objectColor;
             out vec4 FragColor;
             void main() {
-              FragColor = vec4(1.0f, 0.92f, .8f, 0.8f);
+//                float ambientStrength = 0.1;
+//                vec3 ambient = ambientStrength * lightColor;
+//
+//                vec3 result = ambient * objectColor;
+//                FragColor = vec4(result, 1.0);
+                FragColor = vec4(1.0f, 0.92f, .8f, 0.8f);
             })";
     uint32_t id_;
     ShaderManagerPtr shaderManager_;

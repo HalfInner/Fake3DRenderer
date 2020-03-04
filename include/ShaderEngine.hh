@@ -47,6 +47,8 @@ class ShaderEngine {
         glUseProgram(shaderProgram_);
     }
 
+//    void setLightColor()
+
     void setVec3(const std::string &name, const glm::vec3 &vec) const
     {
         auto varId = glGetUniformLocation(shaderProgram_, name.c_str());
@@ -57,6 +59,24 @@ class ShaderEngine {
     {
         auto varId = glGetUniformLocation(shaderProgram_, name.c_str());
         glUniformMatrix4fv(varId, 1, GL_FALSE, &mat[0][0]);
+    }
+
+    void setProjection(const glm::mat4 &mat) const
+    {
+        const std::string projectionName = "projection";
+        setMat4(projectionName, mat);
+    }
+
+    void setView(const glm::mat4 &mat) const
+    {
+        const std::string viewName = "view";
+        setMat4(viewName, mat);
+    }
+
+    void setModel(const glm::mat4 &mat) const
+    {
+        const std::string modelName = "model";
+        setMat4(modelName, mat);
     }
 
 
