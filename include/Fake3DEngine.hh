@@ -72,9 +72,12 @@ class BasicFake3DEngine : public Fake3DEngine {
 //        basicRenderer_->addObject(std::make_shared<Graphic::Cube>(glm::vec3(-2, 0, 0)));
 //        basicRenderer_->addObject(std::make_shared<Graphic::Sphere>(glm::vec3(-2, 0, 0)));
         basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>());
-        basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>());
-        basicRenderer_->initialize();
 
+        auto sun = std::make_shared<Graphic::SunSphere>();
+        basicRenderer_->addObject(sun);
+        basicRenderer_->addLight(sun);
+
+        basicRenderer_->initialize();
 
         configureInputController();
     }

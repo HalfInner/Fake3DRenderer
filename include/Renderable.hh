@@ -28,6 +28,7 @@ struct /*interface*/ Renderer {
     virtual Result initialize() = 0;
     virtual Result draw(float elapsedTime) = 0;
     virtual Result addObject(std::shared_ptr<Renderable> renderable) = 0;
+    virtual Result addLight(std::shared_ptr<LightPoint> light) = 0;
     virtual ~Renderer() = default;
 };
 
@@ -79,23 +80,19 @@ class BasicRenderer : public Renderer {
         return Result::Success;
     }
 
+    Result addLight(std::shared_ptr<LightPoint> light) override {
+        lights_.emplace_back(std::move(light));
+        return Result::Success;
+    }
+
   private:
 
-    unsigned int VAO_ = 0;
-    unsigned int VBO_ = 0;
-    unsigned int EBO_ = 0;
     std::shared_ptr<ShaderEngine> shaderEngine_{nullptr};
     std::shared_ptr<Camera> camera_{nullptr};
 
     std::vector<std::shared_ptr<Renderable>> objects_;
+    std::vector<std::shared_ptr<LightPoint>> lights_;
 
-    glm::vec3 cameraPos{glm::vec3(0.0f, 0.0f, 3.0f)};
-    glm::vec3 cameraTarget{glm::vec3(0.0f, 0.0f, 0.0f)};
-    glm::vec3 cameraDirection{};
-    glm::mat4 view_{};
-
-    std::vector<glm::vec3> vertices{};
-    std::vector<unsigned> indices{};
 };
 
 } // namespace Graphic

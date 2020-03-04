@@ -181,6 +181,10 @@ class SunSphere : public Renderable, public LightPoint {
         return info;
     }
 
+    void initialize(std::shared_ptr<Buffer> buffer) override {
+        naiveSphere_.initialize(std::move(buffer));
+    }
+
     void endDraw() override {
         naiveSphere_.endDraw();
     }
