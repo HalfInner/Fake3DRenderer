@@ -47,7 +47,10 @@ class ShaderEngine {
         glUseProgram(shaderProgram_);
     }
 
-//    void setLightColor()
+    void setColor(const glm::vec3 &color) {
+        const std::string colorObjectName = "colorObject";
+        setVec3(colorObjectName, color);
+    }
 
     void setProjection(const glm::mat4 &mat) const {
         const std::string projectionName = "projection";
@@ -66,6 +69,11 @@ class ShaderEngine {
 
 
   private:
+    void setFloat(const std::string &name, float value) const {
+        auto varId = glGetUniformLocation(shaderProgram_, name.c_str());
+        glUniform1f(varId, value);
+    }
+
     void setVec3(const std::string &name, const glm::vec3 &vec) const {
         auto varId = glGetUniformLocation(shaderProgram_, name.c_str());
         glUniform3fv(varId, 1, &vec[0]);
