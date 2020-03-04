@@ -122,6 +122,10 @@ class NaiveSphere : public Renderable {
             sphereIndicies.emplace_back(i % spherePoints.size());
             sphereIndicies.emplace_back((i + 1) % spherePoints.size());
             sphereIndicies.emplace_back((i + latitudeSteps_) % spherePoints.size());
+
+            sphereIndicies.emplace_back((i + 1) % spherePoints.size());
+            sphereIndicies.emplace_back((i + 1 + latitudeSteps_) % spherePoints.size());
+            sphereIndicies.emplace_back((i + latitudeSteps_) % spherePoints.size());
         }
 
         buffer_->initialize(std::move(spherePoints), std::move(sphereIndicies));
@@ -129,9 +133,9 @@ class NaiveSphere : public Renderable {
 
     RendererInfo beginDraw() override {
         RendererInfo ri;
-        ri.elements = latitudeSteps_ * meridianSteps_ * 3;
+        ri.elements = latitudeSteps_ * meridianSteps_ * 3 * 2;
         ri.position = {0, 0, 0};
-        ri.debugMode = true;
+//        ri.debugMode = true;
         buffer_->bind();
 
         return ri;
