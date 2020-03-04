@@ -50,8 +50,8 @@ class BasicRenderer : public Renderer {
     Result draw(float elapsedTime) override {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        shaderEngine_->setMat4("projection", camera_->projection());
-        shaderEngine_->setMat4("view", camera_->view());
+        shaderEngine_->setProjection(camera_->projection());
+        shaderEngine_->setView(camera_->view());
 
         for (auto &&object : objects_) {
             auto info = object->beginDraw();
@@ -60,7 +60,7 @@ class BasicRenderer : public Renderer {
             model = glm::translate(model, info.position);
             float angle = 1.f;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 1.f, 1.f));
-            shaderEngine_->setMat4("model", model);
+            shaderEngine_->setModel(model);
 
             if (info.debugMode) {
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

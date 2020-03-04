@@ -100,7 +100,7 @@ class TriangleInv : public Renderable {
 
 class NaiveSphere : public Renderable {
   public:
-    explicit NaiveSphere(glm::vec3 position = {}) : position_(position) {};
+    explicit NaiveSphere(float radius = 2.f, glm::vec3 position = {}) : radius_(radius), position_(position) {};
 
     void initialize(std::shared_ptr<Buffer> buffer) override {
         buffer_ = std::move(buffer);

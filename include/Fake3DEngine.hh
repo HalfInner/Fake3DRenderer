@@ -72,7 +72,7 @@ class BasicFake3DEngine : public Fake3DEngine {
 //        basicRenderer_->addObject(std::make_shared<Graphic::Cube>(glm::vec3(-2, 0, 0)));
 //        basicRenderer_->addObject(std::make_shared<Graphic::Sphere>(glm::vec3(-2, 0, 0)));
         basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>());
-        basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(glm::vec3{-1, 10, -12}));
+        basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(1.f, glm::vec3{-1, 10, -12}));
         basicRenderer_->initialize();
 
 
