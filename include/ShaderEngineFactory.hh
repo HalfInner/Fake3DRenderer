@@ -13,8 +13,8 @@ class ShaderEngingeFactory {
             shaderManagerPtr_(std::make_shared<ShaderManager>()) {
     }
 
-    std::shared_ptr<ShaderEngine> create(Graphic::RendererInfo::TypeObject type) {
-        auto shaderEngine = std::make_shared<ShaderEngine>();
+    std::unique_ptr<ShaderEngine> create(Graphic::RendererInfo::TypeObject type) {
+        auto shaderEngine = std::make_unique<ShaderEngine>();
 
         std::shared_ptr<VertexShaderSource> vs;
         std::shared_ptr<FragmentShaderSource> fs;
@@ -30,6 +30,7 @@ class ShaderEngingeFactory {
         }
         shaderEngine->addFragmentShader(fs);
         shaderEngine->addVertexShader(vs);
+        shaderEngine->initialize();
 
         return shaderEngine;
     }

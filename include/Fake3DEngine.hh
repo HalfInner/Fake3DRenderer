@@ -47,13 +47,7 @@ class SimpleClock {
 
 class BasicFake3DEngine : public Fake3DEngine {
   public:
-    BasicFake3DEngine()
-//    :
-//            shaderManagerPtr_(std::make_shared<ShaderManager>()),
-//            vs_(std::make_shared<VertexShaderSource>(shaderManagerPtr_)),
-//            fs_(std::make_shared<FragmentShaderSource>(shaderManagerPtr_))
-            {
-        shaderEngine_ = factory.create(Graphic::RendererInfo::TypeObject::Normal);
+    BasicFake3DEngine() {
     }
 
     void initialize() override {
@@ -65,12 +59,10 @@ class BasicFake3DEngine : public Fake3DEngine {
 
 //        shaderEngine_->addFragmentShader(fs_);
 //        shaderEngine_->addVertexShader(vs_);
-        shaderEngine_->initialize();
-        shaderEngine_->activate();
 
         camera_ = std::make_shared<MovableCamera>();
 
-        basicRenderer_ = std::make_unique<Graphic::BasicRenderer>(shaderEngine_, camera_);
+        basicRenderer_ = std::make_unique<Graphic::BasicRenderer>(camera_);
 //        basicRenderer_->addObject(std::make_shared<Graphic::Cube>());
 //        basicRenderer_->addObject(std::make_shared<Graphic::Cube>(glm::vec3(-2, 0, 0)));
 //        basicRenderer_->addObject(std::make_shared<Graphic::Sphere>(glm::vec3(-2, 0, 0)));
@@ -257,13 +249,10 @@ class BasicFake3DEngine : public Fake3DEngine {
     ShaderManagerPtr shaderManagerPtr_ = nullptr;
     std::shared_ptr<VertexShaderSource> vs_ = nullptr;
     std::shared_ptr<FragmentShaderSource> fs_ = nullptr;
-    std::shared_ptr<ShaderEngine> shaderEngine_ = nullptr;
 
     std::unique_ptr<Graphic::BasicRenderer> basicRenderer_ = nullptr;
 
     std::unique_ptr<OpenGlInputController> openGlInputController_ = nullptr;
-
-    ShaderEngingeFactory factory;
 
     int initialScreenWidth_ = 0;
     int initialScreenHeight_ = 0;

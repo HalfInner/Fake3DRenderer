@@ -14,6 +14,7 @@
 
 #include "BasicCamera.hh"
 #include "ShaderEngine.hh"
+#include "ShaderEngineFactory.hh"
 #include "Triangle.hh"
 
 namespace Graphic {
@@ -35,11 +36,12 @@ struct /*interface*/ Renderer {
 
 class BasicRenderer : public Renderer {
   public:
-    explicit BasicRenderer(std::shared_ptr<ShaderEngine> shaderEngine, std::shared_ptr<Camera> camera)
-            : shaderEngine_(std::move(shaderEngine)), camera_(std::move(camera)) {}
+    explicit BasicRenderer(std::shared_ptr<Camera> camera)
+            : camera_(std::move(camera)) {}
 
     Result initialize() override {
-
+        ShaderEngingeFactory factory;
+        shaderEngine_ = factory.create(Graphic::RendererInfo::TypeObject::Normal);
         // generated from object
         for (auto &&object : objects_) {
             object->initialize(std::make_shared<OpenGlBuffer>());
@@ -58,6 +60,8 @@ class BasicRenderer : public Renderer {
         (void) light;
         for (auto &&object : objects_) {
             auto info = object->beginDraw(elapsedTime);
+
+            shaderEngine_->activate();
             shaderEngine_->setColor(info.color);
             shaderEngine_->setLightColor(light->color());
 
@@ -88,12 +92,11 @@ class BasicRenderer : public Renderer {
     }
 
   private:
-
-    std::shared_ptr<ShaderEngine> shaderEngine_{nullptr};
+    std::unique_ptr<ShaderEngine> shaderEngine_{nullptr};
     std::shared_ptr<Camera> camera_{nullptr};
 
-    std::vector<std::shared_ptr<Renderable>> objects_;
-    std::vector<std::shared_ptr<LightPoint>> lights_;
+    std::vector<std::shared_ptr<Renderable>> objects_{};
+    std::vector<std::shared_ptr<LightPoint>> lights_{};
 
 };
 
