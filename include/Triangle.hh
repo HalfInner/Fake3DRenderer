@@ -154,9 +154,10 @@ class NaiveSphere : public Renderable {
         ri.position = position_;
 
         // TODO(kaj): Example animation. To remove.
-        const float velocity_ = 0.008f;
-        ri.color = color_ + (lastColor_ * cosf(elapsedTime) * velocity_);
-        lastColor_ = ri.color;
+//        const float velocity_ = 0.00008f;
+//        ri.color = color_ + (lastColor_ * cosf(elapsedTime) * velocity_);
+//        lastColor_ = ri.color;
+        ri.color = color_;
         ri.debugMode = false;
 
         buffer_->bind();
@@ -175,8 +176,7 @@ class NaiveSphere : public Renderable {
     const int meridianSteps_ = 50;
 
 
-    glm::vec3 color_{1.f, 0.25f, 0.75f};
-    glm::vec3 lastColor_{1.f, 0.25f, 0.75f};
+    glm::vec3 color_{1.f, 0.84f, 0.01f};
     glm::vec3 position_;
 };
 
@@ -217,7 +217,6 @@ class SunSphere : public Renderable, public LightPoint {
     glm::vec3 color_ {1.f, 1.f, 1.f};
     NaiveSphere naiveSphere_;
 };
-
 
 class Cube : public Renderable {
   public:
@@ -278,6 +277,7 @@ class Cube : public Renderable {
         RendererInfo ri{};
         ri.elements = 6 * 2 * 3;
         ri.position = position_;
+        ri.color = {0.2f, 0.2f, 0.9f};
         buffer_->bind();
         return ri;
     }

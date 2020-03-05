@@ -56,18 +56,11 @@ class BasicFake3DEngine : public Fake3DEngine {
 
         initializeGlew();
 
-
-//        shaderEngine_->addFragmentShader(fs_);
-//        shaderEngine_->addVertexShader(vs_);
-
         camera_ = std::make_shared<MovableCamera>();
 
         basicRenderer_ = std::make_unique<Graphic::BasicRenderer>(camera_);
-//        basicRenderer_->addObject(std::make_shared<Graphic::Cube>());
-//        basicRenderer_->addObject(std::make_shared<Graphic::Cube>(glm::vec3(-2, 0, 0)));
-//        basicRenderer_->addObject(std::make_shared<Graphic::Sphere>(glm::vec3(-2, 0, 0)));
+        basicRenderer_->addObject(std::make_shared<Graphic::Cube>(glm::vec3(-2, 0, 0)));
         basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>());
-
         auto sun = std::make_shared<Graphic::SunSphere>();
         basicRenderer_->addObject(sun);
         basicRenderer_->addLight(sun);

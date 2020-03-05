@@ -55,7 +55,7 @@ class VertexShaderSource : public ShaderSource {
                 viewPos = viewPosObject;
 
                 FragPos = vec3(model * vec4(aPos, 1.0));
-                Normal = mat3(transpose(inverse(model))) * aNormal;
+                Normal = normalize(mat3(transpose(inverse(model))) * aNormal);
                 gl_Position = projection * view * vec4(FragPos, 1.0);
             })";
 
@@ -89,7 +89,7 @@ class FragmentShaderSource : public ShaderSource {
 
             void main() {
                 // ambient
-//                float ambientStrength = 11;
+                // float ambientStrength = 11;
                 float ambientStrength = 1.;
                 vec3 ambient = ambientStrength * lightColor;
 
