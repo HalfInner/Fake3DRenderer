@@ -52,6 +52,11 @@ class ShaderEngine {
         setVec3(colorObjectName, color);
     }
 
+    void setLightColor(const glm::vec3 &color) {
+        const std::string lightColorObjectName = "lightColorObject";
+        setVec3(lightColorObjectName, color);
+    }
+
     void setProjection(const glm::mat4 &mat) const {
         const std::string projectionName = "projection";
         setMat4(projectionName, mat);

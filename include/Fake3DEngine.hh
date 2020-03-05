@@ -13,8 +13,9 @@
 #include <thread>
 
 #include "InputController.hh"
-#include "ShaderEngine.hh"
 #include "Shader.hh"
+#include "ShaderEngine.hh"
+#include "ShaderEngineFactory.hh"
 #include "ShaderManager.hh"
 #include "Renderable.hh"
 #include "Triangle.hh"
@@ -46,11 +47,13 @@ class SimpleClock {
 
 class BasicFake3DEngine : public Fake3DEngine {
   public:
-    BasicFake3DEngine() :
-            shaderManagerPtr_(std::make_shared<ShaderManager>()),
-            vs_(std::make_shared<VertexShaderSource>(shaderManagerPtr_)),
-            fs_(std::make_shared<FragmentShaderSource>(shaderManagerPtr_)) {
-        shaderEngine_ = std::make_shared<ShaderEngine>();
+    BasicFake3DEngine()
+//    :
+//            shaderManagerPtr_(std::make_shared<ShaderManager>()),
+//            vs_(std::make_shared<VertexShaderSource>(shaderManagerPtr_)),
+//            fs_(std::make_shared<FragmentShaderSource>(shaderManagerPtr_))
+            {
+        shaderEngine_ = factory.create(Graphic::RendererInfo::TypeObject::Normal);
     }
 
     void initialize() override {
@@ -60,8 +63,8 @@ class BasicFake3DEngine : public Fake3DEngine {
         initializeGlew();
 
 
-        shaderEngine_->addFragmentShader(fs_);
-        shaderEngine_->addVertexShader(vs_);
+//        shaderEngine_->addFragmentShader(fs_);
+//        shaderEngine_->addVertexShader(vs_);
         shaderEngine_->initialize();
         shaderEngine_->activate();
 
@@ -259,6 +262,8 @@ class BasicFake3DEngine : public Fake3DEngine {
     std::unique_ptr<Graphic::BasicRenderer> basicRenderer_ = nullptr;
 
     std::unique_ptr<OpenGlInputController> openGlInputController_ = nullptr;
+
+    ShaderEngingeFactory factory;
 
     int initialScreenWidth_ = 0;
     int initialScreenHeight_ = 0;

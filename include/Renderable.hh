@@ -55,16 +55,17 @@ class BasicRenderer : public Renderer {
         shaderEngine_->setView(camera_->view());
 
         auto& light = lights_.front(); // TODO(kaj): Supports only one light at the moment
+        (void) light;
         for (auto &&object : objects_) {
             auto info = object->beginDraw(elapsedTime);
             shaderEngine_->setColor(info.color);
+            shaderEngine_->setLightColor(light->color());
 
             glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
             model = glm::translate(model, info.position);
             float angle = 1.f;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 1.f, 1.f));
             shaderEngine_->setModel(model);
-
 
             if (info.debugMode) {
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

@@ -45,9 +45,8 @@ class VertexShaderSource : public ShaderSource {
                 gl_Position = projection * view * model * vec4(aPos, 1.0f);
                 TexCoord = vec2(aTexCoord.x, aTexCoord.y);
                 vertexColor = colorObject;
+                lightColor = lightColorObject;
             })";
-//    gl_Position = projection * view * model * vec4(aPos, 1.0);
-
 
     uint32_t id_;
     ShaderManagerPtr shaderManager_;
@@ -68,17 +67,19 @@ class FragmentShaderSource : public ShaderSource {
     static constexpr const char *shaderProgram = R"(
             #version 330 core
 
-            in vec3 lightColor;
             in vec3 vertexColor;
+            in vec3 lightColor;
 
             out vec4 FragColor;
             void main() {
                 float ambientStrength = 0.1;
                 vec3 ambient = ambientStrength * lightColor;
 
-                vec3 result = ambient * objectColor;
-                FragColor = vec4(result, 1.0);
+                vec3 result = ambient * vertexColor;
+//                FragColor = vec4(result, 1.0);
+                FragColor = vec4(vertexColor  * 1.0, 1.0);
             })";
+
     uint32_t id_;
     ShaderManagerPtr shaderManager_;
 };
