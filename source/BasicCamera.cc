@@ -126,5 +126,9 @@ void MovableCamera::rotate(HeadDirection headDirection, float elapsedTime) {
     updateCameraCoordinates();
 }
 
+glm::vec3 MovableCamera::position() {
+    return position_;
+}
+
 
 

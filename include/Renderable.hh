@@ -69,8 +69,11 @@ class BasicRenderer : public Renderer {
 
             shaderEngine->setProjection(camera_->projection());
             shaderEngine->setView(camera_->view());
+
             shaderEngine->setColor(info.color);
             shaderEngine->setLightColor(light->color());
+            shaderEngine->setLightPos(light->position());
+            shaderEngine->setViewPos(camera_->position());
 
             glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
             model = glm::translate(model, info.position);
