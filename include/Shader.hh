@@ -48,14 +48,13 @@ class VertexShaderSource : public ShaderSource {
             uniform mat4 projection;
 
             void main() {
-
                 vertexColor = colorObject;
                 lightColor = lightColorObject;
                 lightPos = lightPosObject;
                 viewPos = viewPosObject;
 
                 FragPos = vec3(model * vec4(aPos, 1.0));
-                Normal = normalize(mat3(transpose(inverse(model))) * aNormal);
+                Normal = normalize(mat3(transpose(model)) * aNormal);
                 gl_Position = projection * view * vec4(FragPos, 1.0);
             })";
 
@@ -77,6 +76,7 @@ class FragmentShaderSource : public ShaderSource {
   private:
     static constexpr const char *shaderProgram = R"(
             #version 330 core
+
             out vec4 FragColor;
 
             in vec3 Normal;
@@ -95,8 +95,7 @@ class FragmentShaderSource : public ShaderSource {
 
                 // diffuse
                 vec3 norm = normalize(Normal);
-//                vec3 lightDir = normalize(lightPos - FragPos);
-                vec3 lightDir = normalize(FragPos - lightPos * 10);
+                vec3 lightDir = normalize(lightPos - FragPos);
                 float diff = max(dot(norm, lightDir), 0.0);
                 vec3 diffuse = diff * lightColor;
                 FragColor = vec4(diffuse, 1.0);
