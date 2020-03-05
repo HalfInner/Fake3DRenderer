@@ -117,11 +117,10 @@ class NaiveSphere : public Renderable {
     void initialize(std::shared_ptr<Buffer> buffer) override {
         buffer_ = std::move(buffer);
 
-        std::vector<glm::vec3> spherePoints;
+        std::vector<glm::vec3> spherePoints{};
         float gamma = 0.f;
-        float theta = 0.f;
         for (auto lstep = 0; lstep < latitudeSteps_; ++lstep) {
-            theta = 0.f;
+            float theta = 0.f;
             gamma += 2 * M_PI / latitudeSteps_;
             for (auto mstep = 0.f; mstep < meridianSteps_; ++mstep) {
                 theta += M_PI / meridianSteps_;
@@ -134,7 +133,7 @@ class NaiveSphere : public Renderable {
             }
         }
 
-        std::vector<unsigned> sphereIndicies;
+        std::vector<unsigned> sphereIndicies{};
         for (size_t i = 0; i < spherePoints.size(); ++i) {
             sphereIndicies.emplace_back(i % spherePoints.size());
             sphereIndicies.emplace_back((i + 1) % spherePoints.size());
@@ -152,12 +151,13 @@ class NaiveSphere : public Renderable {
         RendererInfo ri;
 
 //        fillPercentage_ += elapsedTime / 10000000.f;
-////        if (fillPercentage_ > 99.f) {
-////            fillPercentage_ = 84.f;
-////        }
-////
-////        ri.elements =  numberOfElements * fillPercentage_;
-        ri.elements =  numberOfElements;
+//        if (fillPercentage_ > 99.f) {
+//            fillPercentage_ = 84.f;
+//        }
+//
+//        ri.elements =  numberOfElements * fillPercentage_;
+//        ri.elements =  numberOfElements / 2;
+        ri.elements = numberOfElements;
         ri.position = position_;
 
         // TODO(kaj): Example animation. To remove.
@@ -182,8 +182,7 @@ class NaiveSphere : public Renderable {
     const int latitudeSteps_ = 50;
     const int meridianSteps_ = 50;
 
-    const int numberOfElements =  latitudeSteps_ * meridianSteps_ * 3 * 2;
-    float fillPercentage_ = 0.86f;
+    const int numberOfElements = latitudeSteps_ * meridianSteps_ * 3 * 2;
 
 
     glm::vec3 color_{1.f, 0.84f, 0.01f};
@@ -244,53 +243,52 @@ class Cube : public Renderable {
         auto front_t_2 = glm::vec3{-sideLength, -sideLength, sideLength};
         auto front_t_3 = glm::vec3{sideLength, sideLength, sideLength};
         auto front_t_4 = glm::vec3{sideLength, -sideLength, sideLength};
-        auto front_normal_ = glm::vec3{0, 0, -1};
+        auto front_norm_ = glm::vec3{0, 0, 1};
 
         auto rear_t_1 = glm::vec3{-sideLength, sideLength, -sideLength};
         auto rear_t_2 = glm::vec3{-sideLength, -sideLength, -sideLength};
         auto rear_t_3 = glm::vec3{sideLength, sideLength, -sideLength};
         auto rear_t_4 = glm::vec3{sideLength, -sideLength, -sideLength};
-        auto rear_normal_ = glm::vec3{0, 0, 1};
+        auto rear_norm_ = glm::vec3{0, 0, -1};
 
         auto left_t_1 = glm::vec3{-sideLength, -sideLength, sideLength};
         auto left_t_2 = glm::vec3{-sideLength, -sideLength, -sideLength};
         auto left_t_3 = glm::vec3{-sideLength, sideLength, sideLength};
         auto left_t_4 = glm::vec3{-sideLength, sideLength, -sideLength};
-        auto left_normal_ = glm::vec3{-1, 0, 0};
+        auto left_norm_ = glm::vec3{-1, 0, 0};
 
         auto right_t_1 = glm::vec3{sideLength, -sideLength, sideLength};
         auto right_t_2 = glm::vec3{sideLength, -sideLength, -sideLength};
         auto right_t_3 = glm::vec3{sideLength, sideLength, sideLength};
         auto right_t_4 = glm::vec3{sideLength, sideLength, -sideLength};
-        auto right_normal_ = glm::vec3{1, 0, 0};
+        auto right_norm_ = glm::vec3{1, 0, 0};
 
         auto top_t_1 = glm::vec3{-sideLength, sideLength, sideLength};
         auto top_t_2 = glm::vec3{sideLength, sideLength, sideLength};
         auto top_t_3 = glm::vec3{-sideLength, sideLength, -sideLength};
         auto top_t_4 = glm::vec3{sideLength, sideLength, -sideLength};
-        auto top_normal_ = glm::vec3{0, 1, 0};
+        auto top_norm_ = glm::vec3{0, 1, 0};
 
         auto bottom_t_1 = glm::vec3{-sideLength, -sideLength, sideLength};
         auto bottom_t_2 = glm::vec3{sideLength, -sideLength, sideLength};
         auto bottom_t_3 = glm::vec3{-sideLength, -sideLength, -sideLength};
         auto bottom_t_4 = glm::vec3{sideLength, -sideLength, -sideLength};
-        auto bottom_normal_ = glm::vec3{0, -1, 0};
+        auto bottom_norm_ = glm::vec3{0, -1, 0};
 
 
         buffer_->initialize(
-                {front_t_1, front_normal_, front_t_2, front_normal_, front_t_3, front_normal_, front_t_4, front_normal_,
-                 rear_t_1, rear_normal_, rear_t_2, rear_normal_, rear_t_3, rear_normal_, rear_t_4, rear_normal_,
-                 left_t_1, left_normal_, left_t_2, left_normal_, left_t_3, left_normal_, left_t_4, left_normal_,
-                 right_t_1, right_normal_, right_t_2, right_normal_, right_t_3, right_normal_, right_t_4,
-                 right_normal_, top_t_1, top_normal_, top_t_2, top_normal_, top_t_3, top_normal_, top_t_4,
-                 top_normal_, bottom_t_1, bottom_normal_, bottom_t_2, bottom_normal_, bottom_t_3, bottom_normal_,
-                 bottom_t_4, bottom_normal_,},
-                {0, 1, 2, 1, 2, 3,
-                 4, 5, 6, 6, 7, 5,
-                 8, 10, 9, 10, 11, 9,
-                 12, 13, 14, 13, 14, 15,
-                 16, 17, 18, 17, 18, 19,
-                 20, 21, 22, 21, 22, 23}, true);
+                {front_t_1, front_norm_, front_t_2, front_norm_, front_t_3, front_norm_, front_t_4, front_norm_,
+                 rear_t_1, rear_norm_, rear_t_2, rear_norm_, rear_t_3, rear_norm_, rear_t_4, rear_norm_,
+                 left_t_1, left_norm_, left_t_2, left_norm_, left_t_3, left_norm_, left_t_4, left_norm_,
+                 right_t_1, right_norm_, right_t_2, right_norm_, right_t_3, right_norm_, right_t_4, right_norm_,
+                 top_t_1, top_norm_, top_t_2, top_norm_, top_t_3, top_norm_, top_t_4, top_norm_,
+                 bottom_t_1, bottom_norm_, bottom_t_2, bottom_norm_, bottom_t_3, bottom_norm_, bottom_t_4,
+                 bottom_norm_,}, {0, 1, 2, 1, 2, 3,
+                                  4, 5, 6, 6, 7, 5,
+                                  8, 10, 9, 10, 11, 9,
+                                  12, 13, 14, 13, 14, 15,
+                                  16, 17, 18, 17, 18, 19,
+                                  20, 21, 22, 21, 22, 23}, true);
     }
 
     RendererInfo beginDraw(float elapsedTime) override {
