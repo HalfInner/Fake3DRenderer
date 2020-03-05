@@ -63,7 +63,7 @@ class Triangle : public Renderable {
 
         buffer_->initialize({{-1, 0, 0},
                              {0,  1, 0},
-                             {1,  0, 0}}, {0, 1, 2});
+                             {1,  0, 0}}, {0, 1, 2}, false);
     }
 
     RendererInfo beginDraw(float elapsedTime) override {
@@ -90,7 +90,7 @@ class TriangleInv : public Renderable {
 
         buffer_->initialize({{-1, 0,  0},
                              {0,  -1, 0},
-                             {1,  0,  0}}, {0, 1, 2});
+                             {1,  0,  0}}, {0, 1, 2}, false);
     }
 
     RendererInfo beginDraw(float elapsedTime) override {
@@ -131,6 +131,7 @@ class NaiveSphere : public Renderable {
 
 //                spherePoints.emplace_back(glm::normalize(glm::vec3{pointX, pointY, pointZ}));
                 spherePoints.emplace_back(glm::vec3{pointX, pointY, pointZ});
+                spherePoints.emplace_back(glm::normalize(glm::vec3{pointX, pointY, pointZ}));
             }
         }
 
@@ -145,7 +146,7 @@ class NaiveSphere : public Renderable {
             sphereIndicies.emplace_back((i + latitudeSteps_) % spherePoints.size());
         }
 
-        buffer_->initialize(std::move(spherePoints), std::move(sphereIndicies));
+        buffer_->initialize(std::move(spherePoints), std::move(sphereIndicies), true);
     }
 
     RendererInfo beginDraw(float elapsedTime) override {
@@ -216,7 +217,7 @@ class SunSphere : public Renderable, public LightPoint {
 
   private:
     glm::vec3 position_{-1.2f, 1.0f, 2.f};
-    glm::vec3 color_ {1.f, 1.f, 1.f};
+    glm::vec3 color_{1.f, 1.f, 1.f};
     NaiveSphere naiveSphere_;
 };
 
@@ -234,45 +235,53 @@ class Cube : public Renderable {
         auto front_t_2 = glm::vec3{-sideLength, -sideLength, sideLength};
         auto front_t_3 = glm::vec3{sideLength, sideLength, sideLength};
         auto front_t_4 = glm::vec3{sideLength, -sideLength, sideLength};
+        auto front_normal_ = glm::vec3{0, 0, -1};
 
         auto rear_t_1 = glm::vec3{-sideLength, sideLength, -sideLength};
         auto rear_t_2 = glm::vec3{-sideLength, -sideLength, -sideLength};
         auto rear_t_3 = glm::vec3{sideLength, sideLength, -sideLength};
         auto rear_t_4 = glm::vec3{sideLength, -sideLength, -sideLength};
+        auto rear_normal_ = glm::vec3{0, 0, 1};
 
         auto left_t_1 = glm::vec3{-sideLength, -sideLength, sideLength};
         auto left_t_2 = glm::vec3{-sideLength, -sideLength, -sideLength};
         auto left_t_3 = glm::vec3{-sideLength, sideLength, sideLength};
         auto left_t_4 = glm::vec3{-sideLength, sideLength, -sideLength};
+        auto left_normal_ = glm::vec3{-1, 0, 0};
 
         auto right_t_1 = glm::vec3{sideLength, -sideLength, sideLength};
         auto right_t_2 = glm::vec3{sideLength, -sideLength, -sideLength};
         auto right_t_3 = glm::vec3{sideLength, sideLength, sideLength};
         auto right_t_4 = glm::vec3{sideLength, sideLength, -sideLength};
+        auto right_normal_ = glm::vec3{1, 0, 0};
 
         auto top_t_1 = glm::vec3{-sideLength, sideLength, sideLength};
         auto top_t_2 = glm::vec3{sideLength, sideLength, sideLength};
         auto top_t_3 = glm::vec3{-sideLength, sideLength, -sideLength};
         auto top_t_4 = glm::vec3{sideLength, sideLength, -sideLength};
+        auto top_normal_ = glm::vec3{0, 1, 0};
 
         auto bottom_t_1 = glm::vec3{-sideLength, -sideLength, sideLength};
         auto bottom_t_2 = glm::vec3{sideLength, -sideLength, sideLength};
         auto bottom_t_3 = glm::vec3{-sideLength, -sideLength, -sideLength};
         auto bottom_t_4 = glm::vec3{sideLength, -sideLength, -sideLength};
+        auto bottom_normal_ = glm::vec3{0, -1, 0};
 
 
-        buffer_->initialize({front_t_1, front_t_2, front_t_3, front_t_4,
-                             rear_t_1, rear_t_2, rear_t_3, rear_t_4,
-                             left_t_1, left_t_2, left_t_3, left_t_4,
-                             right_t_1, right_t_2, right_t_3, right_t_4,
-                             top_t_1, top_t_2, top_t_3, top_t_4,
-                             bottom_t_1, bottom_t_2, bottom_t_3, bottom_t_4},
-                            {0, 1, 2, 1, 2, 3,
-                             4, 5, 6, 6, 7, 5,
-                             8, 10, 9, 10, 11, 9,
-                             12, 13, 14, 13, 14, 15,
-                             16, 17, 18, 17, 18, 19,
-                             20, 21, 22, 21, 22, 23});
+        buffer_->initialize(
+                {front_t_1, front_normal_, front_t_2, front_normal_, front_t_3, front_normal_, front_t_4, front_normal_,
+                 rear_t_1, rear_normal_, rear_t_2, rear_normal_, rear_t_3, rear_normal_, rear_t_4, rear_normal_,
+                 left_t_1, left_normal_, left_t_2, left_normal_, left_t_3, left_normal_, left_t_4, left_normal_,
+                 right_t_1, right_normal_, right_t_2, right_normal_, right_t_3, right_normal_, right_t_4,
+                 right_normal_, top_t_1, top_normal_, top_t_2, top_normal_, top_t_3, top_normal_, top_t_4,
+                 top_normal_, bottom_t_1, bottom_normal_, bottom_t_2, bottom_normal_, bottom_t_3, bottom_normal_,
+                 bottom_t_4, bottom_normal_,},
+                {0, 1, 2, 1, 2, 3,
+                 4, 5, 6, 6, 7, 5,
+                 8, 10, 9, 10, 11, 9,
+                 12, 13, 14, 13, 14, 15,
+                 16, 17, 18, 17, 18, 19,
+                 20, 21, 22, 21, 22, 23}, true);
     }
 
     RendererInfo beginDraw(float elapsedTime) override {

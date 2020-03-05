@@ -89,7 +89,6 @@ class FragmentShaderSource : public ShaderSource {
 
             void main() {
                 // ambient - works
-                // float ambientStrength = 0.1;
                 float ambientStrength = 0.1;
                 vec3 ambient = ambientStrength * lightColor;
 
@@ -108,9 +107,8 @@ class FragmentShaderSource : public ShaderSource {
                 vec3 specular = specularStrength * spec * lightColor;
 
                 vec3 result = (ambient + diffuse + specular) * vertexColor;
-                // result = vec3(1, 1,1);
-//                FragColor = vec4(result, 1.0);
-                FragColor = vec4(diffuse * vertexColor, 1.0);
+//                vec3 result = diffuse  * vertexColor;
+                FragColor = vec4(result, 1.0);
             })";
 
     uint32_t id_;
@@ -132,9 +130,7 @@ class LightVertexShaderSource : public ShaderSource {
     static constexpr const char *shaderProgram = R"(
             #version 330 core
             layout (location = 0) in vec3 aPos;
-            layout (location = 1) in vec2 aTexCoord;
 
-            out vec2 TexCoord;
             out vec3 vertexColor;
 
             uniform vec3 colorObject;
@@ -146,7 +142,6 @@ class LightVertexShaderSource : public ShaderSource {
 
             void main() {
                 gl_Position = projection * view * model * vec4(aPos, 1.0f);
-                TexCoord = vec2(aTexCoord.x, aTexCoord.y);
                 vertexColor = colorObject;
             })";
 

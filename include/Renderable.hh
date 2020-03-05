@@ -53,8 +53,6 @@ class BasicRenderer : public Renderer {
     Result draw(float elapsedTime) override {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-//        shaderEngine_->setProjection(camera_->projection());
-//        shaderEngine_->setView(camera_->view());
 
         auto &light = lights_.front(); // TODO(kaj): Supports only one light at the moment
         (void) light;
@@ -62,9 +60,6 @@ class BasicRenderer : public Renderer {
             auto info = object->beginDraw(elapsedTime);
 
             auto &shaderEngine = shaders.at(info.typeObject);
-//            shaderEngine_->activate();
-//            shaderEngine_->setColor(info.color);
-//            shaderEngine_->setLightColor(light->color());
             shaderEngine->activate();
 
             shaderEngine->setProjection(camera_->projection());
@@ -73,20 +68,18 @@ class BasicRenderer : public Renderer {
             shaderEngine->setColor(info.color);
             shaderEngine->setLightColor(light->color());
             shaderEngine->setLightPos(light->position());
-            printf("Camera Position. (%f, %f, %f)\n",
-                   camera_->position().x, camera_->position().y, camera_->position().z);
             shaderEngine->setViewPos(camera_->position());
-//            shaderEngine->setViewPos(light->position());
 
             glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
             model = glm::translate(model, info.position);
             float angle = 1.f;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 1.f, 1.f));
-//            shaderEngine_->setModel(model);
             shaderEngine->setModel(model);
 
             if (info.debugMode) {
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            } else {
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             }
             glDrawElements(info.renderType, info.elements, info.countType, nullptr);
             object->endDraw();
