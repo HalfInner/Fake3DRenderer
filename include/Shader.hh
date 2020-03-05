@@ -34,8 +34,8 @@ class VertexShaderSource : public ShaderSource {
             out vec3 lightPos;
             out vec3 viewPos;
 
-            out vec3 Normal;
             out vec3 FragPos;
+            out vec3 Normal;
 
             uniform vec3 colorObject;
             uniform vec3 lightColorObject;
@@ -48,14 +48,15 @@ class VertexShaderSource : public ShaderSource {
             uniform mat4 projection;
 
             void main() {
-                gl_Position = projection * view * model * vec4(aPos, 1.0f);
-                Normal = mat3(transpose(inverse(model))) * aNormal;
-                FragPos = vec3(model * vec4(aPos, 1.0));
 
                 vertexColor = colorObject;
                 lightColor = lightColorObject;
                 lightPos = lightPosObject;
                 viewPos = viewPosObject;
+
+                FragPos = vec3(model * vec4(aPos, 1.0));
+                Normal = mat3(transpose(inverse(model))) * aNormal;
+                gl_Position = projection * view * vec4(FragPos, 1.0);
             })";
 
     uint32_t id_;
@@ -76,20 +77,20 @@ class FragmentShaderSource : public ShaderSource {
   private:
     static constexpr const char *shaderProgram = R"(
             #version 330 core
-
             out vec4 FragColor;
 
             in vec3 Normal;
             in vec3 FragPos;
 
-            in vec3 vertexColor;
-            in vec3 lightColor;
             in vec3 lightPos;
             in vec3 viewPos;
+            in vec3 lightColor;
+            in vec3 vertexColor;
 
             void main() {
                 // ambient
-                float ambientStrength = 0.4;
+//                float ambientStrength = 11;
+                float ambientStrength = 1.;
                 vec3 ambient = ambientStrength * lightColor;
 
                 // diffuse
@@ -99,16 +100,15 @@ class FragmentShaderSource : public ShaderSource {
                 vec3 diffuse = diff * lightColor;
 
                 // specular
-                float specularStrength = 0.5;
+                float specularStrength = 1.;
                 vec3 viewDir = normalize(viewPos - FragPos);
                 vec3 reflectDir = reflect(-lightDir, norm);
                 float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
                 vec3 specular = specularStrength * spec * lightColor;
 
                 vec3 result = (ambient + diffuse + specular) * vertexColor;
+                // result = vec3(1, 1,1);
                 FragColor = vec4(result, 1.0);
-//                vec3 result = ambient * vertexColor;
-//                FragColor = vec4(result, 1.0);
             })";
 
     uint32_t id_;
@@ -170,7 +170,6 @@ class LightFragmentShaderSource : public ShaderSource {
             in vec3 vertexColor;
             out vec4 FragColor;
             void main() {
-                FragColor = vec4(.8, 0.24, 0.87, 1.0);
                 FragColor = vec4(vertexColor, 1.0);
             })";
 

@@ -152,7 +152,11 @@ class NaiveSphere : public Renderable {
         RendererInfo ri;
         ri.elements = latitudeSteps_ * meridianSteps_ * 3 * 2;
         ri.position = position_;
-        ri.color = color_;
+
+        // TODO(kaj): Example animation. To remove.
+        const float velocity_ = 0.008f;
+        ri.color = color_ + (lastColor_ * cosf(elapsedTime) * velocity_);
+        lastColor_ = ri.color;
         ri.debugMode = false;
 
         buffer_->bind();
@@ -172,12 +176,13 @@ class NaiveSphere : public Renderable {
 
 
     glm::vec3 color_{1.f, 0.25f, 0.75f};
+    glm::vec3 lastColor_{1.f, 0.25f, 0.75f};
     glm::vec3 position_;
 };
 
 class SunSphere : public Renderable, public LightPoint {
   public:
-    SunSphere() : naiveSphere_(1.f, position_) {}
+    SunSphere() : naiveSphere_(0.25f, position_) {}
 
     RendererInfo beginDraw(float elapsedTime) override {
         auto info = naiveSphere_.beginDraw(elapsedTime);
@@ -208,7 +213,7 @@ class SunSphere : public Renderable, public LightPoint {
     }
 
   private:
-    glm::vec3 position_{-1, 10, -12};
+    glm::vec3 position_{-1, 2.5, 2};
     glm::vec3 color_ {1.f, 1.f, 1.f};
     NaiveSphere naiveSphere_;
 };

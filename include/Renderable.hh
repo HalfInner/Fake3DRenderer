@@ -87,6 +87,10 @@ class BasicRenderer : public Renderer {
             }
             glDrawElements(info.renderType, info.elements, info.countType, nullptr);
             object->endDraw();
+
+            while (auto errorCode = glGetError()) {
+                std::cout << "OpenGL troubles: " << errorCode << "\n";
+            }
         }
 
         return Result::Success;
