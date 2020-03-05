@@ -31,8 +31,10 @@ class VertexShaderSource : public ShaderSource {
 
             out vec2 TexCoord;
             out vec3 vertexColor;
+            out vec3 lightColor;
 
             uniform vec3 colorObject;
+            uniform vec3 lightColorObject;
 
             uniform vec3 pos;
             uniform mat4 model;
@@ -66,14 +68,16 @@ class FragmentShaderSource : public ShaderSource {
     static constexpr const char *shaderProgram = R"(
             #version 330 core
 
+            in vec3 lightColor;
             in vec3 vertexColor;
+
             out vec4 FragColor;
             void main() {
-//                float ambientStrength = 0.1;
-//                vec3 ambient = ambientStrength * lightColor;
-//
-//                vec3 result = ambient * objectColor;
-                FragColor = vec4(vertexColor, 1.0);
+                float ambientStrength = 0.1;
+                vec3 ambient = ambientStrength * lightColor;
+
+                vec3 result = ambient * objectColor;
+                FragColor = vec4(result, 1.0);
             })";
     uint32_t id_;
     ShaderManagerPtr shaderManager_;
