@@ -73,7 +73,10 @@ class BasicRenderer : public Renderer {
             shaderEngine->setColor(info.color);
             shaderEngine->setLightColor(light->color());
             shaderEngine->setLightPos(light->position());
+            printf("Camera Position. (%f, %f, %f)\n",
+                   camera_->position().x, camera_->position().y, camera_->position().z);
             shaderEngine->setViewPos(camera_->position());
+//            shaderEngine->setViewPos(light->position());
 
             glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
             model = glm::translate(model, info.position);
@@ -89,7 +92,8 @@ class BasicRenderer : public Renderer {
             object->endDraw();
 
             while (auto errorCode = glGetError()) {
-                std::cout << "OpenGL troubles: " << errorCode << "\n";
+                std::cerr << "OpenGL troubles: 0x" << std::hex << errorCode << "\n";
+                throw std::runtime_error("OpenGL problem. Not Allowed at the moment");
             }
         }
 

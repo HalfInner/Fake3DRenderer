@@ -184,6 +184,7 @@ class SunSphere : public Renderable, public LightPoint {
   public:
     SunSphere() : naiveSphere_(0.25f, position_) {}
 
+    // Renderable
     RendererInfo beginDraw(float elapsedTime) override {
         auto info = naiveSphere_.beginDraw(elapsedTime);
         info.color = color_;
@@ -200,6 +201,7 @@ class SunSphere : public Renderable, public LightPoint {
         naiveSphere_.endDraw();
     }
 
+    // LightPoint
     glm::vec3 position() override {
         return position_;
     }
@@ -213,7 +215,7 @@ class SunSphere : public Renderable, public LightPoint {
     }
 
   private:
-    glm::vec3 position_{-1, 2.5, 2};
+    glm::vec3 position_{-1.2f, 1.0f, 2.f};
     glm::vec3 color_ {1.f, 1.f, 1.f};
     NaiveSphere naiveSphere_;
 };
@@ -277,7 +279,7 @@ class Cube : public Renderable {
         RendererInfo ri{};
         ri.elements = 6 * 2 * 3;
         ri.position = position_;
-        ri.color = {0.2f, 0.2f, 0.9f};
+        ri.color = {1.0f, 0.5f, 0.31f};
         buffer_->bind();
         return ri;
     }

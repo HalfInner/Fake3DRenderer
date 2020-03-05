@@ -78,7 +78,7 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
   private:
     void updateCameraCoordinates();
 
-    glm::vec3 position_{-1.0f, 0.0f, 4.0f};
+    glm::vec3 position_{0.0f, 0.0f, 3.0f};
     float cameraZoom_ {};
 
     float pitch_{.0f};
