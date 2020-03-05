@@ -40,9 +40,8 @@ class BasicRenderer : public Renderer {
             : camera_(std::move(camera)) {}
 
     Result initialize() override {
-        ShaderEngingeFactory factory;
-        shaderEngine_ = factory.create(Graphic::RendererInfo::TypeObject::Normal);
-        // generated from object
+        initializeShaders();
+
         for (auto &&object : objects_) {
             object->initialize(std::make_shared<OpenGlBuffer>());
         }
@@ -50,26 +49,35 @@ class BasicRenderer : public Renderer {
         return Result::Success;
     }
 
+
     Result draw(float elapsedTime) override {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        shaderEngine_->setProjection(camera_->projection());
-        shaderEngine_->setView(camera_->view());
+//        shaderEngine_->setProjection(camera_->projection());
+//        shaderEngine_->setView(camera_->view());
 
-        auto& light = lights_.front(); // TODO(kaj): Supports only one light at the moment
+        auto &light = lights_.front(); // TODO(kaj): Supports only one light at the moment
         (void) light;
         for (auto &&object : objects_) {
             auto info = object->beginDraw(elapsedTime);
 
-            shaderEngine_->activate();
-            shaderEngine_->setColor(info.color);
-            shaderEngine_->setLightColor(light->color());
+            auto &shaderEngine = shaders.at(info.typeObject);
+//            shaderEngine_->activate();
+//            shaderEngine_->setColor(info.color);
+//            shaderEngine_->setLightColor(light->color());
+            shaderEngine->activate();
+
+            shaderEngine->setProjection(camera_->projection());
+            shaderEngine->setView(camera_->view());
+            shaderEngine->setColor(info.color);
+            shaderEngine->setLightColor(light->color());
 
             glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
             model = glm::translate(model, info.position);
             float angle = 1.f;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 1.f, 1.f));
-            shaderEngine_->setModel(model);
+//            shaderEngine_->setModel(model);
+            shaderEngine->setModel(model);
 
             if (info.debugMode) {
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -92,7 +100,19 @@ class BasicRenderer : public Renderer {
     }
 
   private:
+    void initializeShaders() {
+        ShaderEngingeFactory factory;
+        auto normalShaderEngine_ = factory.create(RendererInfo::TypeObject::Normal);
+        auto lightShaderEngine_ = factory.create(RendererInfo::TypeObject::Normal);
+        // generated from object
+
+        shaders[RendererInfo::TypeObject::Normal] = std::move(normalShaderEngine_);
+        shaders[RendererInfo::TypeObject::Light] = std::move(lightShaderEngine_);
+    }
+
     std::unique_ptr<ShaderEngine> shaderEngine_{nullptr};
+    std::unordered_map<Graphic::RendererInfo::TypeObject, std::unique_ptr<ShaderEngine>> shaders;
+
     std::shared_ptr<Camera> camera_{nullptr};
 
     std::vector<std::shared_ptr<Renderable>> objects_{};

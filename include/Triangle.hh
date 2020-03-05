@@ -30,7 +30,8 @@ struct /*interface*/ RendererInfo {
         Integer = GL_UNSIGNED_INT,
         UnknownCountType = 0x0
     };
-    TypeObject typeObject = TypeObject::NotSpecified;
+    TypeObject typeObject = TypeObject::Normal;
+//    TypeObject typeObject = TypeObject::NotSpecified;
     RenderType renderType = RenderType::Triangles;
     CountType countType = CountType::Integer;
     unsigned elements = 0u;
