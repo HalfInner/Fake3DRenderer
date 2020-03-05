@@ -102,15 +102,16 @@ class BasicRenderer : public Renderer {
   private:
     void initializeShaders() {
         ShaderEngingeFactory factory;
-        auto normalShaderEngine_ = factory.create(RendererInfo::TypeObject::Normal);
-        auto lightShaderEngine_ = factory.create(RendererInfo::TypeObject::Normal);
+        auto normalShaderEngine = factory.create(RendererInfo::TypeObject::Normal);
+        auto lightShaderEngine = factory.create(RendererInfo::TypeObject::Light);
+        auto notSpecifiedShaderEngine = factory.create(RendererInfo::TypeObject::NotSpecified);
         // generated from object
 
-        shaders[RendererInfo::TypeObject::Normal] = std::move(normalShaderEngine_);
-        shaders[RendererInfo::TypeObject::Light] = std::move(lightShaderEngine_);
+        shaders[RendererInfo::TypeObject::Normal] = std::move(normalShaderEngine);
+        shaders[RendererInfo::TypeObject::Light] = std::move(lightShaderEngine);
+        shaders[RendererInfo::TypeObject::NotSpecified] = std::move(notSpecifiedShaderEngine);
     }
 
-    std::unique_ptr<ShaderEngine> shaderEngine_{nullptr};
     std::unordered_map<Graphic::RendererInfo::TypeObject, std::unique_ptr<ShaderEngine>> shaders;
 
     std::shared_ptr<Camera> camera_{nullptr};

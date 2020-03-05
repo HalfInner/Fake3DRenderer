@@ -30,8 +30,8 @@ struct /*interface*/ RendererInfo {
         Integer = GL_UNSIGNED_INT,
         UnknownCountType = 0x0
     };
-    TypeObject typeObject = TypeObject::Normal;
-//    TypeObject typeObject = TypeObject::NotSpecified;
+//    TypeObject typeObject = TypeObject::Normal;
+    TypeObject typeObject = TypeObject::NotSpecified;
     RenderType renderType = RenderType::Triangles;
     CountType countType = CountType::Integer;
     unsigned elements = 0u;
@@ -182,6 +182,7 @@ class SunSphere : public Renderable, public LightPoint {
     RendererInfo beginDraw(float elapsedTime) override {
         auto info = naiveSphere_.beginDraw(elapsedTime);
         info.color = color_;
+        info.typeObject = RendererInfo::TypeObject::Light;
 
         return info;
     }

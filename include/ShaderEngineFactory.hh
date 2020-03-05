@@ -16,15 +16,18 @@ class ShaderEngingeFactory {
     std::unique_ptr<ShaderEngine> create(Graphic::RendererInfo::TypeObject type) {
         auto shaderEngine = std::make_unique<ShaderEngine>();
 
-        std::shared_ptr<VertexShaderSource> vs;
-        std::shared_ptr<FragmentShaderSource> fs;
+        std::shared_ptr<ShaderSource> vs;
+        std::shared_ptr<ShaderSource> fs;
         switch (type) {
+            case Graphic::RendererInfo::TypeObject::NotSpecified:
             case Graphic::RendererInfo::TypeObject::Normal:
                 vs = std::make_shared<VertexShaderSource>(shaderManagerPtr_);
                 fs = std::make_shared<FragmentShaderSource>(shaderManagerPtr_);
                 break;
             case Graphic::RendererInfo::TypeObject::Light:
-            case Graphic::RendererInfo::TypeObject::NotSpecified:
+                vs = std::make_shared<LightVertexShaderSource>(shaderManagerPtr_);
+                fs = std::make_shared<LightFragmentShaderSource>(shaderManagerPtr_);
+                break;
             default:
                 throw std::runtime_error("Unknown type");
         }
