@@ -129,7 +129,6 @@ class NaiveSphere : public Renderable {
                 auto pointY = radius_ * sin(theta) * sin(gamma);
                 auto pointZ = radius_ * cos(theta);
 
-//                spherePoints.emplace_back(glm::normalize(glm::vec3{pointX, pointY, pointZ}));
                 spherePoints.emplace_back(glm::vec3{pointX, pointY, pointZ});
                 spherePoints.emplace_back(glm::normalize(glm::vec3{pointX, pointY, pointZ}));
             }
@@ -151,7 +150,14 @@ class NaiveSphere : public Renderable {
 
     RendererInfo beginDraw(float elapsedTime) override {
         RendererInfo ri;
-        ri.elements = latitudeSteps_ * meridianSteps_ * 3 * 2;
+
+//        fillPercentage_ += elapsedTime / 10000000.f;
+////        if (fillPercentage_ > 99.f) {
+////            fillPercentage_ = 84.f;
+////        }
+////
+////        ri.elements =  numberOfElements * fillPercentage_;
+        ri.elements =  numberOfElements;
         ri.position = position_;
 
         // TODO(kaj): Example animation. To remove.
@@ -175,6 +181,9 @@ class NaiveSphere : public Renderable {
     const float radius_ = 2.f;
     const int latitudeSteps_ = 50;
     const int meridianSteps_ = 50;
+
+    const int numberOfElements =  latitudeSteps_ * meridianSteps_ * 3 * 2;
+    float fillPercentage_ = 0.86f;
 
 
     glm::vec3 color_{1.f, 0.84f, 0.01f};
