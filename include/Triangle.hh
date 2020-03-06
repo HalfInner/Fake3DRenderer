@@ -56,6 +56,12 @@ struct /*interface*/ LightPoint {
     virtual ~LightPoint() = default;
 };
 
+struct /*interface*/ Animation {
+    virtual void start() = 0;
+    virtual void stop() = 0;
+    virtual ~Animation() = default;
+};
+
 class Triangle : public Renderable {
   public:
     void initialize(std::shared_ptr<Buffer> buffer) override {
@@ -228,7 +234,7 @@ class NaiveSphere : public Renderable {
     glm::vec3 color_{};
 };
 
-class SunSphere : public Renderable, public LightPoint {
+class SunSphere : public Renderable, public LightPoint, public Animation {
   public:
     SunSphere() : naiveSphere_(0.25f, position_) {}
 
@@ -237,6 +243,16 @@ class SunSphere : public Renderable, public LightPoint {
         auto info = naiveSphere_.beginDraw(elapsedTime);
         info.color = color_;
         info.typeObject = RendererInfo::TypeObject::Light;
+
+        auto posAnimation = position_;
+        if (isAnimationRunning_) {
+            auto rangeX = 4.f;
+            auto rangeZ = 4.f;
+            posAnimation.x += cos(elapsedTime/1000000.f) * rangeX;
+            posAnimation.z += sin(elapsedTime/1000000.f) * rangeZ;
+        }
+        position_ = posAnimation;
+        info.position = posAnimation;
 
         return info;
     }
@@ -262,10 +278,20 @@ class SunSphere : public Renderable, public LightPoint {
         return 1.f;
     }
 
+    // Animation
+    void start() override {
+        isAnimationRunning_ = true;
+    }
+
+    void stop() override {
+        isAnimationRunning_ = false;
+    }
+
   private:
-    glm::vec3 position_{-1.2f, 1.0f, 2.f};
+    glm::vec3 position_{-1.2f, 4.0f, -1.f};
     glm::vec3 color_{1.f, 1.f, 1.f};
     NaiveSphere naiveSphere_;
+    bool isAnimationRunning_ {true};
 };
 
 class Cuboid : public Renderable {

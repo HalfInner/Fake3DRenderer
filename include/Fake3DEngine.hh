@@ -65,17 +65,34 @@ class BasicFake3DEngine : public Fake3DEngine {
 
     void prepareScene() {
         basicRenderer_ = std::make_unique<Graphic::BasicRenderer>(camera_);
-        // Groundd
+
+        // Ground
         basicRenderer_->addObject(std::make_shared<Graphic::Surface>());
 
+        // Flat of building
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(glm::vec3(-2, 0, 0)));
-        basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(0.75f, glm::vec3{1.f, 0.f, 0.f}));
+        basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
+                glm::vec3{-2.f, 1.f, -1.f}, glm::vec3{1.f,3.f, 1.f}));
+        basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
+                glm::vec3{-2.f, 1.f, -1.f}, glm::vec3{1.f,3.f, 1.f}));
+        basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
+                glm::vec3{2.f, 1.f, -4.f}, glm::vec3{1.f,3.f, 3.f}));
+
+        // Road
+        basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
+                glm::vec3{0.f, -0.45f, 0.f}, glm::vec3{1.5f,0.01f, 200.f}));
+
+
+        // Pacman
+        basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(0.75f, glm::vec3{-3.f, 0.f, -4.f}));
 
         // Snowman
         basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(0.5f, glm::vec3{1.f, 0.f, -2.f}));
         basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(0.25f, glm::vec3{1.f, .7f, -2.f}));
         basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(0.1f, glm::vec3{1.f, 1.f, -2.f}));
 
+
+        // Light
         auto sun = std::make_shared<Graphic::SunSphere>();
         basicRenderer_->addObject(sun);
         basicRenderer_->addLight(sun);
