@@ -18,6 +18,7 @@
 #include "ShaderEngineFactory.hh"
 #include "ShaderManager.hh"
 #include "Renderable.hh"
+#include "TextureManager.hh"
 #include "Triangle.hh"
 
 struct Fake3DEngine {
@@ -289,7 +290,6 @@ class BasicFake3DEngine : public Fake3DEngine {
 
     GLFWwindow *window_ = nullptr;
 
-    ShaderManagerPtr shaderManagerPtr_ = nullptr;
     std::shared_ptr<VertexShaderSource> vs_ = nullptr;
     std::shared_ptr<FragmentShaderSource> fs_ = nullptr;
 
