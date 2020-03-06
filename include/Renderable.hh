@@ -57,7 +57,6 @@ class BasicRenderer : public Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         auto &light = lights_.front(); // TODO(kaj): Supports only one light at the moment
-        (void) light;
         for (auto &&object : objects_) {
             auto info = object->beginDraw(elapsedTime);
 
