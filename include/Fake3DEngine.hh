@@ -56,6 +56,7 @@ class BasicFake3DEngine : public Fake3DEngine {
         initializeGlew();
 
         camera_ = std::make_shared<MovableCamera>();
+        camera_->updateScreen(initialScreenWidth_, initialScreenHeight_);
 
         prepareScene();
 
@@ -76,6 +77,10 @@ class BasicFake3DEngine : public Fake3DEngine {
                 glm::vec3{-2.f, 1.f, -1.f}, glm::vec3{1.f,3.f, 1.f}));
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
                 glm::vec3{2.f, 1.f, -4.f}, glm::vec3{1.f,3.f, 3.f}));
+        basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
+                glm::vec3{2.f, .5f, -8.f}, glm::vec3{1.f,2.f, 4.f}));
+        basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
+                glm::vec3{-2.f, .5f, -7.f}, glm::vec3{1.f,2.f, 4.f}));
 
         // Road
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(

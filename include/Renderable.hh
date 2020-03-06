@@ -33,7 +33,6 @@ struct /*interface*/ Renderer {
     virtual ~Renderer() = default;
 };
 
-
 class BasicRenderer : public Renderer {
   public:
     explicit BasicRenderer(std::shared_ptr<Camera> camera)
