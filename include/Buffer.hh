@@ -11,6 +11,10 @@
 
 namespace Graphic {
 
+enum class BufferType {
+    Regular, Normal, NormalWithTexture
+};
+
 struct  /*interface*/ Buffer {
     virtual void initialize(std::vector<glm::vec3> &&points, std::vector<unsigned> &&indices, bool containsNormal) = 0;
     virtual void bind() = 0;

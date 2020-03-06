@@ -7,6 +7,10 @@
 
 namespace Utils {
 
+enum class TextureType {
+    PoolBall, Grass, None
+};
+
 struct NotCreatable {
     NotCreatable() = delete;
     ~NotCreatable() = delete;

@@ -41,12 +41,11 @@ class BasicRenderer : public Renderer {
 
     Result initialize() override {
         initializeShaders();
+        textureManager_.initialize();
 
         for (auto &&object : objects_) {
             object->initialize(std::make_shared<OpenGlBuffer>());
         }
-
-
 
         return Result::Success;
     }

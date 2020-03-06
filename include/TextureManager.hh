@@ -6,6 +6,7 @@
 #define FAKE3DRENDERER_TEXTUREMANAGER_HH
 #define STB_IMAGE_IMPLEMENTATION
 
+#include "Utils.hh"
 #include "stb_image.hh"
 
 class OpenGlStbImageReaderWrapper {
@@ -46,11 +47,8 @@ class OpenGlStbImageReaderWrapper {
     unsigned char *data_ = nullptr;
 };
 
+using namespace Utils;
 class TextureManager {
-    enum class TextureType {
-        PoolBall, Grass, None
-    };
-
   public:
     void initialize() {
         textureIds_[TextureType::PoolBall] = textureWrappers_.emplace_back("..//textureId_//PoolBall.jpg")();
