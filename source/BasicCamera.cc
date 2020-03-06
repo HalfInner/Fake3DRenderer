@@ -34,7 +34,7 @@ MovableCamera::MovableCamera() {
     up_ = glm::vec3(0.0f, 1.0f, 0.0f); // TODO (kaj) : What's that?
     cameraZoom_ = 45.f;
 
-    velocity_ = 0.0000008f;
+    velocity_ = 1.f;
 }
 
 void MovableCamera::updateCameraCoordinates() {

@@ -29,20 +29,19 @@ struct Fake3DEngine {
 class SimpleClock {
   public:
     void resume() {
-        begin_ = std::chrono::steady_clock::now();
+        begin_ = std::chrono::high_resolution_clock::now();
     }
 
     auto measure() {
-        end_ = std::chrono::steady_clock::now();
-        auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end_ - begin_).count();
-        begin_ = end_;
+        auto end = std::chrono::high_resolution_clock::now();
+        auto elapsed = end - begin_;
+        begin_ = end;
 
-        return elapsed;
+        return std::chrono::duration<double>(elapsed).count();
     }
 
   private:
-    std::chrono::steady_clock::time_point begin_{};
-    std::chrono::steady_clock::time_point end_{};
+    std::chrono::high_resolution_clock::time_point begin_{};
 };
 
 class BasicFake3DEngine : public Fake3DEngine {
@@ -105,6 +104,7 @@ class BasicFake3DEngine : public Fake3DEngine {
         sc.resume();
         while (!glfwWindowShouldClose(window_)) {
             auto elapsed = sc.measure();
+            std::cout << "TEST " << elapsed << "\n";
             openGlInputController_->serve(elapsed);
             basicRenderer_->draw(elapsed);
 
