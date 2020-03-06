@@ -47,19 +47,22 @@ class OpenGlStbImageReaderWrapper {
 };
 
 class TextureManager {
-    enum class Texture {
+    enum class TextureType {
         PoolBall, Grass, None
     };
 
   public:
     void initialize() {
-        textureIds_[Texture::PoolBall] = textureWrappers_.emplace_back("..//textureId_//PoolBall.jpg")();
+        textureIds_[TextureType::PoolBall] = textureWrappers_.emplace_back("..//textureId_//PoolBall.jpg")();
     }
 
-    ~TextureManager() = default;
+    unsigned getTextureId(TextureType type) {
+        return textureIds_.at(type);
+    }
+
   private:
     std::vector<OpenGlStbImageReaderWrapper> textureWrappers_;
-    std::unordered_map<Texture, unsigned> textureIds_{{Texture::None, 0}};
+    std::unordered_map<TextureType, unsigned> textureIds_{{TextureType::None, 0}};
 };
 
 #undef STB_IMAGE_IMPLEMENTATION

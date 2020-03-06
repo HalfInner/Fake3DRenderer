@@ -46,6 +46,8 @@ class BasicRenderer : public Renderer {
             object->initialize(std::make_shared<OpenGlBuffer>());
         }
 
+
+
         return Result::Success;
     }
 
