@@ -191,6 +191,9 @@ class PoolBallFragmentShaderSource : public ShaderSource {
             in vec3 viewPos;
             in vec3 lightColor;
             in vec3 vertexColor;
+            in vec2 TexCoord;
+
+            uniform sampler2D texture;
 
             void main() {
                 // ambient
@@ -211,7 +214,8 @@ class PoolBallFragmentShaderSource : public ShaderSource {
                 vec3 specular = specularStrength * spec * lightColor;
 
                 vec3 result = (ambient + diffuse + specular) * vertexColor;
-                FragColor = vec4(result, 1.0);
+//                FragColor = vec4(result, 1.0);
+                FragColor = texture(ourTexture, TexCoord);
             })";
 
     uint32_t id_;
