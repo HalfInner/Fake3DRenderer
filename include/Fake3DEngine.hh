@@ -115,7 +115,6 @@ class BasicFake3DEngine : public Fake3DEngine {
         sc.resume();
         while (!glfwWindowShouldClose(window_)) {
             auto elapsed = sc.measure();
-            std::cout << "TEST " << elapsed << "\n";
             openGlInputController_->serve(elapsed);
             basicRenderer_->draw(elapsed);
 
@@ -262,7 +261,8 @@ class BasicFake3DEngine : public Fake3DEngine {
         // --------------------
         initialScreenWidth_ = 800;
         initialScreenHeight_ = 640;
-        window_ = glfwCreateWindow(initialScreenWidth_, initialScreenHeight_, "LearnOpenGL", nullptr, nullptr);
+        const std::string windowName = "Projekt GKIW - Kajetan Brzuszczak - 301023 OKNO";
+        window_ = glfwCreateWindow(initialScreenWidth_, initialScreenHeight_, windowName.c_str(), nullptr, nullptr);
         if (window_ == nullptr) {
             constexpr auto errorMsg = "Failed to create GLFW window";
             std::cerr << errorMsg;
