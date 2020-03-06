@@ -51,16 +51,16 @@ using namespace Utils;
 class TextureManager {
   public:
     void initialize() {
-        textureIds_[TextureType::PoolBall] = textureWrappers_.emplace_back("..//textureId_//PoolBall.jpg")();
+        textureIds_[Utils::TypeObject::PoolBall] = textureWrappers_.emplace_back("..//textureId_//PoolBall.jpg")();
     }
 
-    unsigned getTextureId(TextureType type) {
-        return textureIds_.at(type);
+    void bindTexture(Utils::TypeObject type) {
+        glBindTexture(GL_TEXTURE_2D, textureIds_[type]);
     }
 
   private:
     std::vector<OpenGlStbImageReaderWrapper> textureWrappers_;
-    std::unordered_map<TextureType, unsigned> textureIds_{{TextureType::None, 0}};
+    std::unordered_map<Utils::TypeObject, unsigned> textureIds_{{Utils::TypeObject::NotSpecified, 0}};
 };
 
 #undef STB_IMAGE_IMPLEMENTATION

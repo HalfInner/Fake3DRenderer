@@ -12,10 +12,8 @@
 
 namespace Graphic {
 
+using Utils::TypeObject;
 struct /*interface*/ RendererInfo {
-    enum class TypeObject {
-        Normal, Light, PoolBall, NotSpecified
-    };
 
     enum RenderType : unsigned {
         Triangles = GL_TRIANGLES,
@@ -228,7 +226,7 @@ class SunSphere : public Renderable, public LightPoint, public Animation {
     RendererInfo beginDraw(float elapsedTime) override {
         auto info = naiveSphere_.beginDraw(elapsedTime);
         info.color = color_;
-        info.typeObject = RendererInfo::TypeObject::Light;
+        info.typeObject = TypeObject::Light;
 
         if (isAnimationRunning_) {
             auto velocity = 1.5f;
@@ -334,7 +332,7 @@ class PoolBall : public Renderable {
 
     RendererInfo beginDraw(float elapsedTime) override {
         RendererInfo ri;
-        ri.typeObject = RendererInfo::TypeObject::PoolBall;
+        ri.typeObject = TypeObject::PoolBall;
         ri.elements = numberOfElements;
         ri.position = position_;
         ri.color = color_;

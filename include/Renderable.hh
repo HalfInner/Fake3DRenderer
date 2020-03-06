@@ -82,6 +82,9 @@ class BasicRenderer : public Renderer {
             } else {
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             }
+
+            textureManager_.bindTexture(info.typeObject);
+
             glDrawElements(info.renderType, info.elements, info.countType, nullptr);
             object->endDraw();
 
@@ -107,19 +110,19 @@ class BasicRenderer : public Renderer {
   private:
     void initializeShaders() {
         ShaderEngingeFactory factory;
-        auto normalShaderEngine = factory.create(RendererInfo::TypeObject::Normal);
-        auto lightShaderEngine = factory.create(RendererInfo::TypeObject::Light);
-        auto pollBallShaderEngine = factory.create(RendererInfo::TypeObject::PoolBall);
-        auto notSpecifiedShaderEngine = factory.create(RendererInfo::TypeObject::NotSpecified);
+        auto normalShaderEngine = factory.create(Utils::TypeObject::Normal);
+        auto lightShaderEngine = factory.create(Utils::TypeObject::Light);
+        auto pollBallShaderEngine = factory.create(Utils::TypeObject::PoolBall);
+        auto notSpecifiedShaderEngine = factory.create(Utils::TypeObject::NotSpecified);
         // generated from object
 
-        shaders[RendererInfo::TypeObject::Normal] = std::move(normalShaderEngine);
-        shaders[RendererInfo::TypeObject::Light] = std::move(lightShaderEngine);
-        shaders[RendererInfo::TypeObject::PoolBall] = std::move(pollBallShaderEngine);
-        shaders[RendererInfo::TypeObject::NotSpecified] = std::move(notSpecifiedShaderEngine);
+        shaders[Utils::TypeObject::Normal] = std::move(normalShaderEngine);
+        shaders[Utils::TypeObject::Light] = std::move(lightShaderEngine);
+        shaders[Utils::TypeObject::PoolBall] = std::move(pollBallShaderEngine);
+        shaders[Utils::TypeObject::NotSpecified] = std::move(notSpecifiedShaderEngine);
     }
 
-    std::unordered_map<Graphic::RendererInfo::TypeObject, std::unique_ptr<ShaderEngine>> shaders;
+    std::unordered_map<Utils::TypeObject, std::unique_ptr<ShaderEngine>> shaders;
 
     std::shared_ptr<Camera> camera_{nullptr};
 

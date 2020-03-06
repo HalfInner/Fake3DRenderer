@@ -7,8 +7,8 @@
 
 namespace Utils {
 
-enum class TextureType {
-    PoolBall, Grass, None
+enum class TypeObject {
+    Normal, Light, PoolBall, NotSpecified
 };
 
 struct NotCreatable {
