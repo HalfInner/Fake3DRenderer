@@ -29,7 +29,6 @@ struct /*interface*/ RendererInfo {
         Integer = GL_UNSIGNED_INT,
         UnknownCountType = 0x0
     };
-//    TypeObject typeObject = TypeObject::Normal;
     TypeObject typeObject = TypeObject::NotSpecified;
     RenderType renderType = RenderType::Triangles;
     CountType countType = CountType::Integer;
@@ -335,7 +334,7 @@ class PoolBall : public Renderable {
 
     RendererInfo beginDraw(float elapsedTime) override {
         RendererInfo ri;
-
+        ri.typeObject = RendererInfo::TypeObject::PoolBall;
         ri.elements = numberOfElements;
         ri.position = position_;
         ri.color = color_;
