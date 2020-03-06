@@ -65,6 +65,8 @@ class BasicFake3DEngine : public Fake3DEngine {
 
     void prepareScene() {
         basicRenderer_ = std::make_unique<Graphic::BasicRenderer>(camera_);
+        // Groundd
+        basicRenderer_->addObject(std::make_shared<Graphic::Surface>());
 
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(glm::vec3(-2, 0, 0)));
         basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(0.75f, glm::vec3{1.f, 0.f, 0.f}));

@@ -110,12 +110,48 @@ class TriangleInv : public Renderable {
     std::shared_ptr<Buffer> buffer_;
 };
 
+class Surface : public Renderable {
+  public:
+    void initialize(std::shared_ptr<Buffer> buffer) override {
+        buffer_ = std::move(buffer);
+
+        auto sideLenght = 100.f;
+        auto levelHeight = -.5f;
+        auto normal = glm::vec3{0, 1, 0};
+        buffer_->initialize({
+                                    {sideLenght, levelHeight, sideLenght}, normal,
+                                    {-sideLenght, levelHeight, sideLenght}, normal,
+                                    {-sideLenght, levelHeight, -sideLenght}, normal,
+                                    {sideLenght, levelHeight, -sideLenght}, normal,
+                            },
+                            {0, 1, 2, 0, 2, 3}, true);
+    }
+
+    RendererInfo beginDraw(float elapsedTime) override {
+        RendererInfo ri;
+        ri.elements = 6;
+        ri.color = color_;
+
+        buffer_->bind();
+
+        return ri;
+    }
+
+    void endDraw() override {
+        buffer_->unbind();
+    }
+
+  private:
+    std::shared_ptr<Buffer> buffer_;
+    glm::vec3 color_{.0f, .53f, .27f};
+};
+
 class NaiveSphere : public Renderable {
   public:
     explicit NaiveSphere(float radius = 1.f, glm::vec3 position = {}, glm::vec3 color = {1.f, 0.9f, 0.9f})
             : radius_(radius),
               position_(position),
-              color_ (color){};
+              color_(color) {};
 
     void initialize(std::shared_ptr<Buffer> buffer) override {
         buffer_ = std::move(buffer);
@@ -281,19 +317,26 @@ class Cuboid : public Renderable {
         auto bottom_norm_ = glm::vec3{0, -1, 0};
 
 
-        buffer_->initialize(
-                {front_t_1, front_norm_, front_t_2, front_norm_, front_t_3, front_norm_, front_t_4, front_norm_,
-                 rear_t_1, rear_norm_, rear_t_2, rear_norm_, rear_t_3, rear_norm_, rear_t_4, rear_norm_,
-                 left_t_1, left_norm_, left_t_2, left_norm_, left_t_3, left_norm_, left_t_4, left_norm_,
-                 right_t_1, right_norm_, right_t_2, right_norm_, right_t_3, right_norm_, right_t_4, right_norm_,
-                 top_t_1, top_norm_, top_t_2, top_norm_, top_t_3, top_norm_, top_t_4, top_norm_,
-                 bottom_t_1, bottom_norm_, bottom_t_2, bottom_norm_, bottom_t_3, bottom_norm_, bottom_t_4,
-                 bottom_norm_,}, {0, 1, 2, 1, 2, 3,
-                                  4, 5, 6, 6, 7, 5,
-                                  8, 10, 9, 10, 11, 9,
-                                  12, 13, 14, 13, 14, 15,
-                                  16, 17, 18, 17, 18, 19,
-                                  20, 21, 22, 21, 22, 23}, true);
+        buffer_->initialize({
+                                    front_t_1, front_norm_, front_t_2, front_norm_, front_t_3, front_norm_, front_t_4,
+                                    front_norm_,
+                                    rear_t_1, rear_norm_, rear_t_2, rear_norm_, rear_t_3, rear_norm_, rear_t_4,
+                                    rear_norm_,
+                                    left_t_1, left_norm_, left_t_2, left_norm_, left_t_3, left_norm_, left_t_4,
+                                    left_norm_,
+                                    right_t_1, right_norm_, right_t_2, right_norm_, right_t_3, right_norm_, right_t_4,
+                                    right_norm_,
+                                    top_t_1, top_norm_, top_t_2, top_norm_, top_t_3, top_norm_, top_t_4, top_norm_,
+                                    bottom_t_1, bottom_norm_, bottom_t_2, bottom_norm_, bottom_t_3, bottom_norm_,
+                                    bottom_t_4,
+                                    bottom_norm_,
+                            }, {
+                                    0, 1, 2, 1, 2, 3,
+                                    4, 5, 6, 6, 7, 5,
+                                    8, 10, 9, 10, 11, 9,
+                                    12, 13, 14, 13, 14, 15,
+                                    16, 17, 18, 17, 18, 19,
+                                    20, 21, 22, 21, 22, 23}, true);
     }
 
     RendererInfo beginDraw(float elapsedTime) override {
