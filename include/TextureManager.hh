@@ -15,6 +15,7 @@ class OpenGlStbImageReaderWrapper {
         data_ = stbi_load(path.c_str(), &width_, &height_, &nrChannels_, 0);
         if (data_) {
             glGenTextures(1, &textureId_);
+            glBindTexture(GL_TEXTURE_2D, textureId_);
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -23,6 +24,9 @@ class OpenGlStbImageReaderWrapper {
 
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width_, height_, 0, GL_RGB, GL_UNSIGNED_BYTE, data_);
             glGenerateMipmap(GL_TEXTURE_2D);
+        } else {
+            std::cerr << "LOADING::TEX::ERR cannot load texture from: " << path << "\n";
+            throw std::runtime_error("Fail texture loading is not accepted at the moment");
         }
     }
 
@@ -51,7 +55,7 @@ using namespace Utils;
 class TextureManager {
   public:
     void initialize() {
-        textureIds_[Utils::TypeObject::PoolBall] = textureWrappers_.emplace_back("..//textureId_//PoolBall.jpg")();
+        textureIds_[Utils::TypeObject::PoolBall] = textureWrappers_.emplace_back("PoolBall8.jpg")();
     }
 
     void bindTexture(Utils::TypeObject type) {
