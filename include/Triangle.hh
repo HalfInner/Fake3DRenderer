@@ -229,50 +229,52 @@ class SunSphere : public Renderable, public LightPoint {
     NaiveSphere naiveSphere_;
 };
 
-class Cube : public Renderable {
+class Cuboid : public Renderable {
   public:
-    explicit Cube(glm::vec3 position = {}) :
-            position_(position) {};
+    explicit Cuboid(glm::vec3 position = {}, glm::vec3 sideLengths = {1.f, 1.f, 1.f}) :
+            position_(position), sideLengths_(sideLengths) {};
 
     void initialize(std::shared_ptr<Buffer> buffer) override {
         buffer_ = std::move(buffer);
 
-        auto sideLength = 0.5f;
+        auto sidePosX = sideLengths_.x / 2;
+        auto sidePosY = sideLengths_.y / 2;
+        auto sidePosZ = sideLengths_.z / 2;
 
-        auto front_t_1 = glm::vec3{-sideLength, sideLength, sideLength};
-        auto front_t_2 = glm::vec3{-sideLength, -sideLength, sideLength};
-        auto front_t_3 = glm::vec3{sideLength, sideLength, sideLength};
-        auto front_t_4 = glm::vec3{sideLength, -sideLength, sideLength};
+        auto front_t_1 = glm::vec3{-sidePosX, sidePosY, sidePosZ};
+        auto front_t_2 = glm::vec3{-sidePosX, -sidePosY, sidePosZ};
+        auto front_t_3 = glm::vec3{sidePosX, sidePosY, sidePosZ};
+        auto front_t_4 = glm::vec3{sidePosX, -sidePosY, sidePosZ};
         auto front_norm_ = glm::vec3{0, 0, 1};
 
-        auto rear_t_1 = glm::vec3{-sideLength, sideLength, -sideLength};
-        auto rear_t_2 = glm::vec3{-sideLength, -sideLength, -sideLength};
-        auto rear_t_3 = glm::vec3{sideLength, sideLength, -sideLength};
-        auto rear_t_4 = glm::vec3{sideLength, -sideLength, -sideLength};
+        auto rear_t_1 = glm::vec3{-sidePosX, sidePosY, -sidePosZ};
+        auto rear_t_2 = glm::vec3{-sidePosX, -sidePosY, -sidePosZ};
+        auto rear_t_3 = glm::vec3{sidePosX, sidePosY, -sidePosZ};
+        auto rear_t_4 = glm::vec3{sidePosX, -sidePosY, -sidePosZ};
         auto rear_norm_ = glm::vec3{0, 0, -1};
 
-        auto left_t_1 = glm::vec3{-sideLength, -sideLength, sideLength};
-        auto left_t_2 = glm::vec3{-sideLength, -sideLength, -sideLength};
-        auto left_t_3 = glm::vec3{-sideLength, sideLength, sideLength};
-        auto left_t_4 = glm::vec3{-sideLength, sideLength, -sideLength};
+        auto left_t_1 = glm::vec3{-sidePosX, -sidePosY, sidePosZ};
+        auto left_t_2 = glm::vec3{-sidePosX, -sidePosY, -sidePosZ};
+        auto left_t_3 = glm::vec3{-sidePosX, sidePosY, sidePosZ};
+        auto left_t_4 = glm::vec3{-sidePosX, sidePosY, -sidePosZ};
         auto left_norm_ = glm::vec3{-1, 0, 0};
 
-        auto right_t_1 = glm::vec3{sideLength, -sideLength, sideLength};
-        auto right_t_2 = glm::vec3{sideLength, -sideLength, -sideLength};
-        auto right_t_3 = glm::vec3{sideLength, sideLength, sideLength};
-        auto right_t_4 = glm::vec3{sideLength, sideLength, -sideLength};
+        auto right_t_1 = glm::vec3{sidePosX, -sidePosY, sidePosZ};
+        auto right_t_2 = glm::vec3{sidePosX, -sidePosY, -sidePosZ};
+        auto right_t_3 = glm::vec3{sidePosX, sidePosY, sidePosZ};
+        auto right_t_4 = glm::vec3{sidePosX, sidePosY, -sidePosZ};
         auto right_norm_ = glm::vec3{1, 0, 0};
 
-        auto top_t_1 = glm::vec3{-sideLength, sideLength, sideLength};
-        auto top_t_2 = glm::vec3{sideLength, sideLength, sideLength};
-        auto top_t_3 = glm::vec3{-sideLength, sideLength, -sideLength};
-        auto top_t_4 = glm::vec3{sideLength, sideLength, -sideLength};
+        auto top_t_1 = glm::vec3{-sidePosX, sidePosY, sidePosZ};
+        auto top_t_2 = glm::vec3{sidePosX, sidePosY, sidePosZ};
+        auto top_t_3 = glm::vec3{-sidePosX, sidePosY, -sidePosZ};
+        auto top_t_4 = glm::vec3{sidePosX, sidePosY, -sidePosZ};
         auto top_norm_ = glm::vec3{0, 1, 0};
 
-        auto bottom_t_1 = glm::vec3{-sideLength, -sideLength, sideLength};
-        auto bottom_t_2 = glm::vec3{sideLength, -sideLength, sideLength};
-        auto bottom_t_3 = glm::vec3{-sideLength, -sideLength, -sideLength};
-        auto bottom_t_4 = glm::vec3{sideLength, -sideLength, -sideLength};
+        auto bottom_t_1 = glm::vec3{-sidePosX, -sidePosY, sidePosZ};
+        auto bottom_t_2 = glm::vec3{sidePosX, -sidePosY, sidePosZ};
+        auto bottom_t_3 = glm::vec3{-sidePosX, -sidePosY, -sidePosZ};
+        auto bottom_t_4 = glm::vec3{sidePosX, -sidePosY, -sidePosZ};
         auto bottom_norm_ = glm::vec3{0, -1, 0};
 
 
@@ -307,6 +309,7 @@ class Cube : public Renderable {
   private:
     std::shared_ptr<Buffer> buffer_{nullptr};
     glm::vec3 position_;
+    glm::vec3 sideLengths_;
 };
 
 

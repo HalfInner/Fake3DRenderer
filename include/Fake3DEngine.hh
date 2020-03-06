@@ -58,16 +58,21 @@ class BasicFake3DEngine : public Fake3DEngine {
 
         camera_ = std::make_shared<MovableCamera>();
 
+        prepareScene();
+
+        configureInputController();
+    }
+
+    void prepareScene() {
         basicRenderer_ = std::make_unique<Graphic::BasicRenderer>(camera_);
-        basicRenderer_->addObject(std::make_shared<Graphic::Cube>(glm::vec3(-2, 0, 0)));
+
+        basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(glm::vec3(-2, 0, 0)));
         basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>());
         auto sun = std::make_shared<Graphic::SunSphere>();
         basicRenderer_->addObject(sun);
         basicRenderer_->addLight(sun);
 
         basicRenderer_->initialize();
-
-        configureInputController();
     }
 
     void run() override {
