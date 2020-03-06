@@ -68,17 +68,18 @@ class BasicFake3DEngine : public Fake3DEngine {
         basicRenderer_->addObject(std::make_shared<Graphic::Surface>());
 
         // Flat of building
+        float rgbRatio = 1. / 255.f;
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(glm::vec3(-2, 0, 0)));
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
-                glm::vec3{-2.f, 1.f, -1.f}, glm::vec3{1.f, 3.f, 1.f}));
+                glm::vec3{-2.f, 1.f, -1.f}, glm::vec3{1.f, 3.f, 1.f}, glm::vec3{178, 132, 62} * rgbRatio));
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
-                glm::vec3{-2.f, 1.f, -1.f}, glm::vec3{1.f, 3.f, 1.f}));
+                glm::vec3{-2.f, 1.f, -1.f}, glm::vec3{1.f, 3.f, 1.f}, glm::vec3{178, 116, 62} * rgbRatio));
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
-                glm::vec3{2.f, 1.f, -4.f}, glm::vec3{1.f, 3.f, 3.f}));
+                glm::vec3{2.f, 1.f, -4.f}, glm::vec3{1.f, 3.f, 3.f}, glm::vec3{252, 156, 12} * rgbRatio));
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
-                glm::vec3{2.f, .5f, -8.f}, glm::vec3{1.f, 2.f, 4.f}));
+                glm::vec3{2.f, .5f, -8.f}, glm::vec3{1.f, 2.f, 4.f}, glm::vec3{252, 124, 12} * rgbRatio));
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
-                glm::vec3{-2.f, .5f, -7.f}, glm::vec3{1.f, 2.f, 4.f}));
+                glm::vec3{-2.f, .5f, -7.f}, glm::vec3{1.f, 2.f, 4.f}, glm::vec3{204, 126, 10} * rgbRatio));
 
         // Road
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
@@ -101,7 +102,7 @@ class BasicFake3DEngine : public Fake3DEngine {
 
 
         // Poll Ball
-        basicRenderer_->addObject(std::make_shared<Graphic::PoolBall>());
+        basicRenderer_->addObject(std::make_shared<Graphic::PoolBall>(.7f, glm::vec3{2, 0, 0}));
 
 
         // Light
