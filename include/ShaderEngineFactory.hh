@@ -28,6 +28,10 @@ class ShaderEngingeFactory {
                 vs = std::make_shared<LightVertexShaderSource>(shaderManagerPtr_);
                 fs = std::make_shared<LightFragmentShaderSource>(shaderManagerPtr_);
                 break;
+            case Graphic::RendererInfo::TypeObject::PoolBall:
+                vs = std::make_shared<PoolBallVertexShaderSource>(shaderManagerPtr_);
+                fs = std::make_shared<PoolBallFragmentShaderSource>(shaderManagerPtr_);
+                break;
             default:
                 throw std::runtime_error("Unknown type");
         }

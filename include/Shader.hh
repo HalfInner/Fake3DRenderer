@@ -113,9 +113,9 @@ class FragmentShaderSource : public ShaderSource {
     ShaderManagerPtr shaderManager_;
 };
 
-class PollBallVertexShaderSource : public ShaderSource {
+class PoolBallVertexShaderSource : public ShaderSource {
   public:
-    explicit PollBallVertexShaderSource(ShaderManagerPtr shaderManager) :
+    explicit PoolBallVertexShaderSource(ShaderManagerPtr shaderManager) :
             shaderManager_(std::move(shaderManager)) {
         id_ = shaderManager_->addShader(shaderProgram);
     }
@@ -164,9 +164,9 @@ class PollBallVertexShaderSource : public ShaderSource {
     ShaderManagerPtr shaderManager_;
 };
 
-class PollBallFragmentShaderSource : public ShaderSource {
+class PoolBallFragmentShaderSource : public ShaderSource {
   public:
-    explicit PollBallFragmentShaderSource(ShaderManagerPtr shaderManager) :
+    explicit PoolBallFragmentShaderSource(ShaderManagerPtr shaderManager) :
             shaderManager_(std::move(shaderManager)) {
         id_ = shaderManager_->addShader(shaderProgram);
     }
