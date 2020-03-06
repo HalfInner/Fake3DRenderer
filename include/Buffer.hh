@@ -16,7 +16,8 @@ enum class BufferType {
 };
 
 struct  /*interface*/ Buffer {
-    virtual void initialize(std::vector<glm::vec3> &&points, std::vector<unsigned> &&indices, bool containsNormal) = 0;
+    virtual void initialize(
+            std::vector<glm::vec3> &&points, std::vector<unsigned> &&indices, BufferType bufferType) = 0;
     virtual void bind() = 0;
     virtual void unbind() = 0;
     virtual ~Buffer() = default;
@@ -24,7 +25,7 @@ struct  /*interface*/ Buffer {
 
 class OpenGlBuffer : public Buffer {
   public:
-    void initialize(std::vector<glm::vec3> &&points, std::vector<unsigned> &&indices, bool containsNormal) override {
+    void initialize(std::vector<glm::vec3> &&points, std::vector<unsigned> &&indices, BufferType bufferType) override {
         glGenVertexArrays(1, &VAO_);
         glGenBuffers(1, &VBO_);
         glGenBuffers(1, &EBO_);
@@ -33,25 +34,29 @@ class OpenGlBuffer : public Buffer {
         glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(glm::vec3), points.data(), GL_STATIC_DRAW);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned), indices.data(), GL_STATIC_DRAW);
 
-        if (!containsNormal) {
+        if (BufferType::Regular == bufferType) {
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
             glEnableVertexAttribArray(0); // TODO (kaj) 1 0: check where belongs it
-        } else {
+        } else if (BufferType::Normal == bufferType) {
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), nullptr);
             glEnableVertexAttribArray(0); // TODO (kaj) 1 0: check where belongs it
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 6 * sizeof(float), (void *) (3 * sizeof(float)));
             glEnableVertexAttribArray(1);
+        } else if (BufferType::NormalWithTexture == bufferType) {
+
         }
         unbind();
     }
 
-    void bind() override {
+    void bind()
+    override {
         glBindVertexArray(VAO_);
         glBindBuffer(GL_ARRAY_BUFFER, VBO_);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_);
     }
 
-    void unbind() override {
+    void unbind()
+    override {
         glBindBuffer(GL_ARRAY_BUFFER, DELETE_BUFFER_KEY);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, DELETE_BUFFER_KEY);
         glBindVertexArray(DELETE_BUFFER_KEY);

@@ -68,7 +68,7 @@ class Triangle : public Renderable {
 
         buffer_->initialize({{-1, 0, 0},
                              {0,  1, 0},
-                             {1,  0, 0}}, {0, 1, 2}, false);
+                             {1,  0, 0}}, {0, 1, 2}, BufferType::Regular);
     }
 
     RendererInfo beginDraw(float elapsedTime) override {
@@ -95,7 +95,7 @@ class TriangleInv : public Renderable {
 
         buffer_->initialize({{-1, 0,  0},
                              {0,  -1, 0},
-                             {1,  0,  0}}, {0, 1, 2}, false);
+                             {1,  0,  0}}, {0, 1, 2}, BufferType::Regular);
     }
 
     RendererInfo beginDraw(float elapsedTime) override {
@@ -129,7 +129,7 @@ class Surface : public Renderable {
                                     {-sideLenght, levelHeight, -sideLenght}, normal,
                                     {sideLenght, levelHeight, -sideLenght}, normal,
                             },
-                            {0, 1, 2, 0, 2, 3}, true);
+                            {0, 1, 2, 0, 2, 3}, BufferType::Normal);
     }
 
     RendererInfo beginDraw(float elapsedTime) override {
@@ -188,26 +188,14 @@ class NaiveSphere : public Renderable {
             sphereIndicies.emplace_back((i + latitudeSteps_) % spherePoints.size());
         }
 
-        buffer_->initialize(std::move(spherePoints), std::move(sphereIndicies), true);
+        buffer_->initialize(std::move(spherePoints), std::move(sphereIndicies), BufferType::Normal);
     }
 
     RendererInfo beginDraw(float elapsedTime) override {
         RendererInfo ri;
 
-//        fillPercentage_ += elapsedTime / 10000000.f;
-//        if (fillPercentage_ > 99.f) {
-//            fillPercentage_ = 84.f;
-//        }
-//
-//        ri.elements =  numberOfElements * fillPercentage_;
-//        ri.elements =  numberOfElements / 2;
         ri.elements = numberOfElements;
         ri.position = position_;
-
-        // TODO(kaj): Example animation. To remove.
-//        const float velocity_ = 0.00008f;
-//        ri.color = color_ + (lastColor_ * cosf(elapsedTime) * velocity_);
-//        lastColor_ = ri.color;
         ri.color = color_;
         ri.debugMode = false;
 
@@ -342,7 +330,7 @@ class PoolBall : public Renderable {
             sphereIndicies.emplace_back((i + latitudeSteps_) % spherePoints.size());
         }
 
-        buffer_->initialize(std::move(spherePoints), std::move(sphereIndicies), true);
+        buffer_->initialize(std::move(spherePoints), std::move(sphereIndicies), BufferType::NormalWithTexture);
     }
 
     RendererInfo beginDraw(float elapsedTime) override {
@@ -445,7 +433,7 @@ class Cuboid : public Renderable {
                                     8, 10, 9, 10, 11, 9,
                                     12, 13, 14, 13, 14, 15,
                                     16, 17, 18, 17, 18, 19,
-                                    20, 21, 22, 21, 22, 23}, true);
+                                    20, 21, 22, 21, 22, 23}, BufferType::Normal);
     }
 
     RendererInfo beginDraw(float elapsedTime) override {
