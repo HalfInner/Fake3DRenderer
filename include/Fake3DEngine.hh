@@ -46,9 +46,6 @@ class SimpleClock {
 
 class BasicFake3DEngine : public Fake3DEngine {
   public:
-    BasicFake3DEngine() {
-    }
-
     void initialize() override {
         initializeGlfw();
         createWindowContext();
@@ -56,7 +53,7 @@ class BasicFake3DEngine : public Fake3DEngine {
         initializeGlew();
 
         camera_ = std::make_shared<MovableCamera>();
-        camera_->updateScreen(initialScreenWidth_, initialScreenHeight_);
+        camera_->updateScreen(static_cast<float>(initialScreenWidth_), static_cast<float>(initialScreenHeight_));
 
         prepareScene();
 
@@ -275,7 +272,8 @@ class BasicFake3DEngine : public Fake3DEngine {
         glfwSetWindowUserPointer(window_, this);
         auto updateScreenCB = [](GLFWwindow *window, int width, int height) {
             glViewport(0, 0, width, height);
-            static_cast<BasicFake3DEngine *>(glfwGetWindowUserPointer(window))->camera_->updateScreen(width, height);
+            static_cast<BasicFake3DEngine *>(glfwGetWindowUserPointer(window))->camera_->updateScreen(
+                    static_cast<float>(width), static_cast<float>(height));
         };
         glfwSetFramebufferSizeCallback(window_, updateScreenCB);
     }
@@ -287,11 +285,6 @@ class BasicFake3DEngine : public Fake3DEngine {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    }
-
-    void updateScreenCB(GLFWwindow *window, int width, int height) {
-        glViewport(0, 0, width, height);
-        camera_->updateScreen(width, height);
     }
 
     GLFWwindow *window_ = nullptr;
