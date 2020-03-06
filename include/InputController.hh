@@ -65,10 +65,10 @@ class OpenGlInputController : public InputController {
 
     void serve(float elapsedTime) override {
         if (glfwGetKey(window_, GLFW_KEY_ENTER) == GLFW_PRESS) {
-            if (cbEnterPress_) cbEnterPress_(nullptr);
+            if (cbEnterPress_) cbEnterPress_(&elapsedTime);
         }
         if (glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-            if (cbEscapePress_) cbEscapePress_(nullptr);
+            if (cbEscapePress_) cbEscapePress_(&elapsedTime);
         }
         if (glfwGetKey(window_, GLFW_KEY_W) == GLFW_PRESS) {
             if (cbWPress_) cbWPress_(&elapsedTime);

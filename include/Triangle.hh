@@ -244,15 +244,15 @@ class SunSphere : public Renderable, public LightPoint, public Animation {
         info.color = color_;
         info.typeObject = RendererInfo::TypeObject::Light;
 
-        auto posAnimation = basePosition_;
         if (isAnimationRunning_) {
-            auto rangeX = 4.f;
-            auto rangeZ = 4.f;
             auto velocity = 1.5f;
             angle_ += elapsedTime * velocity;
-            posAnimation.x += cos(angle_) * rangeX;
-            posAnimation.z += sin(angle_) * rangeZ;
         }
+        auto rangeX = 4.f;
+        auto rangeZ = 4.f;
+        auto posAnimation = basePosition_;
+        posAnimation.x += cos(angle_) * rangeX;
+        posAnimation.z += sin(angle_) * rangeZ;
         position_ = posAnimation;
         info.position = position_;
 

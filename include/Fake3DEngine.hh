@@ -72,34 +72,40 @@ class BasicFake3DEngine : public Fake3DEngine {
         // Flat of building
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(glm::vec3(-2, 0, 0)));
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
-                glm::vec3{-2.f, 1.f, -1.f}, glm::vec3{1.f,3.f, 1.f}));
+                glm::vec3{-2.f, 1.f, -1.f}, glm::vec3{1.f, 3.f, 1.f}));
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
-                glm::vec3{-2.f, 1.f, -1.f}, glm::vec3{1.f,3.f, 1.f}));
+                glm::vec3{-2.f, 1.f, -1.f}, glm::vec3{1.f, 3.f, 1.f}));
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
-                glm::vec3{2.f, 1.f, -4.f}, glm::vec3{1.f,3.f, 3.f}));
+                glm::vec3{2.f, 1.f, -4.f}, glm::vec3{1.f, 3.f, 3.f}));
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
-                glm::vec3{2.f, .5f, -8.f}, glm::vec3{1.f,2.f, 4.f}));
+                glm::vec3{2.f, .5f, -8.f}, glm::vec3{1.f, 2.f, 4.f}));
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
-                glm::vec3{-2.f, .5f, -7.f}, glm::vec3{1.f,2.f, 4.f}));
+                glm::vec3{-2.f, .5f, -7.f}, glm::vec3{1.f, 2.f, 4.f}));
 
         // Road
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
-                glm::vec3{0.f, -0.45f, 0.f}, glm::vec3{1.f,0.01f, 200.f}, glm::vec3{.2f, .2f, .2f}));
+                glm::vec3{0.f, -0.45f, 0.f}, glm::vec3{1.f, 0.01f, 200.f}, glm::vec3{.2f, .2f, .2f}));
 
 
         // Pacman
-        basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(0.75f, glm::vec3{-3.f, 0.f, -4.f}));
+        auto pacManColor = glm::vec3{0.99f, 0.99f, -.99f};
+        basicRenderer_->addObject(
+                std::make_shared<Graphic::NaiveSphere>(0.75f, glm::vec3{-3.f, 0.f, -4.f}, pacManColor));
 
         // Snowman
-        basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(0.5f, glm::vec3{1.f, 0.f, -2.f}));
-        basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(0.25f, glm::vec3{1.f, .7f, -2.f}));
-        basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(0.1f, glm::vec3{1.f, 1.f, -2.f}));
+        auto snowManColor = glm::vec3{0.99f, 0.99f, .99f};
+        basicRenderer_->addObject(
+                std::make_shared<Graphic::NaiveSphere>(0.5f, glm::vec3{1.f, 0.f, -2.f}, snowManColor));
+        basicRenderer_->addObject(
+                std::make_shared<Graphic::NaiveSphere>(0.25f, glm::vec3{1.f, .7f, -2.f}, snowManColor));
+        basicRenderer_->addObject(
+                std::make_shared<Graphic::NaiveSphere>(0.1f, glm::vec3{1.f, 1.f, -2.f}, snowManColor));
 
 
         // Light
-        auto sun = std::make_shared<Graphic::SunSphere>();
-        basicRenderer_->addObject(sun);
-        basicRenderer_->addLight(sun);
+        sun_ = std::make_shared<Graphic::SunSphere>();
+        basicRenderer_->addObject(sun_);
+        basicRenderer_->addLight(sun_);
 
         basicRenderer_->initialize();
     }
@@ -146,8 +152,17 @@ class BasicFake3DEngine : public Fake3DEngine {
 
     void configureInputController() {
         openGlInputController_ = std::make_unique<OpenGlInputController>(window_);
-        openGlInputController_->subscribeEnterPress([wd = window_](void *param) {
-            glfwSetWindowShouldClose(wd, true);
+        openGlInputController_->subscribeEnterPress([sun = sun_](void *param) {
+            static bool isSunRunning = true;
+            static float lastMeasure = INFINITY;
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (lastMeasure - elapsed < 0.15f) {
+                lastMeasure += elapsed;
+                return;
+            }
+            lastMeasure = .0f;
+            isSunRunning ? sun->stop() : sun->start();
+            isSunRunning = !isSunRunning;
         });
         openGlInputController_->subscribeEscapePress([wd = window_](void *param) {
             glfwSetWindowShouldClose(wd, true);
@@ -258,9 +273,9 @@ class BasicFake3DEngine : public Fake3DEngine {
         glfwMakeContextCurrent(window_);
 
         glfwSetWindowUserPointer(window_, this);
-        auto updateScreenCB = [](GLFWwindow * window, int width, int height) {
+        auto updateScreenCB = [](GLFWwindow *window, int width, int height) {
             glViewport(0, 0, width, height);
-            static_cast<BasicFake3DEngine*>(glfwGetWindowUserPointer(window))->camera_->updateScreen(width, height);
+            static_cast<BasicFake3DEngine *>(glfwGetWindowUserPointer(window))->camera_->updateScreen(width, height);
         };
         glfwSetFramebufferSizeCallback(window_, updateScreenCB);
     }
@@ -292,6 +307,7 @@ class BasicFake3DEngine : public Fake3DEngine {
     int initialScreenWidth_ = 0;
     int initialScreenHeight_ = 0;
     std::shared_ptr<MovableCamera> camera_;
+    std::shared_ptr<Graphic::SunSphere> sun_;
 };
 
 #endif //FAKE3DRENDERER_FAKE3DENGINE_HH
