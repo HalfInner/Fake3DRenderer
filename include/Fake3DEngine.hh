@@ -85,7 +85,6 @@ class BasicFake3DEngine : public Fake3DEngine {
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
                 glm::vec3{0.f, -0.45f, 0.f}, glm::vec3{1.f, 0.01f, 200.f}, glm::vec3{.2f, .2f, .2f}));
 
-
         // Pacman
         auto pacManColor = glm::vec3{0.99f, 0.99f, -.99f};
         basicRenderer_->addObject(
