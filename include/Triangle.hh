@@ -244,15 +244,17 @@ class SunSphere : public Renderable, public LightPoint, public Animation {
         info.color = color_;
         info.typeObject = RendererInfo::TypeObject::Light;
 
-        auto posAnimation = position_;
+        auto posAnimation = basePosition_;
         if (isAnimationRunning_) {
             auto rangeX = 4.f;
             auto rangeZ = 4.f;
-            posAnimation.x += cos(elapsedTime/1000000.f) * rangeX;
-            posAnimation.z += sin(elapsedTime/1000000.f) * rangeZ;
+            auto velocity = 1.5f;
+            angle_ += elapsedTime * velocity;
+            posAnimation.x += cos(angle_) * rangeX;
+            posAnimation.z += sin(angle_) * rangeZ;
         }
         position_ = posAnimation;
-        info.position = posAnimation;
+        info.position = position_;
 
         return info;
     }
@@ -288,16 +290,19 @@ class SunSphere : public Renderable, public LightPoint, public Animation {
     }
 
   private:
+    glm::vec3 basePosition_{-1.2f, 4.0f, -1.f};
     glm::vec3 position_{-1.2f, 4.0f, -1.f};
     glm::vec3 color_{1.f, 1.f, 1.f};
     NaiveSphere naiveSphere_;
-    bool isAnimationRunning_ {true};
+    bool isAnimationRunning_{true};
+    float angle_{};
 };
 
 class Cuboid : public Renderable {
   public:
-    explicit Cuboid(glm::vec3 position = {}, glm::vec3 sideLengths = {1.f, 1.f, 1.f}) :
-            position_(position), sideLengths_(sideLengths) {};
+    explicit Cuboid(glm::vec3 position = {}, glm::vec3 sideLengths = {1.f, 1.f, 1.f},
+                    glm::vec3 color = {1.0f, 0.5f, 0.31f}) :
+            position_(position), sideLengths_(sideLengths), color_(color) {};
 
     void initialize(std::shared_ptr<Buffer> buffer) override {
         buffer_ = std::move(buffer);
@@ -369,7 +374,7 @@ class Cuboid : public Renderable {
         RendererInfo ri{};
         ri.elements = 6 * 2 * 3;
         ri.position = position_;
-        ri.color = {1.0f, 0.5f, 0.31f};
+        ri.color = color_;
         buffer_->bind();
         return ri;
     }
@@ -382,6 +387,7 @@ class Cuboid : public Renderable {
     std::shared_ptr<Buffer> buffer_{nullptr};
     glm::vec3 position_;
     glm::vec3 sideLengths_;
+    glm::vec3 color_;
 };
 
 
