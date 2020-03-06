@@ -286,7 +286,7 @@ class SunSphere : public Renderable, public LightPoint, public Animation {
 
 class PoolBall : public Renderable {
   public:
-    explicit PoolBall(float radius = .7f, glm::vec3 position = {}, glm::vec3 color = {0.f, 0.f, 0.f})
+    explicit PoolBall(float radius = .7f, glm::vec3 position = {}, glm::vec3 color = {01.f, 01.f, 01.f})
             : radius_(radius),
               position_(position),
               color_(color) {};

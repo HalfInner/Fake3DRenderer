@@ -100,6 +100,10 @@ class BasicFake3DEngine : public Fake3DEngine {
                 std::make_shared<Graphic::NaiveSphere>(0.1f, glm::vec3{1.f, 1.f, -2.f}, snowManColor));
 
 
+        // Poll Ball
+        basicRenderer_->addObject(std::make_shared<Graphic::PoolBall>());
+
+
         // Light
         sun_ = std::make_shared<Graphic::SunSphere>();
         basicRenderer_->addObject(sun_);
