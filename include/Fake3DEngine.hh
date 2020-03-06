@@ -79,7 +79,7 @@ class BasicFake3DEngine : public Fake3DEngine {
 
         // Road
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(
-                glm::vec3{0.f, -0.45f, 0.f}, glm::vec3{1.5f,0.01f, 200.f}));
+                glm::vec3{0.f, -0.45f, 0.f}, glm::vec3{1.f,0.01f, 200.f}, glm::vec3{.2f, .2f, .2f}));
 
 
         // Pacman
@@ -251,11 +251,13 @@ class BasicFake3DEngine : public Fake3DEngine {
         }
 
         glfwMakeContextCurrent(window_);
-        glfwSetFramebufferSizeCallback(window_, [](auto win, auto width, auto height) {
-            // make sure the viewport matches the new window_ dimensions; note that width and
-            // height will be significantly larger than specified on retina displays.
+
+        glfwSetWindowUserPointer(window_, this);
+        auto updateScreenCB = [](GLFWwindow * window, int width, int height) {
             glViewport(0, 0, width, height);
-        });
+            static_cast<BasicFake3DEngine*>(glfwGetWindowUserPointer(window))->camera_->updateScreen(width, height);
+        };
+        glfwSetFramebufferSizeCallback(window_, updateScreenCB);
     }
 
     void initializeGlfw() const {
@@ -265,6 +267,11 @@ class BasicFake3DEngine : public Fake3DEngine {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    }
+
+    void updateScreenCB(GLFWwindow *window, int width, int height) {
+        glViewport(0, 0, width, height);
+        camera_->updateScreen(width, height);
     }
 
     GLFWwindow *window_ = nullptr;

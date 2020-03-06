@@ -45,7 +45,7 @@ void MovableCamera::updateCameraCoordinates() {
 }
 
 glm::mat4 MovableCamera::projection() {
-    glm::mat4 projection = glm::perspective(glm::radians(cameraZoom_), (float) 800 / (float) 640, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(cameraZoom_), screenWidth_ / screenHeight_, 0.1f, 100.0f);
     return projection;
 }
 
@@ -70,7 +70,7 @@ void MovableCamera::move(Direction direction, float elapsedTime) {
     };
 
     float additionalMoveVelocity = 10.f;
-    position_ += vectorDirections.at(direction) * velocity_  * additionalMoveVelocity * elapsedTime;
+    position_ += vectorDirections.at(direction) * velocity_ * additionalMoveVelocity * elapsedTime;
 }
 
 void MovableCamera::zoom(float ratio) {
@@ -128,6 +128,11 @@ void MovableCamera::rotate(HeadDirection headDirection, float elapsedTime) {
 
 glm::vec3 MovableCamera::position() {
     return position_;
+}
+
+void MovableCamera::updateScreen(float width, float height) {
+    screenWidth_ = width;
+    screenHeight_ = height;
 }
 
 

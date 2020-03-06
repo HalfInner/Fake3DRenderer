@@ -12,7 +12,7 @@ struct /*interface*/ Camera {
     virtual glm::mat4 projection() = 0;
     virtual glm::mat4 view() = 0;
     virtual glm::vec3 position() = 0;
-//    virtual glm::mat4 model() = 0;
+    virtual void updateScreen(float width, float horizontal) = 0;
     virtual ~Camera() = default;
 };
 
@@ -63,6 +63,7 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     glm::mat4 view() override;
     glm::vec3 position() override;
 //    glm::mat4 model() override;
+    void updateScreen(float width, float height) override;
 
     // Rotatable
     void pitch(float angle) override;
@@ -87,6 +88,8 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     float velocity_{};
     glm::vec3 up_{};
     glm::vec3 front_{};
+    float screenWidth_{800};
+    float screenHeight_{640};
 };
 
 #endif //FAKE3DRENDERER_BASICCAMERA_HH
