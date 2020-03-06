@@ -338,7 +338,6 @@ class PoolBall : public Renderable {
 
         ri.elements = numberOfElements;
         ri.position = position_;
-
         ri.color = color_;
         ri.debugMode = false;
 

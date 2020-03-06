@@ -36,14 +36,20 @@ class OpenGlBuffer : public Buffer {
 
         if (BufferType::Regular == bufferType) {
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-            glEnableVertexAttribArray(0); // TODO (kaj) 1 0: check where belongs it
+            glEnableVertexAttribArray(0);
         } else if (BufferType::Normal == bufferType) {
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), nullptr);
-            glEnableVertexAttribArray(0); // TODO (kaj) 1 0: check where belongs it
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 6 * sizeof(float), (void *) (3 * sizeof(float)));
+            glEnableVertexAttribArray(0);
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 6 * sizeof(float), (void *) (sizeof(glm::vec3)));
             glEnableVertexAttribArray(1);
         } else if (BufferType::NormalWithTexture == bufferType) {
-
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), nullptr);
+            glEnableVertexAttribArray(0);
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 9 * sizeof(float), (void *) (sizeof(glm::vec3)));
+            glEnableVertexAttribArray(1);
+            glVertexAttribPointer(2, 3, GL_FLOAT, GL_TRUE, 9 * sizeof(float),
+                                  (void *) (sizeof(glm::vec3) + sizeof(glm::vec3)));
+            glEnableVertexAttribArray(2);
         }
         unbind();
     }
