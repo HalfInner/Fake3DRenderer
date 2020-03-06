@@ -67,7 +67,13 @@ class BasicFake3DEngine : public Fake3DEngine {
         basicRenderer_ = std::make_unique<Graphic::BasicRenderer>(camera_);
 
         basicRenderer_->addObject(std::make_shared<Graphic::Cuboid>(glm::vec3(-2, 0, 0)));
-        basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>());
+        basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(0.75f, glm::vec3{1.f, 0.f, 0.f}));
+
+        // Snowman
+        basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(0.5f, glm::vec3{1.f, 0.f, -2.f}));
+        basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(0.25f, glm::vec3{1.f, .7f, -2.f}));
+        basicRenderer_->addObject(std::make_shared<Graphic::NaiveSphere>(0.1f, glm::vec3{1.f, 1.f, -2.f}));
+
         auto sun = std::make_shared<Graphic::SunSphere>();
         basicRenderer_->addObject(sun);
         basicRenderer_->addLight(sun);

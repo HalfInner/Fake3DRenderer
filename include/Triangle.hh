@@ -112,7 +112,10 @@ class TriangleInv : public Renderable {
 
 class NaiveSphere : public Renderable {
   public:
-    explicit NaiveSphere(float radius = 1.f, glm::vec3 position = {}) : radius_(radius), position_(position) {};
+    explicit NaiveSphere(float radius = 1.f, glm::vec3 position = {}, glm::vec3 color = {1.f, 0.9f, 0.9f})
+            : radius_(radius),
+              position_(position),
+              color_ (color){};
 
     void initialize(std::shared_ptr<Buffer> buffer) override {
         buffer_ = std::move(buffer);
@@ -185,8 +188,8 @@ class NaiveSphere : public Renderable {
     const int numberOfElements = latitudeSteps_ * meridianSteps_ * 3 * 2;
 
 
-    glm::vec3 color_{1.f, 0.84f, 0.01f};
-    glm::vec3 position_;
+    glm::vec3 position_{};
+    glm::vec3 color_{};
 };
 
 class SunSphere : public Renderable, public LightPoint {
