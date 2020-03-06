@@ -15,6 +15,7 @@
 #include "BasicCamera.hh"
 #include "ShaderEngine.hh"
 #include "ShaderEngineFactory.hh"
+#include "TextureManager.hh"
 #include "Triangle.hh"
 
 namespace Graphic {
@@ -123,6 +124,7 @@ class BasicRenderer : public Renderer {
     std::vector<std::shared_ptr<Renderable>> objects_{};
     std::vector<std::shared_ptr<LightPoint>> lights_{};
 
+    TextureManager textureManager_;
 };
 
 } // namespace Graphic

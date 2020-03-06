@@ -4,6 +4,7 @@
 
 #ifndef FAKE3DRENDERER_TEXTUREMANAGER_HH
 #define FAKE3DRENDERER_TEXTUREMANAGER_HH
+#define STB_IMAGE_IMPLEMENTATION
 
 #include "stb_image.hh"
 
@@ -61,5 +62,5 @@ class TextureManager {
     std::unordered_map<Texture, unsigned> textureIds_{{Texture::None, 0}};
 };
 
-
+#undef STB_IMAGE_IMPLEMENTATION
 #endif //FAKE3DRENDERER_TEXTUREMANAGER_HH

@@ -155,6 +155,7 @@ class BasicFake3DEngine : public Fake3DEngine {
             float elapsed = *reinterpret_cast<float *>(param);
             if (lastMeasure - elapsed < 0.15f) {
                 lastMeasure += elapsed;
+
                 return;
             }
             lastMeasure = .0f;
@@ -290,11 +291,7 @@ class BasicFake3DEngine : public Fake3DEngine {
 
     GLFWwindow *window_ = nullptr;
 
-    std::shared_ptr<VertexShaderSource> vs_ = nullptr;
-    std::shared_ptr<FragmentShaderSource> fs_ = nullptr;
-
     std::unique_ptr<Graphic::BasicRenderer> basicRenderer_ = nullptr;
-
     std::unique_ptr<OpenGlInputController> openGlInputController_ = nullptr;
 
     int initialScreenWidth_ = 0;
