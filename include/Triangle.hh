@@ -27,10 +27,22 @@ struct /*interface*/ RendererInfo {
         Integer = GL_UNSIGNED_INT,
         UnknownCountType = 0x0
     };
+
+    struct Material {
+        // http://devernay.free.fr/cours/opengl/materials.html
+        // Default is chrome
+        glm::vec3 ambient {0.25f, 0.25f, 0.25f};
+        glm::vec3 diffuse {0.4f, 0.4f, 0.4f};
+        glm::vec3 specular {0.774597f,0.774597f,0.774597f};
+        float shininess = 0.6f;
+    };
+
     TypeObject typeObject = TypeObject::NotSpecified;
     RenderType renderType = RenderType::Triangles;
     CountType countType = CountType::Integer;
     unsigned elements = 0u;
+
+    Material material {};
 
     glm::vec3 position{};
     glm::vec3 color{};
