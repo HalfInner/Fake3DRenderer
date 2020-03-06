@@ -22,8 +22,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY build)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wpedantic -Werror")
 
 add_executable(Fake3DRenderer main.cpp source/ShaderManager.cc source/BasicCamera.cc)
-target_compile_definitions(Fake3DRenderer PUBLIC )
+target_compile_definitions(Fake3DRenderer PUBLIC GLEW_STATIC)
 target_include_directories(Fake3DRenderer PUBLIC
         ${INCLUDE_PATH} ${GLFW3_INCLUDE_PATH} ${GLEW_INCLUDE_PATH} ${GLM_INCLUDE_PATH})
 target_link_directories(Fake3DRenderer PUBLIC ${OPENGL_LIB_PATH} ${GLFW3_LIB_PATH} ${GLEW_LIB_PATH})
-target_link_libraries(Fake3DRenderer PUBLIC pthread OpenGL32 GlU32 glfw3 glew32)
+target_link_libraries(Fake3DRenderer PUBLIC -static pthread glew32 OpenGL32 GlU32 glfw3)
