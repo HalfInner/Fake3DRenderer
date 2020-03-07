@@ -8,8 +8,6 @@
 #include <cmath>
 
 #include "Buffer.hh"
-#include "Renderable.hh"
-
 namespace Graphic {
 
 using Utils::TypeObject;
@@ -298,7 +296,7 @@ class SunSphere : public Renderable, public LightPoint, public Animation {
 
 class PoolBall : public Renderable {
   public:
-    explicit PoolBall(float radius = .7f, glm::vec3 position = {}, glm::vec3 color = {01.f, 01.f, 01.f})
+    explicit PoolBall(float radius = .7f, glm::vec3 position = {}, glm::vec3 color = {0.1f, 0.1f, 0.1f})
             : radius_(radius),
               position_(position),
               color_(color) {};

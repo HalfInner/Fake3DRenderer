@@ -6,55 +6,64 @@
 #define FAKE3DRENDERER_INPUTCONTROLLER_HH
 
 #include <functional>
-#include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <glm/vec4.hpp>
-#include <iostream>
-
-#include "Shader.hh"
-#include "ShaderManager.hh"
-#include "Renderable.hh"
-#include "InputController.hh"
 
 struct /* interface */ InputController {
-    using InputControllerCB = std::function<void(void*)>;
+    using InputControllerCB = std::function<void(void *)>;
 
-    virtual void subscribeEnterPress(InputControllerCB&& cb) {};
+    virtual void subscribeEnterPress(InputControllerCB &&cb) {};
 
-    virtual void subscribeEscapePress(InputControllerCB&& cb) {};
+    virtual void subscribeEscapePress(InputControllerCB &&cb) {};
 
     // Move
-    virtual void subscribeWPress(InputControllerCB&& cb) {};
+    virtual void subscribeWPress(InputControllerCB &&cb) {};
 
-    virtual void subscribeSPress(InputControllerCB&& cb) {};
+    virtual void subscribeSPress(InputControllerCB &&cb) {};
 
-    virtual void subscribeAPress(InputControllerCB&& cb) {};
+    virtual void subscribeAPress(InputControllerCB &&cb) {};
 
-    virtual void subscribeDPress(InputControllerCB&& cb) {};
+    virtual void subscribeDPress(InputControllerCB &&cb) {};
 
-    virtual void subscribeQPress(InputControllerCB&& cb) {};
+    virtual void subscribeQPress(InputControllerCB &&cb) {};
 
-    virtual void subscribeEPress(InputControllerCB&& cb) {};
+    virtual void subscribeEPress(InputControllerCB &&cb) {};
 
     // rotate
-    virtual void subscribeRPress(InputControllerCB&& cb) {};
+    virtual void subscribeRPress(InputControllerCB &&cb) {};
 
-    virtual void subscribeTPress(InputControllerCB&& cb) {};
+    virtual void subscribeTPress(InputControllerCB &&cb) {};
 
-    virtual void subscribeFPress(InputControllerCB&& cb) {};
+    virtual void subscribeFPress(InputControllerCB &&cb) {};
 
-    virtual void subscribeGPress(InputControllerCB&& cb) {};
+    virtual void subscribeGPress(InputControllerCB &&cb) {};
 
-    virtual void subscribeVPress(InputControllerCB&& cb) {};
+    virtual void subscribeVPress(InputControllerCB &&cb) {};
 
-    virtual void subscribeBPress(InputControllerCB&& cb) {};
+    virtual void subscribeBPress(InputControllerCB &&cb) {};
 
     // Zoom
-    virtual void subscribeZPress(InputControllerCB&& cb) {};
+    virtual void subscribeZPress(InputControllerCB &&cb) {};
 
-    virtual void subscribeCPress(InputControllerCB&& cb) {};
+    virtual void subscribeCPress(InputControllerCB &&cb) {};
 
     virtual void serve(float elapsedTime) = 0;
+
+
+    // Light manipulation
+    virtual void subscribeMinusPress(InputControllerCB &&cb) = 0;
+    virtual void subscribeEqualPress(InputControllerCB &&cb) = 0;
+
+    // Ambient
+    virtual void subscribeLeftBracketPress(InputControllerCB &&cb) = 0;
+    virtual void subscribeRightBracketPress(InputControllerCB &&cb) = 0;
+
+    // diffuse
+    virtual void subscribeColonPress(InputControllerCB &&cb) = 0;
+    virtual void subscribeCommaPress(InputControllerCB &&cb) = 0;
+
+    // specular
+    virtual void subscribeDotPress(InputControllerCB &&cb) = 0;
+    virtual void subscribeSlashPress(InputControllerCB &&cb) = 0;
 
     virtual ~InputController() = default;
 };
@@ -114,68 +123,101 @@ class OpenGlInputController : public InputController {
         }
     }
 
-    void subscribeEscapePress(InputControllerCB&& cb) override {
+    void subscribeEscapePress(InputControllerCB &&cb) override {
         cbEscapePress_ = cb;
     }
 
-    void subscribeEnterPress(InputControllerCB&& cb) override {
+    void subscribeEnterPress(InputControllerCB &&cb) override {
         cbEnterPress_ = cb;
     }
 
-    void subscribeWPress(InputControllerCB&& cb) override {
+    void subscribeWPress(InputControllerCB &&cb) override {
         cbWPress_ = cb;
     }
 
-    void subscribeSPress(InputControllerCB&& cb) override {
+    void subscribeSPress(InputControllerCB &&cb) override {
         cbSPress_ = cb;
     }
 
-    void subscribeAPress(InputControllerCB&& cb) override {
+    void subscribeAPress(InputControllerCB &&cb) override {
         cbAPress_ = cb;
     }
 
-    void subscribeDPress(InputControllerCB&& cb) override {
+    void subscribeDPress(InputControllerCB &&cb) override {
         cbDPress_ = cb;
     }
 
-    void subscribeQPress(InputControllerCB&& cb) override {
+    void subscribeQPress(InputControllerCB &&cb) override {
         cbQPress_ = cb;
     }
 
-    void subscribeEPress(InputControllerCB&& cb) override {
+    void subscribeEPress(InputControllerCB &&cb) override {
         cbEPress_ = cb;
     }
 
-    void subscribeRPress(InputControllerCB&& cb) override {
+    void subscribeRPress(InputControllerCB &&cb) override {
         cbRPress_ = cb;
     }
 
-    void subscribeTPress(InputControllerCB&& cb) override {
+    void subscribeTPress(InputControllerCB &&cb) override {
         cbTPress_ = cb;
     }
 
-    void subscribeFPress(InputControllerCB&& cb) override {
+    void subscribeFPress(InputControllerCB &&cb) override {
         cbFPress_ = cb;
     }
 
-    void subscribeGPress(InputControllerCB&& cb) override {
+    void subscribeGPress(InputControllerCB &&cb) override {
         cbGPress_ = cb;
     }
 
-    void subscribeVPress(InputControllerCB&& cb) override {
+    void subscribeVPress(InputControllerCB &&cb) override {
         cbVPress_ = cb;
     }
 
-    void subscribeBPress(InputControllerCB&& cb) override {
+    void subscribeBPress(InputControllerCB &&cb) override {
         cbBPress_ = cb;
     }
 
-    void subscribeZPress(InputControllerCB&& cb) override {
+    void subscribeZPress(InputControllerCB &&cb) override {
         cbZPress_ = cb;
     }
 
-    void subscribeCPress(InputControllerCB&& cb) override {
+    void subscribeCPress(InputControllerCB &&cb) override {
         cbCPress_ = cb;
+    }
+
+    void subscribeMinusPress(InputControllerCB &&cb) override {
+        cbMinusPress_ = cb;
+    }
+
+    void subscribeEqualPress(InputControllerCB &&cb) override {
+        cbEqualPress_ = cb;
+    }
+
+    void subscribeLeftBracketPress(InputControllerCB &&cb) override {
+        cbLBracketPress_ = cb;
+    }
+
+    void subscribeRightBracketPress(InputControllerCB &&cb) override {
+        cbLBracketPress_ = cb;
+    }
+
+
+    void subscribeColonPress(InputControllerCB &&cb) override {
+        cbColonPress_ = cb;
+    }
+
+    void subscribeCommaPress(InputControllerCB &&cb) override {
+        cbCommaPress_ = cb;
+    }
+
+    void subscribeDotPress(InputControllerCB &&cb) override {
+        cbDotPress_ = cb;
+    }
+
+    void subscribeSlashPress(InputControllerCB &&cb) override {
+        cbSlashPress_ = cb;
     }
 
   private:
@@ -195,7 +237,14 @@ class OpenGlInputController : public InputController {
     InputControllerCB cbBPress_;
     InputControllerCB cbCPress_;
     InputControllerCB cbZPress_;
-
+    InputControllerCB cbMinusPress_;
+    InputControllerCB cbEqualPress_;
+    InputControllerCB cbLBracketPress_;
+    InputControllerCB cbRBracketPress_;
+    InputControllerCB cbColonPress_;
+    InputControllerCB cbCommaPress_;
+    InputControllerCB cbDotPress_;
+    InputControllerCB cbSlashPress_;
     GLFWwindow *window_;
 };
 #endif //FAKE3DRENDERER_INPUTCONTROLLER_HH

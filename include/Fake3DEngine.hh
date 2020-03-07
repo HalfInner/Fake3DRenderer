@@ -262,8 +262,8 @@ class BasicFake3DEngine : public Fake3DEngine {
     void createWindowContext() {
         // glfw window_ creation
         // --------------------
-        initialScreenWidth_ = 800;
-        initialScreenHeight_ = 640;
+        initialScreenWidth_ = 1920;
+        initialScreenHeight_ = 1024;
         const std::string windowName = "Projekt GKIW - Kajetan Brzuszczak - 301023 OKNO";
         window_ = glfwCreateWindow(initialScreenWidth_, initialScreenHeight_, windowName.c_str(), nullptr, nullptr);
         if (window_ == nullptr) {
