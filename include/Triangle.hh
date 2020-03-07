@@ -170,6 +170,8 @@ class NaiveSphere : public Renderable {
     void initialize(std::shared_ptr<Buffer> buffer) override {
         buffer_ = std::move(buffer);
 
+
+        // TODO(kaj) : Fix 'Pac Man' effect
         std::vector<glm::vec3> spherePoints{};
         float gamma = 0.f;
         for (auto lstep = 0; lstep < latitudeSteps_; ++lstep) {
