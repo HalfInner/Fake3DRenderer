@@ -59,6 +59,9 @@ struct /*interface*/ LightPoint {
     virtual glm::vec3 position() = 0;
     virtual glm::vec3 color() = 0;
     virtual float intensity() = 0;
+
+    virtual void increaseIntensity(float elapsedTime) =0;
+    virtual void decreaseIntensity(float elapsedTime) =0;
     virtual ~LightPoint() = default;
 };
 
@@ -273,7 +276,18 @@ class SunSphere : public Renderable, public LightPoint, public Animation {
     }
 
     float intensity() override {
-        return 1.f;
+        return intensity_;
+    }
+
+    void increaseIntensity(float elapsedTime) override {
+        intensity_ += elapsedTime * backlightVelocity_;
+        intensity_ = std::min(intensity_, 4.f);
+    }
+
+    void decreaseIntensity(float elapsedTime) override {
+        intensity_ += -elapsedTime * backlightVelocity_;
+        std::cout << "Intensity : " << intensity_ << "\n";
+        intensity_ = std::max(intensity_, 0.f);
     }
 
     // Animation
@@ -286,12 +300,14 @@ class SunSphere : public Renderable, public LightPoint, public Animation {
     }
 
   private:
+    NaiveSphere naiveSphere_;
     glm::vec3 basePosition_{-1.2f, 4.0f, -1.f};
     glm::vec3 position_{-1.2f, 4.0f, -1.f};
     glm::vec3 color_{1.f, 1.f, 1.f};
-    NaiveSphere naiveSphere_;
     bool isAnimationRunning_{true};
     float angle_{};
+    float intensity_{1.f};
+    float backlightVelocity_ {2.f};
 };
 
 class PoolBall : public Renderable {

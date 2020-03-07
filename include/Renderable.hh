@@ -34,6 +34,7 @@ struct /*interface*/ Renderer {
     virtual ~Renderer() = default;
 };
 
+
 class BasicRenderer : public Renderer {
   public:
     explicit BasicRenderer(std::shared_ptr<Camera> camera)
@@ -69,6 +70,7 @@ class BasicRenderer : public Renderer {
             shaderEngine->setColor(info.color);
             shaderEngine->setLightColor(light->color());
             shaderEngine->setLightPos(light->position());
+            shaderEngine->setLightIntensity(light->intensity());
             shaderEngine->setViewPos(camera_->position());
 
             glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first

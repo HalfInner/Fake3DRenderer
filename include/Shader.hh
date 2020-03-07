@@ -40,6 +40,7 @@ class VertexShaderSource : public ShaderSource {
             uniform vec3 colorObject;
             uniform vec3 lightColorObject;
             uniform vec3 lightPosObject;
+            uniform float lightIntensityObject;
             uniform vec3 viewPosObject;
 
             uniform vec3 pos;
@@ -87,6 +88,8 @@ class FragmentShaderSource : public ShaderSource {
             in vec3 lightColor;
             in vec3 vertexColor;
 
+            uniform float lightIntensityObject;
+
             void main() {
                 // ambient
                 float ambientStrength = 0.1;
@@ -96,14 +99,14 @@ class FragmentShaderSource : public ShaderSource {
                 vec3 norm = normalize(Normal);
                 vec3 lightDir = normalize(lightPos - FragPos);
                 float diff = max(dot(norm, lightDir), 0.0);
-                vec3 diffuse = diff * lightColor;
+                vec3 diffuse = diff * lightColor * lightIntensityObject;
 
                 // specular
                 float specularStrength = 0.5;
                 vec3 viewDir = normalize(viewPos - FragPos);
                 vec3 reflectDir = reflect(-lightDir, norm);
                 float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-                vec3 specular = specularStrength * spec * lightColor;
+                vec3 specular = specularStrength * spec * lightColor * lightIntensityObject;
 
                 vec3 result = (ambient + diffuse + specular) * vertexColor;
                 FragColor = vec4(result, 1.0);
@@ -194,6 +197,7 @@ class PoolBallFragmentShaderSource : public ShaderSource {
             in vec2 TexCoord;
 
             uniform sampler2D inTexture;
+            uniform float lightIntensityObject;
 
             void main() {
                 // ambient
@@ -204,14 +208,14 @@ class PoolBallFragmentShaderSource : public ShaderSource {
                 vec3 norm = normalize(Normal);
                 vec3 lightDir = normalize(lightPos - FragPos);
                 float diff = max(dot(norm, lightDir), 0.0);
-                vec3 diffuse = diff * lightColor * 1.5;
+                vec3 diffuse = diff * lightColor * lightIntensityObject;
 
                 // specular
                 float specularStrength = 0.9;
                 vec3 viewDir = normalize(viewPos - FragPos);
                 vec3 reflectDir = reflect(-lightDir, norm);
                 float spec = pow(max(dot(viewDir, reflectDir), 0.0), 256);
-                vec3 specular = specularStrength * spec * lightColor;
+                vec3 specular = specularStrength * spec * lightColor * lightIntensityObject;
 
                 vec3 result = (ambient + diffuse + specular) * vertexColor;
                 FragColor = vec4(result, 1.0);

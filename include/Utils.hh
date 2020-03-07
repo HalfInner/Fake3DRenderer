@@ -11,6 +11,13 @@ enum class TypeObject {
     Normal, Light, PoolBall, NotSpecified
 };
 
+struct GlobalMaterial {
+    float ambient;
+    float diffuse;
+    float specularStrength;
+};
+
+
 struct NotCreatable {
     NotCreatable() = delete;
     ~NotCreatable() = delete;

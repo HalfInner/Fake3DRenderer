@@ -121,6 +121,30 @@ class OpenGlInputController : public InputController {
         if (glfwGetKey(window_, GLFW_KEY_C) == GLFW_PRESS) {
             if (cbCPress_) cbCPress_(&elapsedTime);
         }
+        if (glfwGetKey(window_, GLFW_KEY_MINUS) == GLFW_PRESS) {
+            if (cbMinusPress_) cbMinusPress_(&elapsedTime);
+        }
+        if (glfwGetKey(window_, GLFW_KEY_EQUAL) == GLFW_PRESS) {
+            if (cbEqualPress_) cbEqualPress_(&elapsedTime);
+        }
+        if (glfwGetKey(window_, GLFW_KEY_LEFT_BRACKET) == GLFW_PRESS) {
+            if (cbLBracketPress_) cbLBracketPress_(&elapsedTime);
+        }
+        if (glfwGetKey(window_, GLFW_KEY_RIGHT_BRACKET) == GLFW_PRESS) {
+            if (cbRBracketPress_) cbRBracketPress_(&elapsedTime);
+        }
+        if (glfwGetKey(window_, GLFW_KEY_SEMICOLON) == GLFW_PRESS) {
+            if (cbColonPress_) cbColonPress_(&elapsedTime);
+        }
+        if (glfwGetKey(window_, GLFW_KEY_COMMA) == GLFW_PRESS) {
+            if (cbCommaPress_) cbCommaPress_(&elapsedTime);
+        }
+        if (glfwGetKey(window_, GLFW_KEY_PERIOD) == GLFW_PRESS) {
+            if (cbDotPress_) cbDotPress_(&elapsedTime);
+        }
+        if (glfwGetKey(window_, GLFW_KEY_SLASH) == GLFW_PRESS) {
+            if (cbSlashPress_) cbSlashPress_(&elapsedTime);
+        }
     }
 
     void subscribeEscapePress(InputControllerCB &&cb) override {

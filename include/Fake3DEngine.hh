@@ -257,6 +257,21 @@ class BasicFake3DEngine : public Fake3DEngine {
                 camera->rotate(Rotatable::HeadDirection::RightShoulder, elapsed);
             }
         });
+
+        auto weakSun = std::weak_ptr<Graphic::SunSphere>(sun_);
+        openGlInputController_->subscribeMinusPress([weakSun](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto sun = weakSun.lock()) {
+                sun->decreaseIntensity(elapsed);
+            }
+        });
+
+        openGlInputController_->subscribeEqualPress([weakSun](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto sun = weakSun.lock()) {
+                sun->increaseIntensity(elapsed);
+            }
+        });
     }
 
     void createWindowContext() {

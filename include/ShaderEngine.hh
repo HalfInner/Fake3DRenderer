@@ -63,6 +63,11 @@ class ShaderEngine {
         const std::string lightPosObjectName = "lightPosObject";
         setVec3(lightPosObjectName, color);
     }
+
+    void setLightIntensity(const float intensity) {
+        const std::string lightPosObjectName = "lightIntensityObject";
+        setFloat(lightPosObjectName, intensity);
+    }
 //
 //    void setLightPos(const glm::vec3 &color) {
 //        const std::string lightPosObjectName = "lightPosObject";
