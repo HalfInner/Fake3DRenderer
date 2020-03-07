@@ -90,7 +90,6 @@ class BasicRenderer : public Renderer {
 
             while (auto errorCode = glGetError()) {
                 std::cerr << "OpenGL troubles: 0x" << std::hex << errorCode << "\n";
-                throw std::runtime_error("OpenGL problem. Not Allowed at the moment");
             }
         }
 

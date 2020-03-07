@@ -12,7 +12,7 @@ Primitive & Naive 3D engine.
 
 The project was divided into two parts:
  1. General requirements
-    * Any library - OpenGL/glfw3/glew32
+    * Any library - OpenGL/glfw3/glew32/stb
     * Any programming language - C++
     * Result: statically linked 32/64 bit Windows application
     * Cases listed below shall be written from scratch 

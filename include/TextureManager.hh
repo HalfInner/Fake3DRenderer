@@ -26,7 +26,6 @@ class OpenGlStbImageReaderWrapper {
             glGenerateMipmap(GL_TEXTURE_2D);
         } else {
             std::cerr << "LOADING::TEX::ERR cannot load texture from: " << path << "\n";
-            throw std::runtime_error("Fail texture loading is not accepted at the moment");
         }
     }
 
