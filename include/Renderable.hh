@@ -111,13 +111,13 @@ class BasicRenderer : public Renderer {
         ShaderEngingeFactory factory;
         auto normalShaderEngine = factory.create(Utils::TypeObject::Normal);
         auto lightShaderEngine = factory.create(Utils::TypeObject::Light);
-        auto pollBallShaderEngine = factory.create(Utils::TypeObject::PoolBall);
+        auto poolBallShaderEngine = factory.create(Utils::TypeObject::PoolBall);
         auto notSpecifiedShaderEngine = factory.create(Utils::TypeObject::NotSpecified);
         // generated from object
 
         shaders[Utils::TypeObject::Normal] = std::move(normalShaderEngine);
         shaders[Utils::TypeObject::Light] = std::move(lightShaderEngine);
-        shaders[Utils::TypeObject::PoolBall] = std::move(pollBallShaderEngine);
+        shaders[Utils::TypeObject::PoolBall] = std::move(poolBallShaderEngine);
         shaders[Utils::TypeObject::NotSpecified] = std::move(notSpecifiedShaderEngine);
     }
 
