@@ -6,10 +6,10 @@
 #define FAKE3DRENDERER_FAKE3DENGINE_HH
 
 #include <chrono>
-#include <iostream>
 #include <glm/vec4.hpp>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <iostream>
 #include <thread>
 
 #include "InputController.hh"
@@ -20,29 +20,12 @@
 #include "Renderable.hh"
 #include "TextureManager.hh"
 #include "Triangle.hh"
+#include "SimpleClock.hh"
 
 struct Fake3DEngine {
     virtual void initialize() = 0;
     virtual void run() = 0;
     virtual ~Fake3DEngine() = default;
-};
-
-class SimpleClock {
-  public:
-    void resume() {
-        begin_ = std::chrono::high_resolution_clock::now();
-    }
-
-    auto measure() {
-        auto end = std::chrono::high_resolution_clock::now();
-        auto elapsed = end - begin_;
-        begin_ = end;
-
-        return std::chrono::duration<double>(elapsed).count();
-    }
-
-  private:
-    std::chrono::high_resolution_clock::time_point begin_{};
 };
 
 class BasicFake3DEngine : public Fake3DEngine {

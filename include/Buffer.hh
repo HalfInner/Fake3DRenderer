@@ -34,23 +34,28 @@ class OpenGlBuffer : public Buffer {
         glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(glm::vec3), points.data(), GL_STATIC_DRAW);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned), indices.data(), GL_STATIC_DRAW);
 
-        if (BufferType::Regular == bufferType) {
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-            glEnableVertexAttribArray(0);
-        } else if (BufferType::Normal == bufferType) {
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), nullptr);
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 6 * sizeof(float), (void *) (sizeof(glm::vec3)));
-            glEnableVertexAttribArray(1);
-        } else if (BufferType::NormalWithTexture == bufferType) {
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), nullptr);
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 9 * sizeof(float), (void *) (sizeof(glm::vec3)));
-            glEnableVertexAttribArray(1);
-            glVertexAttribPointer(2, 3, GL_FLOAT, GL_TRUE, 9 * sizeof(float),
-                                  (void *) (sizeof(glm::vec3) + sizeof(glm::vec3)));
-            glEnableVertexAttribArray(2);
+        switch(bufferType) {
+            case BufferType::Regular:
+                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+                glEnableVertexAttribArray(0);
+                break;
+            case BufferType::Normal:
+                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), nullptr);
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 6 * sizeof(float), (void *) (sizeof(glm::vec3)));
+                glEnableVertexAttribArray(1);
+                break;
+            case BufferType::NormalWithTexture:
+                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), nullptr);
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 9 * sizeof(float), (void *) (sizeof(glm::vec3)));
+                glEnableVertexAttribArray(1);
+                glVertexAttribPointer(2, 3, GL_FLOAT, GL_TRUE, 9 * sizeof(float),
+                                      (void *) (sizeof(glm::vec3) + sizeof(glm::vec3)));
+                glEnableVertexAttribArray(2);
+                break;
         }
+
         unbind();
     }
 
