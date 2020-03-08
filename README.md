@@ -15,7 +15,8 @@ The project was divided into two parts:
     * Any library - OpenGL/glfw3/glew32/stb
     * Any programming language - C++
     * Result: statically linked 32/64 bit Windows application
-    * Cases listed below shall be written from scratch 
+    * Camera support
+    * Lighting support
  2. Camera support
     * Moving up-down left-right forward-backward
     * Zoom In & Zoom Out
@@ -35,7 +36,7 @@ The project was divided into two parts:
             * Algorithms 
             * Pool Ball
         * Effect of set ups border values   
- 4. Additional
+ 5. Additional
     * Movable sun - analysis reflection behaviour
     * Resizable window
 

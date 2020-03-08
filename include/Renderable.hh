@@ -31,6 +31,7 @@ struct /*interface*/ Renderer {
     virtual Result draw(float elapsedTime) = 0;
     virtual Result addObject(std::shared_ptr<Renderable> renderable) = 0;
     virtual Result addLight(std::shared_ptr<LightPoint> light) = 0;
+    virtual Result setMaterial(std::shared_ptr<Utils::GlobalMaterial> material) = 0;
     virtual ~Renderer() = default;
 };
 
@@ -79,6 +80,12 @@ class BasicRenderer : public Renderer {
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 1.f, 1.f));
             shaderEngine->setModel(model);
 
+            if (material_) {
+                shaderEngine->setAmbientRatio(material_->ambient);
+                shaderEngine->setDiffuseRatio(material_->diffuse);
+                shaderEngine->setSpecularRatio(material_->specular);
+            }
+
             if (info.debugMode) {
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             } else {
@@ -108,6 +115,11 @@ class BasicRenderer : public Renderer {
         return Result::Success;
     }
 
+    Result setMaterial(std::shared_ptr<Utils::GlobalMaterial> material) override {
+        material_ = material;
+        return Result::Success;
+    }
+
   private:
     void initializeShaders() {
         ShaderEngingeFactory factory;
@@ -126,6 +138,7 @@ class BasicRenderer : public Renderer {
     std::unordered_map<Utils::TypeObject, std::unique_ptr<ShaderEngine>> shaders;
 
     std::shared_ptr<Camera> camera_{nullptr};
+    std::shared_ptr<Utils::GlobalMaterial> material_{};
 
     std::vector<std::shared_ptr<Renderable>> objects_{};
     std::vector<std::shared_ptr<LightPoint>> lights_{};

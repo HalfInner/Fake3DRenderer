@@ -14,9 +14,8 @@ enum class TypeObject {
 struct GlobalMaterial {
     float ambient;
     float diffuse;
-    float specularStrength;
+    float specular;
 };
-
 
 struct NotCreatable {
     NotCreatable() = delete;

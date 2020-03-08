@@ -68,11 +68,6 @@ class ShaderEngine {
         const std::string lightPosObjectName = "lightIntensityObject";
         setFloat(lightPosObjectName, intensity);
     }
-//
-//    void setLightPos(const glm::vec3 &color) {
-//        const std::string lightPosObjectName = "lightPosObject";
-//        setVec3(lightPosObjectName, color);
-//    }
 
     void setViewPos(const glm::vec3 &color) {
         const std::string viewPosObjectName = "viewPosObject";
@@ -92,6 +87,21 @@ class ShaderEngine {
     void setModel(const glm::mat4 &mat) const {
         const std::string modelName = "model";
         setMat4(modelName, mat);
+    }
+
+    void setAmbientRatio(float ambientRatio) const {
+        const std::string ambientRatioName = "ambientRatio";
+        setFloat(ambientRatioName, ambientRatio);
+    }
+
+    void setDiffuseRatio(float diffuseRatio) const {
+        const std::string diffuseRatioName = "diffuseRatio";
+        setFloat(diffuseRatioName, diffuseRatio);
+    }
+
+    void setSpecularRatio(float specularRatio) const {
+        const std::string specularRatioName = "ambientRatio";
+        setFloat(specularRatioName, specularRatio);
     }
 
 
