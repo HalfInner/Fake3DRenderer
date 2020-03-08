@@ -112,7 +112,7 @@ class BasicFake3DEngine : public Fake3DEngine {
         // Material
         material_ = std::make_shared<Utils::GlobalMaterial>();
         basicRenderer_->setMaterial(material_);
-        
+
         basicRenderer_->initialize();
     }
 
@@ -276,13 +276,55 @@ class BasicFake3DEngine : public Fake3DEngine {
                 sun->increaseIntensity(elapsed);
             }
         });
+
+        auto weakMaterial = std::weak_ptr<Utils::GlobalMaterial>(material_);
+        openGlInputController_->subscribeLeftBracketPress([weakMaterial](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto material = weakMaterial.lock()) {
+                material->increaseAmbient(elapsed);
+            }
+        });
+
+        openGlInputController_->subscribeRightBracketPress([weakMaterial](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto material = weakMaterial.lock()) {
+                material->decreaseAmbient(elapsed);
+            }
+        });
+
+        openGlInputController_->subscribeColonPress([weakMaterial](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto material = weakMaterial.lock()) {
+                material->increaseDiffuse(elapsed);
+            }
+        });
+        openGlInputController_->subscribeCommaPress([weakMaterial](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto material = weakMaterial.lock()) {
+                material->decreaseDiffuse(elapsed);
+            }
+        });
+
+        openGlInputController_->subscribeDotPress([weakMaterial](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto material = weakMaterial.lock()) {
+                material->increaseSpecular(elapsed);
+            }
+        });
+
+        openGlInputController_->subscribeSlashPress([weakMaterial](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto material = weakMaterial.lock()) {
+                material->decreaseSpecular(elapsed);
+            }
+        });
     }
 
     void createWindowContext() {
         // glfw window_ creation
         // --------------------
-        initialScreenWidth_ = 1920;
-        initialScreenHeight_ = 1024;
+        initialScreenWidth_ = 1280;
+        initialScreenHeight_ = 800;
         const std::string windowName = "Projekt GKIW - Kajetan Brzuszczak - 301023 OKNO";
         window_ = glfwCreateWindow(initialScreenWidth_, initialScreenHeight_, windowName.c_str(), nullptr, nullptr);
         if (window_ == nullptr) {
