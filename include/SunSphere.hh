@@ -22,7 +22,7 @@ class SunSphere : public Graphic::Renderable, public Graphic::LightPoint, public
             auto velocity = 1.5f;
             angle_ += elapsedTime * velocity;
         }
-        auto rangeX = 4.f;
+        auto rangeX = 5.f;
         auto rangeZ = 8.f;
         auto posAnimation = basePosition_;
         posAnimation.x += cos(angle_) * rangeX;
@@ -76,8 +76,8 @@ class SunSphere : public Graphic::Renderable, public Graphic::LightPoint, public
     }
 
   private:
-    glm::vec3 basePosition_{-1.2f, 4.0f, -1.f};
-    glm::vec3 position_{-1.2f, 4.0f, -1.f};
+    glm::vec3 basePosition_{-1.2f, 4.0f, -4.f};
+    glm::vec3 position_{-1.2f, 4.0f, -4.f};
     glm::vec3 color_{1.f, 1.f, 1.f};
     bool isAnimationRunning_{false};
     float angle_{1.3f};
