@@ -199,7 +199,9 @@ class PoolBallFragmentShaderSource : public ShaderSource {
             uniform sampler2D inTexture;
             uniform float lightIntensityObject;
 
-
+            uniform float ambientRatio;
+            uniform float diffuseRatio;
+            uniform float specularRatio;
 
             void main() {
                 // ambient

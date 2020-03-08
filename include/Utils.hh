@@ -12,9 +12,9 @@ enum class TypeObject {
 };
 
 struct GlobalMaterial {
-    float ambient;
-    float diffuse;
-    float specular;
+    float ambient{1.f};
+    float diffuse{1.f};
+    float specular{1.f};
 
     void increaseAmbient(float elapsedTime) {
         ambient += elapsedTime * velocity;

@@ -100,7 +100,7 @@ class ShaderEngine {
     }
 
     void setSpecularRatio(float specularRatio) const {
-        const std::string specularRatioName = "ambientRatio";
+        const std::string specularRatioName = "specularRatio";
         setFloat(specularRatioName, specularRatio);
     }
 
