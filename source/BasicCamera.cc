@@ -20,14 +20,6 @@ glm::mat4 BasicCamera::view() {
     return view;
 }
 
-//glm::mat4 BasicCamera::model() {
-//    glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-//    model = glm::translate(model, {0, 0, 0});
-//    float angle = 20.0f * 1;
-//    model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-//    return model;
-//}
-
 MovableCamera::MovableCamera() {
     updateCameraCoordinates();
 
@@ -84,21 +76,6 @@ void MovableCamera::zoom(ResizeType resizeType, float elapsedTime) {
         cameraZoom_ = 10.f;
     if (cameraZoom_ > 100.f)
         cameraZoom_ = 100.f;
-}
-
-void MovableCamera::pitch(float angle) {
-    pitch_ += angle * velocity_;
-    updateCameraCoordinates();
-}
-
-void MovableCamera::yaw(float angle) {
-    yaw_ += angle * velocity_;
-    updateCameraCoordinates();
-}
-
-void MovableCamera::roll(float angle) {
-    roll_ += angle * velocity_;
-    updateCameraCoordinates();
 }
 
 void MovableCamera::rotate(HeadDirection headDirection, float elapsedTime) {

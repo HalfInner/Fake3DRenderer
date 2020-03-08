@@ -15,7 +15,7 @@ enum class BufferType {
     Regular, Normal, NormalWithTexture
 };
 
-struct  /*interface*/ Buffer {
+struct /*interface*/ Buffer {
     virtual void initialize(
             std::vector<glm::vec3> &&points, std::vector<unsigned> &&indices, BufferType bufferType) = 0;
     virtual void bind() = 0;
@@ -34,7 +34,7 @@ class OpenGlBuffer : public Buffer {
         glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(glm::vec3), points.data(), GL_STATIC_DRAW);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned), indices.data(), GL_STATIC_DRAW);
 
-        switch(bufferType) {
+        switch (bufferType) {
             case BufferType::Regular:
                 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
                 glEnableVertexAttribArray(0);
@@ -59,15 +59,13 @@ class OpenGlBuffer : public Buffer {
         unbind();
     }
 
-    void bind()
-    override {
+    void bind() override {
         glBindVertexArray(VAO_);
         glBindBuffer(GL_ARRAY_BUFFER, VBO_);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_);
     }
 
-    void unbind()
-    override {
+    void unbind() override {
         glBindBuffer(GL_ARRAY_BUFFER, DELETE_BUFFER_KEY);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, DELETE_BUFFER_KEY);
         glBindVertexArray(DELETE_BUFFER_KEY);

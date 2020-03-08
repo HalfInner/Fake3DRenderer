@@ -31,7 +31,7 @@ class TextureCuboid : public Renderable {
         auto front_t_t2 = letBottomCorner;
         auto front_t_3 = glm::vec3{sidePosX, sidePosY, sidePosZ};
         auto front_t_t3 = rightUpCorner;
-        auto front_t_4 = glm::vec3{-sidePosX, -sidePosY, sidePosZ};
+        auto front_t_4 = glm::vec3{sidePosX, -sidePosY, sidePosZ};
         auto front_t_t4 = rightBottomCorner;
         auto front_norm_ = glm::vec3{0, 0, 1};
 
@@ -121,7 +121,7 @@ class TextureCuboid : public Renderable {
 
     RendererInfo beginDraw(float elapsedTime) override {
         RendererInfo ri{};
-        ri.elements = 6 * 2 * 3;
+        ri.elements = 6 * 3 * 3;
         ri.position = position_;
         ri.color = color_;
         ri.typeObject = TypeObject::PoolBall;

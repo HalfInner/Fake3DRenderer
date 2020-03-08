@@ -28,13 +28,7 @@ struct /*interface*/ Rotatable {
     enum class HeadDirection {
         LeftSide, RightSide, UpSide, DownSide, LeftShoulder, RightShoulder
     };
-
-    virtual void pitch(float angle) = 0;
-    virtual void yaw(float angle) = 0;
-    virtual void roll(float angle) = 0;
-
     virtual void rotate(HeadDirection headDirection, float elapsedTime) = 0;
-
 
     virtual ~Rotatable() = default;
 };
@@ -52,7 +46,6 @@ class BasicCamera : public Camera {
   public:
     glm::mat4 projection() override;
     glm::mat4 view() override;
-//    glm::mat4 model() override;
 };
 
 class MovableCamera : public Camera, public Movable, public Rotatable, public Zoomable {
@@ -62,13 +55,9 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     glm::mat4 projection() override;
     glm::mat4 view() override;
     glm::vec3 position() override;
-//    glm::mat4 model() override;
     void updateScreen(float width, float height) override;
 
     // Rotatable
-    void pitch(float angle) override;
-    void yaw(float angle) override;
-    void roll(float angle) override;
     void rotate(HeadDirection headDirection, float elapsedTime) override;
 
     // Movable
@@ -79,7 +68,7 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
   private:
     void updateCameraCoordinates();
 
-    glm::vec3 position_{0.0f, 2.0f, 3.0f};
+    glm::vec3 position_{0.0f, 2.5f, 6.f};
     float cameraZoom_ {};
 
     float pitch_{-15.0f};

@@ -71,12 +71,12 @@ void BasicFake3DEngine::prepareScene() {
 
 
     // Pool Ball - Phong
-    basicRenderer_->addObject(std::make_shared<Graphic::PoolBall>(.7f, glm::vec3{2, 0, 0}));
+    basicRenderer_->addObject(std::make_shared<Graphic::PoolBall>(.7f, glm::vec3{2, 0, 1.5f}));
     basicRenderer_->addObject(
-            std::make_shared<Graphic::PoolBall>(.7f, glm::vec3{0, 0, 1.f}, glm::vec3{0.5f, 0.5f, 0.78f}));
+            std::make_shared<Graphic::PoolBall>(.7f, glm::vec3{0, 0, 1.5f}, glm::vec3{0.5f, 0.5f, 0.78f}));
     // Cuboid Wall - Phong
     basicRenderer_->addObject(std::make_shared<Graphic::TextureCuboid>(
-            glm::vec3{-2.f, 1.f, 2.5f}, glm::vec3{1.f, 3.f, 1.f}, glm::vec3{178, 132, 62} * rgbRatio));
+            glm::vec3{-2.f, 1.f, 1.5f}, glm::vec3{1.f, 3.f, 1.f}, glm::vec3{178, 132, 62} * rgbRatio));
 
 
     // Light
@@ -132,7 +132,7 @@ void BasicFake3DEngine::initializeGlew() {
 void BasicFake3DEngine::configureInputController() {
     openGlInputController_ = std::make_unique<OpenGlInputController>(window_);
     openGlInputController_->subscribeEnterPress([sun = sun_](void *param) {
-        static bool isSunRunning = true;
+        static bool isSunRunning = false;
         static float lastMeasure = INFINITY;
         float elapsed = *reinterpret_cast<float *>(param);
         if (lastMeasure - elapsed < 0.15f) {
