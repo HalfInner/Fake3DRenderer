@@ -100,8 +100,9 @@ class BasicFake3DEngine : public Fake3DEngine {
                 std::make_shared<Graphic::NaiveSphere>(0.1f, glm::vec3{1.f, 1.f, -2.f}, snowManColor));
 
 
-        // Pool Ball
+        // Pool Ball - Phong
         basicRenderer_->addObject(std::make_shared<Graphic::PoolBall>(.7f, glm::vec3{2, 0, 0}));
+        basicRenderer_->addObject(std::make_shared<Graphic::PoolBall>(.7f, glm::vec3{0, 0, 1.f}, glm::vec3{0.5f, 0.5f, 0.78f}));
 
 
         // Light
@@ -298,7 +299,8 @@ class BasicFake3DEngine : public Fake3DEngine {
                 material->decreaseDiffuse(elapsed);
             }
         });
-        openGlInputController_->subscribeCommaPress([weakMaterial](void *param) {
+
+        openGlInputController_->subscribeApostrophePress([weakMaterial](void *param) {
             float elapsed = *reinterpret_cast<float *>(param);
             if (auto material = weakMaterial.lock()) {
                 material->increaseDiffuse(elapsed);
@@ -316,6 +318,20 @@ class BasicFake3DEngine : public Fake3DEngine {
             float elapsed = *reinterpret_cast<float *>(param);
             if (auto material = weakMaterial.lock()) {
                 material->increaseSpecular(elapsed);
+            }
+        });
+
+        openGlInputController_->subscribeMPress([weakMaterial](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto material = weakMaterial.lock()) {
+                material->decreaseFocus(elapsed);
+            }
+        });
+
+        openGlInputController_->subscribeCommaPress([weakMaterial](void *param) {
+            float elapsed = *reinterpret_cast<float *>(param);
+            if (auto material = weakMaterial.lock()) {
+                material->increaseFocus(elapsed);
             }
         });
     }

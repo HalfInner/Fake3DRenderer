@@ -59,11 +59,15 @@ struct /* interface */ InputController {
 
     // diffuse
     virtual void subscribeColonPress(InputControllerCB &&cb) = 0;
-    virtual void subscribeCommaPress(InputControllerCB &&cb) = 0;
+    virtual void subscribeApostrophePress(InputControllerCB &&cb) = 0;
 
     // specular
     virtual void subscribeDotPress(InputControllerCB &&cb) = 0;
     virtual void subscribeSlashPress(InputControllerCB &&cb) = 0;
+
+    // focus
+    virtual void subscribeMPress(InputControllerCB &&cb) = 0;
+    virtual void subscribeCommaPress(InputControllerCB &&cb) = 0;
 
     virtual ~InputController() = default;
 };
@@ -136,8 +140,8 @@ class OpenGlInputController : public InputController {
         if (glfwGetKey(window_, GLFW_KEY_SEMICOLON) == GLFW_PRESS) {
             if (cbColonPress_) cbColonPress_(&elapsedTime);
         }
-        if (glfwGetKey(window_, GLFW_KEY_COMMA) == GLFW_PRESS) {
-            if (cbCommaPress_) cbCommaPress_(&elapsedTime);
+        if (glfwGetKey(window_, GLFW_KEY_APOSTROPHE) == GLFW_PRESS) {
+            if (cbApostrophePress_) cbApostrophePress_(&elapsedTime);
         }
         if (glfwGetKey(window_, GLFW_KEY_PERIOD) == GLFW_PRESS) {
             if (cbDotPress_) cbDotPress_(&elapsedTime);
@@ -227,13 +231,12 @@ class OpenGlInputController : public InputController {
         cbRBracketPress_ = cb;
     }
 
-
     void subscribeColonPress(InputControllerCB &&cb) override {
         cbColonPress_ = cb;
     }
 
-    void subscribeCommaPress(InputControllerCB &&cb) override {
-        cbCommaPress_ = cb;
+    void subscribeApostrophePress(InputControllerCB &&cb) override {
+        cbApostrophePress_ = cb;
     }
 
     void subscribeDotPress(InputControllerCB &&cb) override {
@@ -242,6 +245,14 @@ class OpenGlInputController : public InputController {
 
     void subscribeSlashPress(InputControllerCB &&cb) override {
         cbSlashPress_ = cb;
+    }
+
+    void subscribeMPress(InputControllerCB &&cb) override {
+        cbMPress_ = cb;
+    }
+
+    void subscribeCommaPress(InputControllerCB &&cb) override {
+        cbCommaPress_ = cb;
     }
 
   private:
@@ -266,9 +277,12 @@ class OpenGlInputController : public InputController {
     InputControllerCB cbLBracketPress_;
     InputControllerCB cbRBracketPress_;
     InputControllerCB cbColonPress_;
-    InputControllerCB cbCommaPress_;
+    InputControllerCB cbApostrophePress_;
     InputControllerCB cbDotPress_;
     InputControllerCB cbSlashPress_;
+    InputControllerCB cbMPress_;
+    InputControllerCB cbCommaPress_;
+
     GLFWwindow *window_;
 };
 #endif //FAKE3DRENDERER_INPUTCONTROLLER_HH

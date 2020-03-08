@@ -202,6 +202,7 @@ class PoolBallFragmentShaderSource : public ShaderSource {
             uniform float ambientRatio;
             uniform float diffuseRatio;
             uniform float specularRatio;
+            uniform float focusRatio;
 
             void main() {
                 // ambient
@@ -211,13 +212,14 @@ class PoolBallFragmentShaderSource : public ShaderSource {
                 vec3 norm = normalize(Normal);
                 vec3 lightDir = normalize(lightPos - FragPos);
                 float diff = max(dot(norm, lightDir), 0.0);
-                vec3 diffuse = diff * lightColor * lightIntensityObject;
+                vec3 diffuse = diff * diffuseRatio * lightColor * lightIntensityObject;
 
                 // specular
-                float specularStrength = 0.9;
+                float lightFocus = pow(2, focusRatio);
+                float specularStrength = specularRatio;
                 vec3 viewDir = normalize(viewPos - FragPos);
                 vec3 reflectDir = reflect(-lightDir, norm);
-                float spec = pow(max(dot(viewDir, reflectDir), 0.0), 256);
+                float spec = pow(max(dot(viewDir, reflectDir), 0.0), lightFocus);
                 vec3 specular = specularStrength * spec * lightColor * lightIntensityObject;
 
                 vec3 result = (ambient + diffuse + specular) * vertexColor;

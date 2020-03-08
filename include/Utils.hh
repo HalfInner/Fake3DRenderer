@@ -12,13 +12,14 @@ enum class TypeObject {
 };
 
 struct GlobalMaterial {
-    float ambient{1.f};
+    float ambient{.1f};
     float diffuse{1.f};
-    float specular{1.f};
+    float specular{0.5f};
+    float focus{5.f};
 
     void increaseAmbient(float elapsedTime) {
         ambient += elapsedTime * velocity;
-        ambient = std::min(ambient, 1.f);
+        ambient = std::min(ambient, 2.f);
     }
 
     void increaseDiffuse(float elapsedTime) {
@@ -28,7 +29,12 @@ struct GlobalMaterial {
 
     void increaseSpecular(float elapsedTime) {
         specular += elapsedTime * velocity;
-        specular = std::min(specular, 12.f);
+        specular = std::min(specular, 2.f);
+    }
+
+    void increaseFocus(float elapsedTime) {
+        focus += elapsedTime * velocity * 10.f;
+        focus = std::min(focus, 14.f);
     }
 
     void decreaseAmbient(float elapsedTime) {
@@ -44,6 +50,11 @@ struct GlobalMaterial {
     void decreaseSpecular(float elapsedTime) {
         specular -= elapsedTime * velocity;
         specular = std::max(specular, 0.f);
+    }
+
+    void decreaseFocus(float elapsedTime) {
+        focus -= elapsedTime * velocity * 10.f;
+        focus = std::max(focus, 0.f);
     }
 
     static constexpr float velocity = 2.f;

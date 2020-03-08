@@ -86,6 +86,7 @@ class BasicRenderer : public Renderer {
                 shaderEngine->setAmbientRatio(material_->ambient);
                 shaderEngine->setDiffuseRatio(material_->diffuse);
                 shaderEngine->setSpecularRatio(material_->specular);
+                shaderEngine->setFocusRatio(material_->focus);
             }
 
             if (info.debugMode) {

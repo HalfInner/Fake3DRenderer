@@ -104,6 +104,11 @@ class ShaderEngine {
         setFloat(specularRatioName, specularRatio);
     }
 
+    void setFocusRatio(float focusRatio) const {
+        const std::string focusRatioName = "focusRatio";
+        setFloat(focusRatioName, focusRatio);
+    }
+
 
   private:
     void setFloat(const std::string &name, float value) const {
