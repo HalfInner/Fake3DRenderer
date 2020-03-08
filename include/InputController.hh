@@ -149,6 +149,12 @@ class OpenGlInputController : public InputController {
         if (glfwGetKey(window_, GLFW_KEY_SLASH) == GLFW_PRESS) {
             if (cbSlashPress_) cbSlashPress_(&elapsedTime);
         }
+        if (glfwGetKey(window_, GLFW_KEY_M) == GLFW_PRESS) {
+            if (cbMPress_) cbMPress_(&elapsedTime);
+        }
+        if (glfwGetKey(window_, GLFW_KEY_COMMA) == GLFW_PRESS) {
+            if (cbCommaPress_) cbCommaPress_(&elapsedTime);
+        }
     }
 
     void subscribeEscapePress(InputControllerCB &&cb) override {

@@ -7,15 +7,15 @@
 #include <iostream>
 #include <thread>
 
-#include "InputController.hh"
-#include "TextureManager.hh"
-#include "GraphicBase.hh"
-#include "SimpleClock.hh"
-#include "Surface.hh"
-#include "PoolBall.hh"
 #include "Cuboid.hh"
-#include "SunSphere.hh"
+#include "InputController.hh"
+#include "GraphicBase.hh"
 #include "NaiveSphere.hh"
+#include "PoolBall.hh"
+#include "SimpleClock.hh"
+#include "SunSphere.hh"
+#include "Surface.hh"
+#include "TextureCuboid.hh"
 
 void BasicFake3DEngine::initialize() {
     initializeGlfw();
@@ -74,6 +74,9 @@ void BasicFake3DEngine::prepareScene() {
     basicRenderer_->addObject(std::make_shared<Graphic::PoolBall>(.7f, glm::vec3{2, 0, 0}));
     basicRenderer_->addObject(
             std::make_shared<Graphic::PoolBall>(.7f, glm::vec3{0, 0, 1.f}, glm::vec3{0.5f, 0.5f, 0.78f}));
+    // Cuboid Wall - Phong
+    basicRenderer_->addObject(std::make_shared<Graphic::TextureCuboid>(
+            glm::vec3{-2.f, 1.f, 2.5f}, glm::vec3{1.f, 3.f, 1.f}, glm::vec3{178, 132, 62} * rgbRatio));
 
 
     // Light
