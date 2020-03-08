@@ -15,8 +15,8 @@
 #include "BasicCamera.hh"
 #include "ShaderEngine.hh"
 #include "ShaderEngineFactory.hh"
-#include "TextureManager.hh"
 #include "Triangle.hh"
+#include "TextureManager.hh"
 
 namespace Graphic {
 

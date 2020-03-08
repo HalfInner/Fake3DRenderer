@@ -5,6 +5,8 @@
 #ifndef FAKE3DRENDERER_UTILS_HH
 #define FAKE3DRENDERER_UTILS_HH
 
+#include <algorithm>
+
 namespace Utils {
 
 enum class TypeObject {
