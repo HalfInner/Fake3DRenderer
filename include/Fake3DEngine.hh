@@ -281,41 +281,41 @@ class BasicFake3DEngine : public Fake3DEngine {
         openGlInputController_->subscribeLeftBracketPress([weakMaterial](void *param) {
             float elapsed = *reinterpret_cast<float *>(param);
             if (auto material = weakMaterial.lock()) {
-                material->increaseAmbient(elapsed);
+                material->decreaseAmbient(elapsed);
             }
         });
 
         openGlInputController_->subscribeRightBracketPress([weakMaterial](void *param) {
             float elapsed = *reinterpret_cast<float *>(param);
             if (auto material = weakMaterial.lock()) {
-                material->decreaseAmbient(elapsed);
+                material->increaseAmbient(elapsed);
             }
         });
 
         openGlInputController_->subscribeColonPress([weakMaterial](void *param) {
             float elapsed = *reinterpret_cast<float *>(param);
             if (auto material = weakMaterial.lock()) {
-                material->increaseDiffuse(elapsed);
+                material->decreaseDiffuse(elapsed);
             }
         });
         openGlInputController_->subscribeCommaPress([weakMaterial](void *param) {
             float elapsed = *reinterpret_cast<float *>(param);
             if (auto material = weakMaterial.lock()) {
-                material->decreaseDiffuse(elapsed);
+                material->increaseDiffuse(elapsed);
             }
         });
 
         openGlInputController_->subscribeDotPress([weakMaterial](void *param) {
             float elapsed = *reinterpret_cast<float *>(param);
             if (auto material = weakMaterial.lock()) {
-                material->increaseSpecular(elapsed);
+                material->decreaseSpecular(elapsed);
             }
         });
 
         openGlInputController_->subscribeSlashPress([weakMaterial](void *param) {
             float elapsed = *reinterpret_cast<float *>(param);
             if (auto material = weakMaterial.lock()) {
-                material->decreaseSpecular(elapsed);
+                material->increaseSpecular(elapsed);
             }
         });
     }

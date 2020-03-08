@@ -32,18 +32,17 @@ struct GlobalMaterial {
     }
 
     void decreaseAmbient(float elapsedTime) {
-        ambient += elapsedTime * velocity;
+        ambient -= elapsedTime * velocity;
         ambient = std::max(ambient, 0.f);
     }
 
     void decreaseDiffuse(float elapsedTime) {
-        diffuse += elapsedTime * velocity;
+        diffuse -= elapsedTime * velocity;
         diffuse = std::max(diffuse, 0.f);
-
     }
 
     void decreaseSpecular(float elapsedTime) {
-        specular += elapsedTime * velocity;
+        specular -= elapsedTime * velocity;
         specular = std::max(specular, 0.f);
     }
 

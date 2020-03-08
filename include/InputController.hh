@@ -224,7 +224,7 @@ class OpenGlInputController : public InputController {
     }
 
     void subscribeRightBracketPress(InputControllerCB &&cb) override {
-        cbLBracketPress_ = cb;
+        cbRBracketPress_ = cb;
     }
 
 

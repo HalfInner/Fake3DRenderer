@@ -205,8 +205,7 @@ class PoolBallFragmentShaderSource : public ShaderSource {
 
             void main() {
                 // ambient
-                float ambientStrength = 0.3;
-                vec3 ambient = ambientStrength * lightColor;
+                vec3 ambient = ambientRatio * lightColor;
 
                 // diffuse
                 vec3 norm = normalize(Normal);
