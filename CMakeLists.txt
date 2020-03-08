@@ -22,7 +22,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY build)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wpedantic -Werror")
 
 add_executable(Fake3DRenderer main.cpp source/ShaderManager.cc source/BasicCamera.cc
-        source/Fake3DEngine.cc source/TextureManager.cc)
+        source/Fake3DEngine.cc source/TextureManager.cc include/Surface.cc include/Surface.hh)
 target_compile_definitions(Fake3DRenderer PUBLIC GLEW_STATIC)
 target_include_directories(Fake3DRenderer PUBLIC
         ${INCLUDE_PATH} ${GLFW3_INCLUDE_PATH} ${GLEW_INCLUDE_PATH} ${GLM_INCLUDE_PATH})

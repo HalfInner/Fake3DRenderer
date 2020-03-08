@@ -12,8 +12,9 @@
 #include "BasicCamera.hh"
 #include "InputController.hh"
 #include "Renderable.hh"
-#include "Triangle.hh"
+#include "GraphicBase.hh"
 #include "Utils.hh"
+#include "SunSphere.hh"
 
 struct Fake3DEngine {
     virtual void initialize() = 0;

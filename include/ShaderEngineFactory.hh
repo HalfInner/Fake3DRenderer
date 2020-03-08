@@ -5,7 +5,7 @@
 #ifndef FAKE3DRENDERER_SHADERENGINEFACTORY_HH
 #define FAKE3DRENDERER_SHADERENGINEFACTORY_HH
 
-#include "Triangle.hh"
+#include "GraphicBase.hh"
 
 class ShaderEngingeFactory {
   public:

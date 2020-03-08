@@ -9,8 +9,13 @@
 
 #include "InputController.hh"
 #include "TextureManager.hh"
-#include "Triangle.hh"
+#include "GraphicBase.hh"
 #include "SimpleClock.hh"
+#include "Surface.hh"
+#include "PoolBall.hh"
+#include "Cuboid.hh"
+#include "SunSphere.hh"
+#include "NaiveSphere.hh"
 
 void BasicFake3DEngine::initialize() {
     initializeGlfw();
