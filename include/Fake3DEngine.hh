@@ -109,6 +109,10 @@ class BasicFake3DEngine : public Fake3DEngine {
         basicRenderer_->addObject(sun_);
         basicRenderer_->addLight(sun_);
 
+        // Material
+        material_ = std::make_shared<Utils::GlobalMaterial>();
+        basicRenderer_->setMaterial(material_);
+        
         basicRenderer_->initialize();
     }
 
@@ -317,6 +321,7 @@ class BasicFake3DEngine : public Fake3DEngine {
     int initialScreenHeight_ = 0;
     std::shared_ptr<MovableCamera> camera_;
     std::shared_ptr<Graphic::SunSphere> sun_;
+    std::shared_ptr<GlobalMaterial> material_;
 };
 
 #endif //FAKE3DRENDERER_FAKE3DENGINE_HH

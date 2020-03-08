@@ -15,6 +15,39 @@ struct GlobalMaterial {
     float ambient;
     float diffuse;
     float specular;
+
+    void increaseAmbient(float elapsedTime) {
+        ambient += elapsedTime * velocity;
+        ambient = std::min(ambient, 1.f);
+    }
+
+    void increaseDiffuse(float elapsedTime) {
+        diffuse += elapsedTime * velocity;
+        diffuse = std::min(diffuse, 2.f);
+    }
+
+    void increaseSpecular(float elapsedTime) {
+        specular += elapsedTime * velocity;
+        specular = std::min(specular, 12.f);
+    }
+
+    void decreaseAmbient(float elapsedTime) {
+        ambient += elapsedTime * velocity;
+        ambient = std::max(ambient, 0.f);
+    }
+
+    void decreaseDiffuse(float elapsedTime) {
+        diffuse += elapsedTime * velocity;
+        diffuse = std::max(diffuse, 0.f);
+
+    }
+
+    void decreaseSpecular(float elapsedTime) {
+        specular += elapsedTime * velocity;
+        specular = std::max(specular, 0.f);
+    }
+
+    static constexpr float velocity = 2.f;
 };
 
 struct NotCreatable {

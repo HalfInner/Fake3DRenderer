@@ -74,6 +74,8 @@ class BasicRenderer : public Renderer {
             shaderEngine->setLightIntensity(light->intensity());
             shaderEngine->setViewPos(camera_->position());
 
+
+            // Todo(kaj) : put this into Renderable's info
             glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
             model = glm::translate(model, info.position);
             float angle = 1.f;

@@ -199,6 +199,8 @@ class PoolBallFragmentShaderSource : public ShaderSource {
             uniform sampler2D inTexture;
             uniform float lightIntensityObject;
 
+
+
             void main() {
                 // ambient
                 float ambientStrength = 0.3;
