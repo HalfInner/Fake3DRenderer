@@ -56,7 +56,6 @@ class Cuboid : public Renderable {
         auto bottom_t_4 = glm::vec3{sidePosX, -sidePosY, -sidePosZ};
         auto bottom_norm_ = glm::vec3{0, -1, 0};
 
-
         buffer_->initialize({
                                     front_t_1, front_norm_, front_t_2, front_norm_, front_t_3, front_norm_, front_t_4,
                                     front_norm_,
