@@ -19,7 +19,7 @@ glm::mat4 MovableCamera::projection() {
 }
 
 glm::mat4 MovableCamera::view() {
-    return view_;d
+    return view_;
 }
 
 glm::vec3 MovableCamera::position() {
