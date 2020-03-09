@@ -5,25 +5,10 @@
 
 #include <unordered_map>
 
-
-glm::mat4 BasicCamera::projection() {
-    auto cameraZoom = 45.f;
-    glm::mat4 projection = glm::perspective(glm::radians(cameraZoom), (float) 800 / (float) 640, 0.1f, 100.0f);
-    return projection;
-}
-
-glm::mat4 BasicCamera::view() {
-    auto position = glm::vec3(-1.0f, 0.0f, 4.0f);
-    auto up = glm::vec3(0.0f, 1.0f, 0.0f);
-    auto front = glm::vec3(0.0f, 0.0f, -1.0f);
-    glm::mat4 view = glm::lookAt(position, position + front, up);
-    return view;
-}
-
 MovableCamera::MovableCamera() {
     updateCameraCoordinates();
 
-    up_ = glm::vec3(0.0f, 1.0f, 0.0f); // TODO (kaj) : What's that?
+    up_ = glm::vec3(0.0f, 1.0f, 0.0f);
     cameraZoom_ = 45.f;
 
     velocity_ = 1.f;
@@ -79,7 +64,7 @@ void MovableCamera::zoom(ResizeType resizeType, float elapsedTime) {
 }
 
 void MovableCamera::rotate(HeadDirection headDirection, float elapsedTime) {
-    float defaultAngle = 90.f;
+    constexpr float defaultAngle = 90.f;
     switch (headDirection) {
         case HeadDirection::LeftSide:
             yaw_ += -defaultAngle * velocity_ * elapsedTime;

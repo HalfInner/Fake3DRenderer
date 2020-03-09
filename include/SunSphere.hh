@@ -62,7 +62,6 @@ class SunSphere : public Graphic::Renderable, public Graphic::LightPoint, public
 
     void decreaseIntensity(float elapsedTime) override {
         intensity_ += -elapsedTime * backlightVelocity_;
-        std::cout << "Intensity : " << intensity_ << "\n";
         intensity_ = std::max(intensity_, 0.f);
     }
 

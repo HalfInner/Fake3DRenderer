@@ -68,19 +68,19 @@ class BasicRenderer : public Renderer {
             shaderEngine->setProjection(camera_->projection());
             shaderEngine->setView(camera_->view());
 
+            // Todo(kaj) : put this into Renderable's info
+            glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+            model = glm::translate(model, info.position);
+            float angle = 0.f;
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 1.f, 1.f));
+            shaderEngine->setModel(model);
+
+
             shaderEngine->setColor(info.color);
             shaderEngine->setLightColor(light->color());
             shaderEngine->setLightPos(light->position());
             shaderEngine->setLightIntensity(light->intensity());
             shaderEngine->setViewPos(camera_->position());
-
-
-            // Todo(kaj) : put this into Renderable's info
-            glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-            model = glm::translate(model, info.position);
-            float angle = 1.f;
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 1.f, 1.f));
-            shaderEngine->setModel(model);
 
             if (material_) {
                 shaderEngine->setAmbientRatio(material_->ambient);

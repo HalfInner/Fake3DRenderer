@@ -214,13 +214,13 @@ void BasicFake3DEngine::configureInputController() {
     openGlInputController_->subscribeFPress([weakCamera](void *param) {
         float elapsed = *reinterpret_cast<float *>(param);
         if (auto camera = weakCamera.lock()) {
-            camera->rotate(Rotatable::HeadDirection::DownSide, elapsed);
+            camera->rotate(Rotatable::HeadDirection::UpSide, elapsed);
         }
     });
     openGlInputController_->subscribeGPress([weakCamera](void *param) {
         float elapsed = *reinterpret_cast<float *>(param);
         if (auto camera = weakCamera.lock()) {
-            camera->rotate(Rotatable::HeadDirection::UpSide, elapsed);
+            camera->rotate(Rotatable::HeadDirection::DownSide, elapsed);
         }
     });
     openGlInputController_->subscribeVPress([weakCamera](void *param) {

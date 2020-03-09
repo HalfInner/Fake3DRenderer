@@ -42,12 +42,6 @@ struct /*interface*/ Zoomable {
     virtual ~Zoomable() = default;
 };
 
-class BasicCamera : public Camera {
-  public:
-    glm::mat4 projection() override;
-    glm::mat4 view() override;
-};
-
 class MovableCamera : public Camera, public Movable, public Rotatable, public Zoomable {
   public:
     MovableCamera();
