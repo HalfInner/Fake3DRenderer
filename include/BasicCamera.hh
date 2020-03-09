@@ -37,7 +37,6 @@ struct /*interface*/ Zoomable {
     enum class ResizeType {
         ZoomIn, ZoomOut
     };
-    virtual void zoom(float ratio) = 0;
     virtual void zoom(ResizeType resizeType, float elapsedTime) = 0;
     virtual ~Zoomable() = default;
 };
@@ -57,7 +56,6 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     // Movable
     void move(Direction direction, float elapsedTime) override;
     // Zoomable
-    void zoom(float ratio) override;
     void zoom(ResizeType resizeType, float elapsedTime) override;
   private:
     void updateCameraCoordinates();
@@ -73,6 +71,8 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     glm::vec3 front_{};
     float screenWidth_{800};
     float screenHeight_{640};
+    glm::mat4 projection_;
+    glm::mat4 view_;
 };
 
 #endif //FAKE3DRENDERER_BASICCAMERA_HH
