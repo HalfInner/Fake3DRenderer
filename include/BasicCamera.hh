@@ -59,13 +59,14 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     void zoom(ResizeType resizeType, float elapsedTime) override;
   private:
     void updateCameraCoordinates();
+    glm::mat3 generateRotateMat(float yaw, float pitch, float roll);
 
     glm::vec3 position_{0.0f, 2.5f, 6.f};
-    float cameraZoom_ {};
+    float cameraZoom_{};
 
     float pitch_{-15.0f};
     float yaw_{-90.f};
-    float roll_{ .0f};
+    float roll_{.0f};
     float velocity_{};
     glm::vec3 up_{};
     glm::vec3 front_{};

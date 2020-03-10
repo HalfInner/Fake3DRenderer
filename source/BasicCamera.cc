@@ -3,21 +3,23 @@
 //
 #include "BasicCamera.hh"
 
+#include <glm/gtx/string_cast.hpp>
+#include <iostream>
 #include <unordered_map>
 
 MovableCamera::MovableCamera() {
-
     front_ = glm::vec3{0.0f, 0.0f, -1.0f}; // TODO (kaj) : What's that?
     cameraZoom_ = 45.f;
     velocity_ = 1.f;
 
+
+    auto up = glm::vec3{0.f, 1.f, 0.f};
+    up_ = generateRotateMat(0.f, 0.f, 0.f) * up;
+
     target_ = glm::vec3{0.f, 0.f, 0.f};
     direction_ = glm::normalize(glm::vec3{position_ - target_});
+    rigth_ = glm::normalize(glm::cross(up_, direction_));
 
-    auto up = glm::vec3(0.0f, 1.0f, 0.0f);
-    rigth_ = glm::normalize(glm::cross(up, direction_));
-    up_ = glm::normalize(glm::cross(direction_, rigth_));
-    up_ = up; // TODO (kaj) : wtf?
     updateCameraCoordinates();
 }
 
@@ -88,12 +90,12 @@ void MovableCamera::zoom(ResizeType resizeType, float elapsedTime) {
     updateCameraCoordinates();
 }
 
+
 void MovableCamera::updateCameraCoordinates() {
 
     front_.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
     front_.y = sin(glm::radians(pitch_));
     front_.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
-
 
     projection_ = glm::perspective(glm::radians(cameraZoom_), screenWidth_ / screenHeight_, 0.1f, 100.0f);
     view_ = glm::lookAt(position_, position_ + front_, up_); // TODO (kaj) : Implement by yourself
@@ -110,8 +112,34 @@ void MovableCamera::updateCameraCoordinates() {
             0.f, 0.f, 0.f, 1.f};
 
     view_ = matViewTranslation * matViewTranslationPosition;
-
+    std::cout << glm::to_string(view_) << std::endl;
     view_ = glm::lookAt(position_, position_ + front_, up_); // TODO (kaj) : Implement by yourself
+    std::cout << glm::to_string(view_) << std::endl;
+}
+
+glm::mat3 MovableCamera::generateRotateMat(float yaw, float pitch, float roll) {
+    yaw = glm::radians(yaw);
+    glm::mat3 matRotateYaw{
+            cosf(yaw), -sinf(yaw), 0.f,
+            sinf(yaw), cosf(yaw), 0.f,
+            0.f, 0.f, 1.f,
+    };
+
+    pitch = glm::radians(pitch);
+    glm::mat3 matRotatePitch{
+            cosf(pitch), 0.f, sinf(pitch),
+            0.f, 1.f, 0.f,
+            -sinf(pitch), 0.f, cosf(pitch),
+    };
+
+    pitch = glm::radians(roll);
+    glm::mat3 matRotateRoll{
+            1.f, 0.f, 0.f,
+            0.f, cosf(roll), -sinf(roll),
+            0.f, sinf(roll), cosf(roll)
+    };
+
+    return matRotateYaw * matRotatePitch * matRotateRoll;
 }
 
 
