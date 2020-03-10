@@ -73,6 +73,9 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     float screenHeight_{640};
     glm::mat4 projection_;
     glm::mat4 view_;
+    glm::vec3 target_;
+    glm::vec3 direction_;
+    glm::vec3 rigth_;
 };
 
 #endif //FAKE3DRENDERER_BASICCAMERA_HH
