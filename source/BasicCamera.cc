@@ -7,18 +7,9 @@
 #include <iostream>
 #include <unordered_map>
 
-MovableCamera::MovableCamera() {
-    front_ = glm::vec3{0.0f, 0.0f, -1.0f}; // TODO (kaj) : What's that?
-    cameraZoom_ = 45.f;
-    velocity_ = 1.f;
+MovableCamera::MovableCamera() : velocity_(1.f), zoom_(45.f) {
+    zoom_ = 45.f;
 
-
-    auto up = glm::vec3{0.f, 1.f, 0.f};
-    up_ = generateRotateMat(0.f, 0.f, 0.f) * up;
-
-    target_ = glm::vec3{0.f, 0.f, 0.f};
-    direction_ = glm::normalize(glm::vec3{position_ - target_});
-    rigth_ = glm::normalize(glm::cross(up_, direction_));
 
     updateCameraCoordinates();
 }
@@ -79,14 +70,15 @@ void MovableCamera::move(Direction direction, float elapsedTime) {
 
     float additionalMoveVelocity = 10.f;
     position_ += vectorDirections.at(direction) * velocity_ * additionalMoveVelocity * elapsedTime;
+    target_ += vectorDirections.at(direction) * velocity_ * additionalMoveVelocity * elapsedTime;
     updateCameraCoordinates();
 }
 
 void MovableCamera::zoom(ResizeType resizeType, float elapsedTime) {
     const float zoomRatio = resizeType == ResizeType::ZoomOut ? 90.f : -90.f;
-    cameraZoom_ += zoomRatio * velocity_ * elapsedTime;
-    cameraZoom_ = std::min(cameraZoom_, 100.f);
-    cameraZoom_ = std::max(cameraZoom_, 10.f);
+    zoom_ += zoomRatio * velocity_ * elapsedTime;
+    zoom_ = std::min(zoom_, 100.f);
+    zoom_ = std::max(zoom_, 10.f);
     updateCameraCoordinates();
 }
 
@@ -96,25 +88,33 @@ void MovableCamera::updateCameraCoordinates() {
     front_.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
     front_.y = sin(glm::radians(pitch_));
     front_.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+    up_ = glm::vec3{0., 1.f, 0.f};
 
-    projection_ = glm::perspective(glm::radians(cameraZoom_), screenWidth_ / screenHeight_, 0.1f, 100.0f);
-    view_ = glm::lookAt(position_, position_ + front_, up_); // TODO (kaj) : Implement by yourself
+    projection_ = glm::perspective(glm::radians(zoom_), screenWidth_ / screenHeight_, 0.1f, 100.0f); // TODO (kaj): Implement by yourself
 
-    auto matViewTranslation = glm::mat4{
-            rigth_.x, rigth_.y, rigth_.z, 0.f,
-            up_.x, up_.y, up_.z, 0.f,
-            direction_.x, direction_.y, direction_.z, 0.f,
-            0.f, 0.f, 0.f, 0.f};
-    auto matViewTranslationPosition = glm::mat4{
-            1.f, 0.f, 0.f, -position_.x,
-            0.f, 1.f, 0.f, -position_.y,
-            0.f, 0.f, 1.f, -position_.z,
-            0.f, 0.f, 0.f, 1.f};
-
-    view_ = matViewTranslation * matViewTranslationPosition;
-    std::cout << glm::to_string(view_) << std::endl;
     view_ = glm::lookAt(position_, position_ + front_, up_); // TODO (kaj) : Implement by yourself
     std::cout << glm::to_string(view_) << std::endl;
+    view_ = generateView();
+    std::cout << glm::to_string(view_) << std::endl;
+}
+
+glm::mat4 MovableCamera::generateView() {
+    auto up = glm::vec3{0.f, 1.f, 0.f};
+    up_ = up;
+
+    glm::vec3 directionNorm = glm::normalize(position_ - target_);
+
+    glm::vec3 axisZ = glm::normalize(directionNorm);
+    glm::vec3 axisX = glm::normalize(glm::cross(up, axisZ));
+    glm::vec3 axisY = glm::normalize(glm::cross(axisZ, axisX));
+
+    auto matView = glm::mat4{
+            axisX.x, axisY.x, axisZ.x, 0.f,
+            axisX.y, axisY.y, axisZ.y, 0.f,
+            axisX.z, axisY.z, axisZ.z, 0.f,
+            -glm::dot(axisX, position_), -glm::dot(axisY, position_), -glm::dot(axisZ, position_), 1.f
+    };
+    return matView;
 }
 
 glm::mat3 MovableCamera::generateRotateMat(float yaw, float pitch, float roll) {

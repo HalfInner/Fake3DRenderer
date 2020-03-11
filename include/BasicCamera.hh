@@ -60,14 +60,15 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
   private:
     void updateCameraCoordinates();
     glm::mat3 generateRotateMat(float yaw, float pitch, float roll);
+    glm::mat4 generateView();
 
     glm::vec3 position_{0.0f, 2.5f, 6.f};
-    float cameraZoom_{};
 
     float pitch_{-15.0f};
     float yaw_{-90.f};
     float roll_{.0f};
     float velocity_{};
+    float zoom_{};
     glm::vec3 up_{};
     glm::vec3 front_{};
     float screenWidth_{800};

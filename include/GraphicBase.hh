@@ -44,7 +44,9 @@ struct /*interface*/ RendererInfo {
     Material material {};
 
     glm::vec3 position{};
+    glm::mat4 model {};
     glm::vec3 color{};
+
 
     bool debugMode = false;
 };

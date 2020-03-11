@@ -69,16 +69,12 @@ class BasicRenderer : public Renderer {
             shaderEngine->setProjection(camera_->projection());
             shaderEngine->setView(camera_->view());
 
-            // Todo(kaj) : put this into Renderable's info
+            // Todo(kaj) : put model into Renderable's info
             glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-            std::cout << glm::to_string(model) << '\n' << std::endl;
             model = glm::translate(model, info.position);
-            std::cout << glm::to_string(model) << '\n' << std::endl;
             float angle = 0.f;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 1.f, 1.f));
-            std::cout << glm::to_string(model) << '\n' << std::endl;
             shaderEngine->setModel(model);
-
 
             shaderEngine->setColor(info.color);
             shaderEngine->setLightColor(light->color());
