@@ -65,7 +65,7 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     glm::vec3 position_{0.0f, 2.5f, 6.f};
 
     float pitch_{-15.0f};
-    float yaw_{-90.f};
+    float yaw_{90.f};
     float roll_{.0f};
     float velocity_{};
     float zoom_{};
@@ -78,6 +78,7 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     glm::vec3 target_;
     glm::vec3 direction_;
     glm::vec3 rigth_;
+    float dtRoll_;
 };
 
 #endif //FAKE3DRENDERER_BASICCAMERA_HH
