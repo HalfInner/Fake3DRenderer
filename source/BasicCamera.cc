@@ -9,8 +9,6 @@
 
 MovableCamera::MovableCamera() : velocity_(1.f), zoom_(45.f) {
     zoom_ = 45.f;
-
-
     updateCameraCoordinates();
 }
 
@@ -48,11 +46,11 @@ void MovableCamera::rotate(HeadDirection headDirection, float elapsedTime) {
             pitch_ += -defaultAngle * velocity_ * elapsedTime;
             break;
         case HeadDirection::LeftShoulder:
-            dtRoll_ = defaultAngle * velocity_ * elapsedTime * 0.01f;
+            dtRoll_ = defaultAngle * velocity_ * elapsedTime;
             roll_ += dtRoll_;
             break;
         case HeadDirection::RightShoulder:
-            dtRoll_ = -defaultAngle * velocity_ * elapsedTime * 0.01f;
+            dtRoll_ = -defaultAngle * velocity_ * elapsedTime;
             roll_ += dtRoll_;
             break;
     }
@@ -95,21 +93,23 @@ void MovableCamera::updateCameraCoordinates() {
     projection_ = glm::perspective(glm::radians(zoom_), screenWidth_ / screenHeight_, 0.1f,
                                    100.0f); // TODO (kaj): Implement by yourself
 
-    view_ = glm::lookAt(position_, position_ + front_, up_); // TODO (kaj) : Implement by yourself
-    std::cout << glm::to_string(view_) << std::endl;
+
     view_ = generateView();
-    std::cout << glm::to_string(view_) << std::endl;
+}
+
+glm::mat4 MovableCamera::generateProjection() {
+    return glm::perspective(glm::radians(zoom_), screenWidth_ / screenHeight_, 0.1f,
+                                   100.0f); // TODO (kaj): Implement by yourself
+
+
 }
 
 glm::mat4 MovableCamera::generateView() {
     auto basicAxisX = glm::vec3{1.f, 0.f, 0.f};
     auto basicAxisY = glm::vec3{0.f, 1.f, 0.f};
     auto basicAxisZ = glm::vec3{0.f, 0.f, 1.f};
-    (void)basicAxisX;
-    (void)basicAxisY;
-    (void)basicAxisZ;
 
-    auto rotationMatrix = generateRotateMat(yaw_, pitch_, roll_);
+    auto rotationMatrix = generateRotationMat();
 
     auto axisX = rotationMatrix * basicAxisX;
     auto axisY = rotationMatrix * basicAxisY;
@@ -127,22 +127,22 @@ glm::mat4 MovableCamera::generateView() {
 // pitch hang to up axisY
 // yaw turn lef or right to axis X
 // roll keep Z Axis unchenged
-glm::mat3 MovableCamera::generateRotateMat(float yaw, float pitch, float roll) {
-    yaw = glm::radians(yaw);
+glm::mat3 MovableCamera::generateRotationMat() {
+    auto yaw = glm::radians(yaw_);
     glm::mat3 matRotateYaw{
             cosf(yaw), -sinf(yaw), 0.f,
             sinf(yaw), cosf(yaw), 0.f,
             0.f, 0.f, 1.f,
     };
 
-    pitch = glm::radians(pitch);
+    auto pitch = glm::radians(pitch_);
     glm::mat3 matRotatePitch{
             cosf(pitch), 0.f, sinf(pitch),
             0.f, 1.f, 0.f,
             -sinf(pitch), 0.f, cosf(pitch),
     };
 
-    pitch = glm::radians(roll);
+    auto roll = glm::radians(roll_);
     glm::mat3 matRotateRoll{
             1.f, 0.f, 0.f,
             0.f, cosf(roll), -sinf(roll),
