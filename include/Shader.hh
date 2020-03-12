@@ -154,6 +154,8 @@ class PoolBallVertexShaderSource : public ShaderSource {
             uniform mat4 projection;
 
             void main() {
+
+
                 vertexColor = colorObject;
                 lightColor = lightColorObject;
                 lightPos = lightPosObject;

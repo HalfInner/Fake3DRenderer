@@ -46,12 +46,10 @@ void MovableCamera::rotate(HeadDirection headDirection, float elapsedTime) {
             pitch_ += -defaultAngle * velocity_ * elapsedTime;
             break;
         case HeadDirection::LeftShoulder:
-            dtRoll_ = defaultAngle * velocity_ * elapsedTime;
-            roll_ += dtRoll_;
+            roll_ += defaultAngle * velocity_ * elapsedTime;
             break;
         case HeadDirection::RightShoulder:
-            dtRoll_ = -defaultAngle * velocity_ * elapsedTime;
-            roll_ += dtRoll_;
+            roll_ +=  -defaultAngle * velocity_ * elapsedTime;
             break;
     }
     updateCameraCoordinates();
@@ -83,16 +81,7 @@ void MovableCamera::zoom(ResizeType resizeType, float elapsedTime) {
 }
 
 void MovableCamera::updateCameraCoordinates() {
-
-    front_.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
-    front_.y = sin(glm::radians(pitch_));
-    front_.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
-    up_ = glm::vec3{0., 1.f, 0.f};
-
-    projection_ = glm::perspective(glm::radians(zoom_), screenWidth_ / screenHeight_, 0.1f,
-                                   100.0f); // TODO (kaj): Implement by yourself
-
-
+    projection_ = generateProjection();
     view_ = generateView();
 }
 

@@ -69,14 +69,13 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     float roll_{.0f};
     float velocity_{};
     float zoom_{};
-    glm::vec3 up_{};
-    glm::vec3 front_{};
+
     float screenWidth_{800};
     float screenHeight_{640};
+
     glm::mat4 projection_{};
     glm::mat4 view_{};
     glm::vec3 target_{};
-    float dtRoll_;
     glm::mat4 generateProjection();
 };
 
