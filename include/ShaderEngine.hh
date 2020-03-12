@@ -109,8 +109,16 @@ class ShaderEngine {
         setFloat(focusRatioName, focusRatio);
     }
 
-
+    void setTextureOn(bool isTextureOn) const {
+        const std::string textureOnName = "textureOn";
+        setInteger(textureOnName, static_cast<int>(isTextureOn));
+    }
+    
   private:
+    void setInteger(const std::string &name, int value) const {
+        auto varId = glGetUniformLocation(shaderProgram_, name.c_str());
+        glUniform1i(varId, value);
+    }
     void setFloat(const std::string &name, float value) const {
         auto varId = glGetUniformLocation(shaderProgram_, name.c_str());
         glUniform1f(varId, value);

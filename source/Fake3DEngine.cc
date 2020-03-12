@@ -307,6 +307,20 @@ void BasicFake3DEngine::configureInputController() {
             material->increaseFocus(elapsed);
         }
     });
+
+    openGlInputController_->subscribeSpacePress([weakMaterial](void *param) {
+        static float lastMeasure = INFINITY;
+        float elapsed = *reinterpret_cast<float *>(param);
+        if (lastMeasure - elapsed < 0.15f) {
+            lastMeasure += elapsed;
+            return;
+        }
+        lastMeasure = .0f;
+
+        if (auto material = weakMaterial.lock()) {
+            material->toggleTexture();
+        }
+    });
 }
 
 void BasicFake3DEngine::createWindowContext() {

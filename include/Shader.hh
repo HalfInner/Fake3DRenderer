@@ -225,9 +225,9 @@ class PoolBallFragmentShaderSource : public ShaderSource {
 
                 vec3 result = (ambient + diffuse + specular) * vertexColor;
                 if (textureOn) {
-                   FragColor = vec4(result, 1.0);
-                } else {
                     FragColor = texture(inTexture, TexCoord) * vec4(result, 1.0);
+                } else {
+                   FragColor = vec4(result, 1.0);
                 }
             })";
 

@@ -87,6 +87,7 @@ class BasicRenderer : public Renderer {
                 shaderEngine->setDiffuseRatio(material_->diffuse);
                 shaderEngine->setSpecularRatio(material_->specular);
                 shaderEngine->setFocusRatio(material_->focus);
+                shaderEngine->setTextureOn(material_->textureOn);
             }
 
             if (info.debugMode) {
@@ -102,6 +103,7 @@ class BasicRenderer : public Renderer {
 
             while (auto errorCode = glGetError()) {
                 std::cerr << "OpenGL troubles: 0x" << std::hex << errorCode << "\n";
+                throw;
             }
         }
 
