@@ -82,7 +82,6 @@ void MovableCamera::zoom(ResizeType resizeType, float elapsedTime) {
     updateCameraCoordinates();
 }
 
-
 void MovableCamera::updateCameraCoordinates() {
 
     front_.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
@@ -98,10 +97,17 @@ void MovableCamera::updateCameraCoordinates() {
 }
 
 glm::mat4 MovableCamera::generateProjection() {
-    return glm::perspective(glm::radians(zoom_), screenWidth_ / screenHeight_, 0.1f,
-                                   100.0f); // TODO (kaj): Implement by yourself
+    auto near = 0.5f;
+    auto far = 100.f;
+    auto aspectRatio = screenWidth_ / screenHeight_;
+    auto matProjection = glm::mat4{
+            1.f / (aspectRatio * tanf(glm::radians(zoom_) / 2.f)), 0.f, 0.f, 0.f,
+            0.f, 1.f / tanf(glm::radians(zoom_) / 2), 0.f, 0.f,
+            0.f, 0.f, (near + far) / (near - far), (2 * near * far) / (near - far),
+            0.f, 0.f, -1.f, 0.f
+    };
 
-
+    return matProjection;
 }
 
 glm::mat4 MovableCamera::generateView() {
@@ -124,9 +130,6 @@ glm::mat4 MovableCamera::generateView() {
     return matView;
 }
 
-// pitch hang to up axisY
-// yaw turn lef or right to axis X
-// roll keep Z Axis unchenged
 glm::mat3 MovableCamera::generateRotationMat() {
     auto yaw = glm::radians(yaw_);
     glm::mat3 matRotateYaw{
@@ -148,38 +151,6 @@ glm::mat3 MovableCamera::generateRotationMat() {
             0.f, cosf(roll), -sinf(roll),
             0.f, sinf(roll), cosf(roll)
     };
-//    glm::mat4 matRotateYaw{
-//            cosf(yaw), -sinf(yaw), 0.f, 0.f,
-//            sinf(yaw), cosf(yaw), 0.f,0.f,
-//            0.f, 0.f, 1.f,0.f,
-//            0.f,0.f,0.f, 1.f
-//    };
-////         |  cos(A)  -sin(A)   0   0 |
-////     M = |  sin(A)   cos(A)   0   0 |
-////         |  0        0        1   0 |
-////         |  0        0        0   1 |
-//    pitch = glm::radians(pitch);
-//    glm::mat4 matRotatePitch{
-//            cosf(pitch), 0.f, sinf(pitch), 0.f,
-//            0.f, 1.f, 0.f, 0.f,
-//            -sinf(pitch), 0.f, cosf(pitch), 0.f,
-//            0.f,0.f, 0.f, 1
-//    };
-////          |  cos(A)  0   sin(A)  0 |
-////     M = |  0       1   0       0 |
-////         | -sin(A)  0   cos(A)  0 |
-////         |  0       0   0       1 |
-//    pitch = glm::radians(roll);
-//    glm::mat4 matRotateRoll{
-//            1.f, 0.f, 0.f, 0,
-//            0.f, cosf(roll), -sinf(roll), 0,
-//            0.f, sinf(roll), cosf(roll), 0,
-//            0, 0, 0, 1
-//    };
-////         |  1  0       0       0 |
-////     M = |  0  cos(A) -sin(A)  0 |
-////         |  0  sin(A)  cos(A)  0 |
-////         |  0  0       0       1 |
     return matRotateYaw * matRotatePitch * matRotateRoll;
 }
 

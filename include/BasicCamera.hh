@@ -62,7 +62,7 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     glm::mat3 generateRotationMat();
     glm::mat4 generateView();
 
-    glm::vec3 position_{0.0f, 2.5f, 6.f};
+    glm::vec3 position_{0.0f, 0.5f, 6.f};
 
     float pitch_{0.0f};
     float yaw_{0.f};
@@ -73,11 +73,9 @@ class MovableCamera : public Camera, public Movable, public Rotatable, public Zo
     glm::vec3 front_{};
     float screenWidth_{800};
     float screenHeight_{640};
-    glm::mat4 projection_;
-    glm::mat4 view_;
-    glm::vec3 target_;
-    glm::vec3 direction_;
-    glm::vec3 rigth_;
+    glm::mat4 projection_{};
+    glm::mat4 view_{};
+    glm::vec3 target_{};
     float dtRoll_;
     glm::mat4 generateProjection();
 };
