@@ -111,6 +111,10 @@ glm::mat4 MovableCamera::generateProjection() {
 }
 
 glm::mat4 MovableCamera::generateView() {
+//    auto basicAxisX = glm::vec3{1.f, 0.f, 0.f};
+//    auto basicAxisY = glm::vec3{0.f, 1.f, 0.f};
+//    auto basicAxisZ = glm::vec3{0.f, 0.f, 1.f};
+
     auto basicAxisX = glm::vec3{1.f, 0.f, 0.f};
     auto basicAxisY = glm::vec3{0.f, 1.f, 0.f};
     auto basicAxisZ = glm::vec3{0.f, 0.f, 1.f};
@@ -133,23 +137,23 @@ glm::mat4 MovableCamera::generateView() {
 glm::mat3 MovableCamera::generateRotationMat() {
     auto yaw = glm::radians(yaw_);
     glm::mat3 matRotateYaw{
-            cosf(yaw), -sinf(yaw), 0.f,
-            sinf(yaw), cosf(yaw), 0.f,
-            0.f, 0.f, 1.f,
+            cosf(yaw), 0.f, sinf(yaw),
+            0.f, 1.f, 0.f,
+            -sinf(yaw), 0.f, cosf(yaw),
     };
 
     auto pitch = glm::radians(pitch_);
     glm::mat3 matRotatePitch{
-            cosf(pitch), 0.f, sinf(pitch),
-            0.f, 1.f, 0.f,
-            -sinf(pitch), 0.f, cosf(pitch),
+            1.f, 0.f, 0.f,
+            0.f, cosf(pitch), -sinf(pitch),
+            0.f, sinf(pitch), cosf(pitch)
     };
 
-    auto roll = glm::radians(roll_);
+    auto roll = -glm::radians(roll_);
     glm::mat3 matRotateRoll{
-            1.f, 0.f, 0.f,
-            0.f, cosf(roll), -sinf(roll),
-            0.f, sinf(roll), cosf(roll)
+            cosf(roll), -sinf(roll), 0.f,
+            sinf(roll), cosf(roll), 0.f,
+            0.f, 0.f, 1.f,
     };
     return matRotateYaw * matRotatePitch * matRotateRoll;
 }

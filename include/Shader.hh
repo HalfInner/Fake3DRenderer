@@ -203,6 +203,7 @@ class PoolBallFragmentShaderSource : public ShaderSource {
             uniform float diffuseRatio;
             uniform float specularRatio;
             uniform float focusRatio;
+            uniform bool textureOn;
 
             void main() {
                 // ambient
@@ -223,8 +224,11 @@ class PoolBallFragmentShaderSource : public ShaderSource {
                 vec3 specular = specularStrength * spec * lightColor * lightIntensityObject;
 
                 vec3 result = (ambient + diffuse + specular) * vertexColor;
-                FragColor = vec4(result, 1.0);
-//                FragColor = texture(inTexture, TexCoord) * vec4(result, 1.0);
+                if (textureOn) {
+                   FragColor = vec4(result, 1.0);
+                } else {
+                    FragColor = texture(inTexture, TexCoord) * vec4(result, 1.0);
+                }
             })";
 
     uint32_t id_;

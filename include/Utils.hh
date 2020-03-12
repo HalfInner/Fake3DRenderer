@@ -18,6 +18,7 @@ struct GlobalMaterial {
     float diffuse{1.f};
     float specular{0.5f};
     float focus{5.f};
+    bool textureOn{false};
 
     void increaseAmbient(float elapsedTime) {
         ambient += elapsedTime * velocity;
@@ -57,6 +58,10 @@ struct GlobalMaterial {
     void decreaseFocus(float elapsedTime) {
         focus -= elapsedTime * velocity * 10.f;
         focus = std::max(focus, 0.f);
+    }
+
+    void toggleTexture() {
+        textureOn = !textureOn;
     }
 
     static constexpr float velocity = 2.f;

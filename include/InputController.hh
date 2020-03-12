@@ -69,6 +69,9 @@ struct /* interface */ InputController {
     virtual void subscribeMPress(InputControllerCB &&cb) = 0;
     virtual void subscribeCommaPress(InputControllerCB &&cb) = 0;
 
+    // focus
+    virtual void subscribeSpacePress(InputControllerCB &&cb) = 0;
+
     virtual ~InputController() = default;
 };
 
@@ -261,6 +264,10 @@ class OpenGlInputController : public InputController {
         cbCommaPress_ = cb;
     }
 
+    void subscribeSpacePress(InputControllerCB &&cb) override {
+        cbSpacePress_ = cb;
+    }
+
   private:
     InputControllerCB cbEnterPress_;
     InputControllerCB cbEscapePress_;
@@ -288,6 +295,7 @@ class OpenGlInputController : public InputController {
     InputControllerCB cbSlashPress_;
     InputControllerCB cbMPress_;
     InputControllerCB cbCommaPress_;
+    InputControllerCB cbSpacePress_;
 
     GLFWwindow *window_;
 };
