@@ -111,10 +111,6 @@ glm::mat4 MovableCamera::generateProjection() {
 }
 
 glm::mat4 MovableCamera::generateView() {
-//    auto basicAxisX = glm::vec3{1.f, 0.f, 0.f};
-//    auto basicAxisY = glm::vec3{0.f, 1.f, 0.f};
-//    auto basicAxisZ = glm::vec3{0.f, 0.f, 1.f};
-
     auto basicAxisX = glm::vec3{1.f, 0.f, 0.f};
     auto basicAxisY = glm::vec3{0.f, 1.f, 0.f};
     auto basicAxisZ = glm::vec3{0.f, 0.f, 1.f};
