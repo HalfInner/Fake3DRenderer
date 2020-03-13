@@ -225,7 +225,7 @@ class PoolBallFragmentShaderSource : public ShaderSource {
                 float spec = pow(max(dot(viewDir, reflectDir), 0.0), lightFocus);
                 vec3 specular = specularStrength * spec * lightColor * lightIntensityObject;
 
-                vec3 result = (ambient + diffuse + specular);
+                vec3 result = ambient + diffuse + specular;
                 if (textureOn) {
                     FragColor = vec4(result, 1.0) * texture(inTexture, TexCoord);
                 } else {
