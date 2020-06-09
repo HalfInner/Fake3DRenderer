@@ -46,20 +46,48 @@ The project was divided into two parts:
 * C++17
 * OpenGL/glfw3/glew32
 * cmake configuration
+* Cmake / Makefile
 * free time
 
 ### Installing
-
-TBD
-
+Windows:
 ```
-TBD
+mkidr build && cd build
+cmake .. -G 'MSYS Makefiles' && make
+build/Fake3DRenderer
 ```
+
+Linux/Mac: _TBD_
 
 ## Running the tests
 
 No tests =O
 
+## Steering
+
+Camera:
+```
+ * W S A D  Forward/Backward/Left/Right
+ * Q E      Up/Down
+ * Z C      Zoom In/Out
+ * R T      Rotate Left/Right
+ * F G      Rotate Up/Down
+ * B V      Pivot Left/Right
+```
+Light & Reflection:
+```
+ * \- =     Soften/Harden light source
+ * \[ \]    Soften/Harden light ambient
+ * ; ‘      Soften/Harden light diffuse
+ * . /      Soften/Harden light reflection
+ * M ,      Soften/Harden light focus
+ * Enter    Start/Stop rotary of Sun
+```
+Others:
+```
+ * Space    Overlay/Take off the 'PoolBall8.jpg'
+ * Escape   Close application
+```
 
 ## Authors
 
