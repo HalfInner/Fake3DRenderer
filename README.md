@@ -1,6 +1,7 @@
 # Fake 3D Renderer
 
-Primitive & Naive 3D engine.  
+Primitive & Naive 3D engine based on OpenGL.  
+![demo of application](readme_resources/Demo.gif)
 
 ## Support 
 
