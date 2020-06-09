@@ -77,8 +77,8 @@ Camera:
 ```
 Light & Reflection:
 ```
- * \- =     Soften/Harden light source
- * \[ \]    Soften/Harden light ambient
+ * - =      Soften/Harden light source
+ * [ ]      Soften/Harden light ambient
  * ; ‘      Soften/Harden light diffuse
  * . /      Soften/Harden light reflection
  * M ,      Soften/Harden light focus
