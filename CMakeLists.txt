@@ -2,21 +2,33 @@ cmake_minimum_required(VERSION 3.15)
 project(Fake3DRenderer)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_VERBOSE_MAKEFILE TRUE)
 
-set(OPENGL_LIB_PATH C:/Program Files\ \(x86\)/Windows\ Kits/10/Lib/10.0.18362.0/um/x64/)
+
+add_subdirectory(3pp/glfw)
+
+
+# set(OPENGL_LIB_PATH C:/Program Files\ \(x86\)/Windows\ Kits/10/Lib/10.0.18362.0/um/x64/)
 set(GLEW_INCLUDE_PATH C:/Program\ Files\ \(x86\)/glew/include/)
+# set(GLEW_INCLUDE_PATH BENIZ)
 set(GLEW_LIB_PATH C:/Program\ Files\ \(x86\)/glew/lib/)
 set(GLM_INCLUDE_PATH C:/Users/kajbr/Programming/glm)
 
 message(${GLEW_INCLUDE_PATH})
 
 set(GLFW3_INCLUDE_PATH C:/include/)
-set(GLFW3_LIB_PATH C:/lib/)
+# set(GLFW3_LIB_PATH C:/lib/)
+# set(GLFW3_LIB_PATH C:/Users/kajbr/Programming/glfw/build-static/src)
 
 set(INCLUDE_PATH include/)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY build)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wpedantic -Werror")
+
+if ( CMAKE_BUILD_TYPE MATCHES "Release" )
+        # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wpedantic -Werror ")
+else()
+        # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -Wall -Wpedantic -Werror")
+endif()
 
 add_executable(Fake3DRenderer main.cpp source/BasicCamera.cc source/Fake3DEngine.cc source/TextureManager.cc)
 target_compile_definitions(Fake3DRenderer PUBLIC GLEW_STATIC)
