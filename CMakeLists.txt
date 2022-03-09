@@ -28,11 +28,19 @@ target_include_directories(${PROJECT_NAME}
 target_link_directories(${PROJECT_NAME}
         PUBLIC out/build/3pp/glfw/src/
         PUBLIC ./out/build/3pp/glad)
+message("eh")
 
-# Linux:        -static  rt glfw3 glad GLU dl  pthread
-# Windows VS:   -static  glfw3 glad OpenGL32 GlU32
-target_link_libraries(${PROJECT_NAME} 
-        PUBLIC  -static-libgcc 
-        -static-libstdc++ 
-        -static  glfw3 glad OpenGL32 GlU32 pthread
-)
+if (WIN32 AND MSVC) #VS Code
+	message(Used\ VS)
+	target_link_libraries(${PROJECT_NAME} PUBLIC -static glfw3 glad)
+elseif(WIN32) # MinGW
+	message(Used\ MinGW)
+	target_link_libraries(${PROJECT_NAME} PUBLIC -static-libgcc -static-libstdc++ -static glfw3 glad GLU pthread)
+else() 
+	message(Used\ Linux)
+	target_link_libraries(${PROJECT_NAME} PUBLIC -static-libgcc -static-libstdc++ -static glfw3 glad GLU pthread rt dl)
+endif()
+
+
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE _USE_MATH_DEFINES=true)
