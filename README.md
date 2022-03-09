@@ -45,17 +45,14 @@ The project was divided into two parts:
 ### Prerequisites
 
 * C++17
-* OpenGL/glfw3/glew32
-* cmake configuration
 * Cmake / Makefile
 * free time
 
 ### Installing
 Windows:
 ```
-mkidr build && cd build
-cmake .. -G 'MSYS Makefiles' && make
-build/Fake3DRenderer
+./configure.sh
+./build.sh
 ```
 
 Linux/Mac: _TBD_

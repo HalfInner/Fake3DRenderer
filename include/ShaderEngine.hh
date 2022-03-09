@@ -5,7 +5,7 @@
 #ifndef FAKE3DRENDERER_SHADERENGINE_HH
 #define FAKE3DRENDERER_SHADERENGINE_HH
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/vec3.hpp>
 #include <glm/matrix.hpp>

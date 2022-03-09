@@ -6,7 +6,7 @@
 #define FAKE3DRENDERER_BUFFER_HH
 
 #include <glm/vec3.hpp>
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <vector>
 
 namespace Graphic {
