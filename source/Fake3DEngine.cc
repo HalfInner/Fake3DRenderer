@@ -113,12 +113,12 @@ BasicFake3DEngine::~BasicFake3DEngine() {
 
 void BasicFake3DEngine::initializeGlew() {
     auto err = gladLoadGL();
-    // if (err != 0) {
-    //     constexpr auto errorMsg = "Failed to initialize GLEW library";
-    //     std::cerr << errorMsg;
-    //     glfwTerminate();
-    //     throw std::runtime_error(errorMsg);
-    // }
+    if (err == 0) {
+        constexpr auto errorMsg = "Failed to initialize GLEW library";
+        std::cerr << errorMsg;
+        glfwTerminate();
+        throw std::runtime_error(errorMsg);
+    }
 
     // if (!GLEW_VERSION_2_1) { // check that the machine supports the 2.1 API.
     //     // or handle the error in a nicer way

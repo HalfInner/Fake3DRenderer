@@ -4,9 +4,6 @@
 [submodule "3pp/glad"]
 	path = 3pp/glad
 	url = https://github.com/Dav1dde/glad.git
-[submodule "glfw"]
-	path = glfw
-	url = https://github.com/glfw/glfw.git
 [submodule "3pp/glfw"]
 	path = 3pp/glfw
 	url = https://github.com/glfw/glfw.git
