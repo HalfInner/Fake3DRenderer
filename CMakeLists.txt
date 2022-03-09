@@ -29,7 +29,8 @@ target_link_directories(${PROJECT_NAME}
         PUBLIC out/build/3pp/glfw/src/
         PUBLIC ./out/build/3pp/glad)
 
-# Linux: -static  rt glfw3 glad GLU dl  pthread
+# Linux:        -static  rt glfw3 glad GLU dl  pthread
+# Windows VS:   -static  glfw3 glad OpenGL32 GlU32
 target_link_libraries(${PROJECT_NAME} 
         PUBLIC  -static-libgcc 
         -static-libstdc++ 
