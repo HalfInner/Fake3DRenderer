@@ -6,6 +6,7 @@
 
 #include <glad/glad.h>
 #include <iostream>
+#include <string>
 
 #include "stb_image.hh"
 

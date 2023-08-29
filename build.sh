@@ -1,3 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 
-bash -c 'cd out/build; make -j 8'
+cmake --build out/build  -j7
+

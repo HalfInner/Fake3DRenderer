@@ -51,11 +51,18 @@ The project was divided into two parts:
 ### Installing
 Windows:
 ```
-./configure.sh
-./build.sh
+.\configure.bat
+.\build.bat
 ```
 
-Linux/Mac: _TBD_
+Linux:
+```
+.\configure.sh
+.\build.sh
+```
+
+> **NOTE **  
+> For WSL set `LIBGL_ALWAYS_INDIRECT` env to 0 for executable
 
 ## Running the tests
 

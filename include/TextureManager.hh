@@ -5,6 +5,7 @@
 #ifndef FAKE3DRENDERER_TEXTUREMANAGER_HH
 #define FAKE3DRENDERER_TEXTUREMANAGER_HH
 
+#include <string>
 #include <unordered_map>
 #include <vector>
 
